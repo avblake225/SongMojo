@@ -25,6 +25,8 @@ public class MainActivity extends Activity{
     SurfaceHolder surfaceHolder;
     boolean recording;
 
+    private int cameraId;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,12 +87,30 @@ public class MainActivity extends Activity{
         // TODO Auto-generated method stub
         Camera c = null;
         try {
-            c = Camera.open(); // attempt to get a Camera instance
+
+            cameraId = findFrontFacingCamera();
+
+            c = Camera.open(cameraId); // attempt to get a Camera instance
         }
         catch (Exception e){
             // Camera is not available (in use or does not exist)
         }
         return c; // returns null if camera is unavailable
+    }
+
+    private int findFrontFacingCamera() {
+        int cameraId = -1;
+        // Search for the front facing camera
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.CameraInfo info = new Camera.CameraInfo();
+            Camera.getCameraInfo(i, info);
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+                cameraId = i;
+                break;
+            }
+        }
+        return cameraId;
     }
 
     private boolean prepareMediaRecorder(){
@@ -103,7 +123,7 @@ public class MainActivity extends Activity{
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
-        mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+        mediaRecorder.setProfile(CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH));
 
         mediaRecorder.setOutputFile("/sdcard/myvideo.mp4");
         mediaRecorder.setMaxDuration(60000); // Set max duration 60 sec.
