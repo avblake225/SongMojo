@@ -5,7 +5,7 @@
 
     <drawable name="clr_focused">#FF6600</drawable>
     <drawable name="clr_pressed">#FFD700</drawable>
-    <drawable name="brown">#846a20</drawable>
+    <drawable name="white">#FFFFFF</drawable>
     <drawable name="black">#000000</drawable>
 
     <string-array name="menu_items">
