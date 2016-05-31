@@ -6,6 +6,7 @@
     <drawable name="clr_focused">#FF6600</drawable>
     <drawable name="clr_pressed">#FFD700</drawable>
     <drawable name="clr_normal">#FFFFFF</drawable>
+    <drawable name="blue">#33b5e5</drawable>
 
     <string-array name="menu_items">
         <item>Upload Video</item>
