@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "453052738434",
+    "firebase_url": "https://songmojo.firebaseio.com",
+    "project_id": "songmojo",
+    "storage_bucket": "songmojo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453052738434:android:e11f6b0d9409880d",
+        "android_client_info": {
+          "package_name": "com.tonyblake.songmojo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453052738434-pdmm8u3jd9hhrkracds5agvcir80r2ep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJMfIGPV8AmapNK02MzpZYuAd3xPCTb40"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

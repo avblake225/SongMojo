@@ -9,8 +9,8 @@
     <drawable name="black">#000000</drawable>
 
     <string-array name="menu_items">
-        <item>Upload Video</item>
-        <item>Download Video</item>
+        <item>Upload Audio</item>
+        <item>Download Audio</item>
         <item>Find Band Members</item>
         <item>Edit Band Members</item>
     </string-array>

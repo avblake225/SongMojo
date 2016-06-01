@@ -13,9 +13,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class Home extends AppCompatActivity{
 
     private Context context;
+
+    private FirebaseStorage storage;
+
+    public static StorageReference storageRef, recordingRef, audioRecordingRef;
 
     public Home home;
 
@@ -29,6 +36,21 @@ public class Home extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
+        storage = FirebaseStorage.getInstance();
+
+        // Create a storage reference
+        storageRef = storage.getReferenceFromUrl("gs://songmojo.appspot.com");
+
+        // Create a reference to recording.3gp
+        recordingRef = storageRef.child("recording.3gp");
+
+        // Create a reference to 'audio/recording.3gp'
+        audioRecordingRef = storageRef.child("audio/recording.3gp");
+
+        // While the file names are the same, the references point to different files
+        recordingRef.getName().equals(audioRecordingRef.getName());    // true
+        recordingRef.getPath().equals(audioRecordingRef.getPath());    // false
 
         // Show Status Bar
         View decorView = getWindow().getDecorView();
@@ -84,22 +106,22 @@ public class Home extends AppCompatActivity{
 
                 switch (position) {
 
-                    // Upload Video
+                    // Upload Audio
                     case 0:
 
                         dLayout.closeDrawer(dList);
 
-                        Intent intent = new Intent(home,UploadVideo.class);
+                        Intent intent = new Intent(home,UploadAudio.class);
                         startActivity(intent);
 
                         break;
 
-                    // Download Video
+                    // Download Audio
                     case 1:
 
                         dLayout.closeDrawer(dList);
 
-                        // download video...
+                        // download audio...
 
                         break;
 
