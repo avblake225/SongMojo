@@ -14,7 +14,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 
 import java.io.File;
-import java.io.IOException;
 
 public class DownloadAudio extends AppCompatActivity{
 
@@ -33,7 +32,7 @@ public class DownloadAudio extends AppCompatActivity{
 
         btn_download = (Button)findViewById(R.id.btn_download);
 
-        file = null;
+        file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Home.recordingRef.getName());
     }
 
     @Override
@@ -45,20 +44,11 @@ public class DownloadAudio extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                try {
-
-                    file = File.createTempFile("audio", ".3pg", Environment.getExternalStorageDirectory());
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-
                 Home.recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
 
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 
-                        Toast.makeText(context, "Successfully downloaded audio", Toast.LENGTH_SHORT);
                     }
 
                 }).addOnFailureListener(new OnFailureListener() {
@@ -68,6 +58,8 @@ public class DownloadAudio extends AppCompatActivity{
                         // Handle any errors
                     }
                 });
+
+                Toast.makeText(context, "Successfully downloaded audio", Toast.LENGTH_SHORT);
             }
         });
     }
