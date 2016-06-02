@@ -2,21 +2,37 @@ package com.tonyblake.songmojo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class Home extends AppCompatActivity{
+import java.io.File;
+import java.io.IOException;
+
+public class Home extends AppCompatActivity implements DownloadAudioDialog.DownloadAudioDialogListener{
 
     private Context context;
 
@@ -34,10 +50,18 @@ public class Home extends AppCompatActivity{
 
     private Intent intent;
 
+    private DownloadAudioDialog downloadAudioDialog;
+
+    private LinearLayout layout_container;
+
+    private File file;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
+        layout_container = (LinearLayout)findViewById(R.id.layout_container);
 
         storage = FirebaseStorage.getInstance();
 
@@ -106,6 +130,8 @@ public class Home extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                FragmentManager fm = getSupportFragmentManager();
+
                 switch (position) {
 
                     // Upload Audio
@@ -123,8 +149,8 @@ public class Home extends AppCompatActivity{
 
                         dLayout.closeDrawer(dList);
 
-                        intent = new Intent(home, DownloadAudio.class);
-                        startActivity(intent);
+                        downloadAudioDialog = new DownloadAudioDialog();
+                        downloadAudioDialog.show(fm, "downloadAudioDialog");
 
                         break;
 
@@ -146,6 +172,74 @@ public class Home extends AppCompatActivity{
 
                         break;
                 }
+            }
+        });
+    }
+
+    @Override
+    public void onDownloadAudioDialogSearchClick(DialogFragment dialog, final String filename) {
+
+        StorageReference recordingRef = storageRef.child(filename + ".3gp");
+
+        file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename);
+
+        recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                displayAudioScreen(filename);
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+
+                Toast.makeText(context, context.getString(R.string.no_file_found), Toast.LENGTH_LONG);
+            }
+        });
+    }
+
+    private void displayAudioScreen(String filename){
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View download_audio_layout = inflater.inflate(R.layout.download_audio, null);
+
+        layout_container.addView(download_audio_layout);
+
+        TextView tv_file_name = (TextView) download_audio_layout.findViewById(R.id.tv_file_name);
+
+        Button btn_play = (Button) download_audio_layout.findViewById(R.id.btn_play);
+
+        tv_file_name.setText(filename + ".3pg");
+
+        btn_play.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                MediaPlayer mediaPlayer = new MediaPlayer();
+
+                try {
+
+                    mediaPlayer.setDataSource(file.getPath());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+
+                    mediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                mediaPlayer.start();
+
+                Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_LONG).show();
             }
         });
     }
