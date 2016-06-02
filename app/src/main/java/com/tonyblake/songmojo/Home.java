@@ -32,7 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 
-public class Home extends AppCompatActivity implements DownloadAudioDialog.DownloadAudioDialogListener{
+public class Home extends AppCompatActivity implements DownloadAudioDialog.DownloadAudioDialogInterface{
 
     private Context context;
 
@@ -69,7 +69,7 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         storageRef = storage.getReferenceFromUrl("gs://songmojo.appspot.com");
 
         // Create a reference to recording.3gp
-        recordingRef = storageRef.child("recording.3gp");
+        recordingRef = storageRef.child("audioTest.3gp");
 
         // Create a reference to 'audio/recording.3gp'
         audioRecordingRef = storageRef.child("audio/recording.3gp");
@@ -178,6 +178,8 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
     @Override
     public void onDownloadAudioDialogSearchClick(DialogFragment dialog, final String filename) {
+
+        layout_container.removeAllViews();
 
         StorageReference recordingRef = storageRef.child(filename + ".3gp");
 

@@ -53,7 +53,7 @@ public class DownloadAudioDialog extends DialogFragment {
 
                             file_name = et_file_name.getText().toString();
 
-                            mListener.onDownloadAudioDialogSearchClick(DownloadAudioDialog.this, file_name);
+                            downloadAudioDialogInterface.onDownloadAudioDialogSearchClick(DownloadAudioDialog.this, file_name);
                         }
                     }
                 })
@@ -100,19 +100,19 @@ public class DownloadAudioDialog extends DialogFragment {
         return dialog;
     }
 
-    public interface DownloadAudioDialogListener {
+    public interface DownloadAudioDialogInterface {
 
         void onDownloadAudioDialogSearchClick(DialogFragment dialog, String filename);
     }
 
-    DownloadAudioDialogListener mListener;
+    DownloadAudioDialogInterface downloadAudioDialogInterface;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         try {
-            mListener = (DownloadAudioDialogListener) activity;
+            downloadAudioDialogInterface = (DownloadAudioDialogInterface) activity;
         }
         catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");

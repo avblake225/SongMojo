@@ -41,7 +41,7 @@ public class UploadAudio extends AppCompatActivity{
 
         stop.setEnabled(false);
         play.setEnabled(false);
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";;
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audioTest.3gp";
 
         myAudioRecorder=new MediaRecorder();
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
