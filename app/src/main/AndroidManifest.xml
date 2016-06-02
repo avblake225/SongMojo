@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".Home"></activity>
         <activity android:name=".UploadAudio"></activity>
+        <activity android:name=".DownloadAudio"></activity>
         <activity android:name=".UploadVideo"></activity>
     </application>
 

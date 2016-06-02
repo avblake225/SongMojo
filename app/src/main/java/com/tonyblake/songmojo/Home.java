@@ -32,6 +32,8 @@ public class Home extends AppCompatActivity{
     private ListView dList;
     private ArrayAdapter<String> drawerAdapter;
 
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +113,7 @@ public class Home extends AppCompatActivity{
 
                         dLayout.closeDrawer(dList);
 
-                        Intent intent = new Intent(home,UploadAudio.class);
+                        intent = new Intent(home, UploadAudio.class);
                         startActivity(intent);
 
                         break;
@@ -121,7 +123,8 @@ public class Home extends AppCompatActivity{
 
                         dLayout.closeDrawer(dList);
 
-                        // download audio...
+                        intent = new Intent(home, DownloadAudio.class);
+                        startActivity(intent);
 
                         break;
 
