@@ -25,6 +25,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -54,6 +59,10 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
     private LinearLayout layout_container;
 
+    private FirebaseDatabase database;
+
+    private DatabaseReference databaseRef;
+
     private File file;
 
     @Override
@@ -62,6 +71,12 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         setContentView(R.layout.home);
 
         layout_container = (LinearLayout)findViewById(R.id.layout_container);
+
+        database = FirebaseDatabase.getInstance();
+
+        databaseRef = database.getReference("users");
+
+        writeNewUser(1, "tony", "12345");
 
         storage = FirebaseStorage.getInstance();
 
@@ -102,6 +117,13 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         dList.setAdapter(drawerAdapter);
     }
 
+    private void writeNewUser(int userId, String username, String password) {
+
+        User user = new User(userId, username, password);
+
+        databaseRef.setValue(user);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -115,6 +137,26 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Read from the database
+        databaseRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                User user = dataSnapshot.getValue(User.class);
+
+                int dummy = 0;
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
