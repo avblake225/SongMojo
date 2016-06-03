@@ -1,5 +1,14 @@
 <resources>
 
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="create_account">Create Account</string>
+    <string name="create">Create</string>
+    <string name="no_username_entered">No username entered</string>
+    <string name="no_password_entered">No password_entered</string>
+    <string name="account_created">Account created</string>
+
     <string name="app_name">SongMojo</string>
     <string name="record_video">Record Video</string>
 
