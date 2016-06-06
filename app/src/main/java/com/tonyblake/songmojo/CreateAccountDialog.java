@@ -21,8 +21,8 @@ public class CreateAccountDialog extends DialogFragment {
 
     private Context context;
     private View view;
-    private EditText et_username, et_password;
-    private String username, password;
+    private EditText et_firstName, et_lastName, et_username, et_password;
+    private String firstName, lastName, username, password;
     private WindowManager.LayoutParams lp;
 
     @Override
@@ -36,6 +36,8 @@ public class CreateAccountDialog extends DialogFragment {
 
         view = inflater.inflate(R.layout.create_account_dialog, null);
 
+        firstName = null;
+        lastName = null;
         username = null;
         password = null;
 
@@ -56,13 +58,15 @@ public class CreateAccountDialog extends DialogFragment {
                         }
                         else{
 
+                            firstName = et_firstName.getText().toString();
+
+                            lastName = et_lastName.getText().toString();
+
                             username = et_username.getText().toString();
 
                             password = et_password.getText().toString();
 
-                            createAccountDialogInterface.onCreateAccountDialogSearchClick(CreateAccountDialog.this, username, password);
-
-                            Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_LONG);
+                            createAccountDialogInterface.onCreateAccountDialogSearchClick(CreateAccountDialog.this, firstName, lastName, username, password);
                         }
                     }
                 })
@@ -111,7 +115,7 @@ public class CreateAccountDialog extends DialogFragment {
 
     public interface CreateAccountDialogInterface {
 
-        void onCreateAccountDialogSearchClick(DialogFragment dialog, String username, String password);
+        void onCreateAccountDialogSearchClick(DialogFragment dialog, String firstName, String lastName, String username, String password);
     }
 
     CreateAccountDialogInterface createAccountDialogInterface;
@@ -131,6 +135,10 @@ public class CreateAccountDialog extends DialogFragment {
     @Override
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+
+        et_firstName = (EditText) view.findViewById(R.id.et_firstName);
+
+        et_lastName = (EditText) view.findViewById(R.id.et_lastName);
 
         et_username = (EditText) view.findViewById(R.id.et_username);
 

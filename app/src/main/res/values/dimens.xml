@@ -1,6 +1,7 @@
 <resources>
 
     <dimen name="login_layout_margin_left">5dp</dimen>
+    <dimen name="create_account_margin_left">20dp</dimen>
 
     <dimen name="divider_line">1dp</dimen>
 
