@@ -14,4 +14,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="header_text_style">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/header_text_size</item>
+    </style>
+
 </resources>

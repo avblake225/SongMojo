@@ -23,7 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class UploadAudio extends AppCompatActivity{
+public class UploadFile extends AppCompatActivity{
 
     Button play,stop,record, upload;
     private MediaRecorder myAudioRecorder;

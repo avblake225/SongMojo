@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/upload_file_header_margin_left"
+                android:layout_marginTop="@dimen/upload_file_header_margin_top"
+                android:text="@string/set_file_name"
+                style="@style/header_text_style"/>
+
+            <EditText
+                android:id="@+id/et_file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/upload_file_header_margin_left"
+                android:layout_marginTop="@dimen/upload_file_header_margin_top"
+                android:text="@string/select_file_type"
+                style="@style/header_text_style"/>
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/upload_file_radio_group_margin_left"
+                android:layout_marginTop="@dimen/upload_file_radio_group_margin_top">
+
+                <RadioButton
+                    android:id="@+id/rb_audio_file"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/audio_file"/>
+
+                <RadioButton
+                    android:id="@+id/rb_video_file"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/video_file"/>
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/upload_file_header_margin_left"
+                android:layout_marginTop="@dimen/upload_file_header_margin_top"
+                android:text="@string/select_recipient"
+                style="@style/header_text_style"/>
+
+            <Spinner
+                android:id="@+id/select_recipient_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_proceed_to_recording"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/btn_proceed_to_recording_margin_top"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/proceed_to_recording"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

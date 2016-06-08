@@ -23,14 +23,22 @@
     <drawable name="black">#000000</drawable>
 
     <string-array name="menu_items">
-        <item>Upload Audio</item>
-        <item>Download Audio</item>
+        <item>Upload File</item>
+        <item>Download File</item>
         <item>Find Band Members</item>
         <item>Edit Band Members</item>
     </string-array>
 
     <string name="settings">Settings</string>
 
+    <!-- Upload File screen -->
+    <string name="set_file_name">Set File Name:</string>
+    <string name="select_file_type">Select File Type:</string>
+    <string name="select_recipient">Select Recipient:</string>
+    <string name="proceed_to_recording">Proceed to recording</string>
+
+    <string name="audio_file">Audio File</string>
+    <string name="video_file">Video File</string>
     <string name="enter_file_name">Enter file name</string>
     <string name="cancel">Cancel</string>
     <string name="search">Search</string>

@@ -159,17 +159,17 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
                 switch (position) {
 
-                    // Upload Audio
+                    // Upload File
                     case 0:
 
                         dLayout.closeDrawer(dList);
 
-                        intent = new Intent(home, UploadAudio.class);
+                        intent = new Intent(home, UploadFile.class);
                         startActivity(intent);
 
                         break;
 
-                    // Download Audio
+                    // Download File
                     case 1:
 
                         dLayout.closeDrawer(dList);

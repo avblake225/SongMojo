@@ -3,9 +3,16 @@
     <dimen name="login_layout_margin_left">5dp</dimen>
     <dimen name="create_account_margin_left">20dp</dimen>
 
-    <dimen name="welcome_text_size">20dp</dimen>
+    <dimen name="header_text_size">20dp</dimen>
     <dimen name="welcome_image_max_height">200dp</dimen>
     <dimen name="welcome_image_max_width">200dp</dimen>
+
+    <!-- Upload File screen -->
+    <dimen name="upload_file_header_margin_left">10dp</dimen>
+    <dimen name="upload_file_header_margin_top">10dp</dimen>
+    <dimen name="upload_file_radio_group_margin_left">5dp</dimen>
+    <dimen name="upload_file_radio_group_margin_top">8dp</dimen>
+    <dimen name="btn_proceed_to_recording_margin_top">15dp</dimen>
 
     <dimen name="divider_line">1dp</dimen>
 
