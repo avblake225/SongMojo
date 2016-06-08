@@ -7,14 +7,20 @@
     <dimen name="create_account_dialog_margin">5dp</dimen>
 
     <dimen name="header_text_size">20dp</dimen>
+    <dimen name="input_text_size">18dp</dimen>
+    <dimen name="spinner_input_text_size">25dp</dimen>
     <dimen name="welcome_image_max_height">200dp</dimen>
     <dimen name="welcome_image_max_width">200dp</dimen>
 
     <!-- Upload File screen -->
-    <dimen name="upload_file_header_margin_left">10dp</dimen>
-    <dimen name="upload_file_header_margin_top">10dp</dimen>
-    <dimen name="upload_file_radio_group_margin_left">5dp</dimen>
+    <dimen name="upload_file_header_margin_left">25dp</dimen>
+    <dimen name="upload_file_input_margin_left">35dp</dimen>
+    <dimen name="upload_file_header_input_margin_top">10dp</dimen>
+    <dimen name="upload_file_header_input_margin_bottom">10dp</dimen>
+    <dimen name="upload_file_header_padding_top">5dp</dimen>
+    <dimen name="upload_file_radio_group_margin_left">20dp</dimen>
     <dimen name="upload_file_radio_group_margin_top">8dp</dimen>
+    <dimen name="upload_file_spinner_margin_left">10dp</dimen>
     <dimen name="btn_proceed_to_recording_margin_top">15dp</dimen>
 
     <dimen name="divider_line">1dp</dimen>

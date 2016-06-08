@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,6 +38,8 @@ public class UploadFile extends AppCompatActivity implements AdapterView.OnItemS
 
     private Intent intent;
 
+    private Toolbar actionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,37 +64,59 @@ public class UploadFile extends AppCompatActivity implements AdapterView.OnItemS
 
         select_recipient_spinner = (Spinner)findViewById(R.id.select_recipient_spinner);
 
-        spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, recipients);
+        spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, recipients);
 
         select_recipient_spinner.setAdapter(spinnerAdapter);
 
         btn_proceed_to_recording = (Button)findViewById(R.id.btn_proceed_to_recording);
+
+        // Show Status Bar
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        // Set up Action Bar
+        actionBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(actionBar);
+        actionBar.setNavigationIcon(context.getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
+        actionBar.setTitle(context.getString(R.string.app_name));
+        actionBar.setTitleTextColor(context.getResources().getColor(R.color.white));
     }
 
     @Override
     protected void onResume(){
         super.onResume();
 
+        actionBar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                onBackPressed();
+            }
+        });
+
         btn_proceed_to_recording.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
+                showToastMessage("To Do...");
+
                 filename = et_file_name.getText().toString();
 
                 if(rb_audio_file.isChecked()){
 
-                    intent = new Intent(context, RecordAudio.class);
+                    //intent = new Intent(context, RecordAudio.class);
                 }
                 else if(rb_video_file.isChecked()){
 
                     //intent = new Intent(context, RecordVideo.class);
                 }
 
-                intent.putExtra("filename",filename);
-                intent.putExtra("recipient", recipient_chosen);
-
-                startActivity(intent);
+//                intent.putExtra("filename",filename);
+//                intent.putExtra("recipient", recipient_chosen);
+//                startActivity(intent);
             }
         });
     }
