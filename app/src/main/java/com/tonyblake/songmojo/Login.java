@@ -20,8 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Login extends AppCompatActivity implements CreateAccountDialog.CreateAccountDialogInterface {
 
@@ -41,11 +39,9 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
     private CreateAccountDialog createAccountDialog;
 
-    private User user;
-
     private ArrayList<User> users;
 
-    private ProgressDialog loginDialog;
+    private ProgressDialog loginProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,18 +92,18 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
                     @Override
                     protected void onPreExecute(){
 
-                        loginDialog = new ProgressDialog(context);
+                        loginProgressDialog = new ProgressDialog(context);
 
-                        loginDialog.setProgressStyle(loginDialog.STYLE_SPINNER);
-                        loginDialog.setIndeterminate(true);
-                        loginDialog.setMessage(context.getString(R.string.logging_in));
-                        loginDialog.show();
+                        loginProgressDialog.setProgressStyle(loginProgressDialog.STYLE_SPINNER);
+                        loginProgressDialog.setIndeterminate(true);
+                        loginProgressDialog.setMessage(context.getString(R.string.logging_in));
+                        loginProgressDialog.show();
                     }
 
                     @Override
                     protected void onPostExecute(User user){
 
-                        loginDialog.dismiss();
+                        loginProgressDialog.dismiss();
 
                         if(user != null){
 
@@ -143,14 +139,17 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                     for (DataSnapshot userID: dataSnapshot.getChildren()) {
 
-                        user = new User();
+                        User user = new User();
 
                         user.firstName = (String) userID.child("firstName").getValue();
                         user.lastName = (String) userID.child("lastName").getValue();
                         user.username = (String) userID.child("username").getValue();
                         user.password = (String) userID.child("password").getValue();
 
-                        users.add(user);
+                        if(!users.contains(user)){
+
+                            users.add(user);
+                        }
                     }
                 }
             }
@@ -175,13 +174,9 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
     @Override
     public void onCreateAccountDialogSearchClick(DialogFragment dialog, String firstName, String lastName, String username, String password) {
 
-        User user = new User(firstName, lastName, username, password);
+        User newUser = new User(firstName, lastName, username, password);
 
-        Map<String, User> map = new HashMap<>();
-
-        map.put(username, user);
-
-        databaseRef.setValue(map);
+        databaseRef.child(username).setValue(newUser);
 
         showToastMessage(context.getString(R.string.account_created));
     }

@@ -1,167 +1,116 @@
 package com.tonyblake.songmojo;
 
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
-import android.net.Uri;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.UploadTask;
+import java.util.ArrayList;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+public class UploadFile extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-public class UploadFile extends AppCompatActivity{
+    private Context context;
 
-    Button play,stop,record, upload;
-    private MediaRecorder myAudioRecorder;
-    private String outputFile = null;
+    private EditText et_file_name;
+
+    private RadioButton rb_audio_file, rb_video_file;
+
+    private Spinner select_recipient_spinner;
+
+    private ArrayAdapter<String> spinnerAdapter;
+
+    private ArrayList<String> recipients;
+
+    private String recipient_chosen;
+
+    private Button btn_proceed_to_recording;
+
+    private String filename;
+
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.record_audio);
+        setContentView(R.layout.upload_file);
 
-        play=(Button)findViewById(R.id.btn_play);
-        stop=(Button)findViewById(R.id.btn_stop);
-        record=(Button)findViewById(R.id.btn_record);
-        upload=(Button)findViewById(R.id.btn_upload);
+        context = this;
 
-        stop.setEnabled(false);
-        play.setEnabled(false);
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audioTest.3gp";
+        recipient_chosen = null;
 
-        myAudioRecorder=new MediaRecorder();
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        myAudioRecorder.setOutputFile(outputFile);
+        recipients = new ArrayList<>();
 
-        record.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    myAudioRecorder.prepare();
-                    myAudioRecorder.start();
-                } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+        recipients.add("Simon");
+        recipients.add("John");
+        recipients.add("Lisa");
+        recipients.add("Ben");
 
-                record.setEnabled(false);
-                stop.setEnabled(true);
+        et_file_name = (EditText)findViewById(R.id.et_file_name);
 
-                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
-            }
-        });
+        rb_audio_file = (RadioButton)findViewById(R.id.rb_audio_file);
 
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myAudioRecorder.stop();
-                myAudioRecorder.release();
-                myAudioRecorder  = null;
+        rb_video_file = (RadioButton)findViewById(R.id.rb_video_file);
 
-                stop.setEnabled(false);
-                play.setEnabled(true);
+        select_recipient_spinner = (Spinner)findViewById(R.id.select_recipient_spinner);
 
-                Toast.makeText(getApplicationContext(), "Audio recorded successfully", Toast.LENGTH_LONG).show();
-            }
-        });
+        spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, recipients);
 
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) throws IllegalArgumentException,SecurityException,IllegalStateException {
-                MediaPlayer m = new MediaPlayer();
+        select_recipient_spinner.setAdapter(spinnerAdapter);
 
-                try {
-                    m.setDataSource(outputFile);
-                }
+        btn_proceed_to_recording = (Button)findViewById(R.id.btn_proceed_to_recording);
+    }
 
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
+    @Override
+    protected void onResume(){
+        super.onResume();
 
-                try {
-                    m.prepare();
-                }
-
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                m.start();
-                Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        upload.setOnClickListener(new View.OnClickListener() {
+        btn_proceed_to_recording.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                InputStream stream = null;
+                filename = et_file_name.getText().toString();
 
-                try {
+                if(rb_audio_file.isChecked()){
 
-                    stream = new FileInputStream(new File(outputFile));
+                    intent = new Intent(context, RecordAudio.class);
                 }
-                catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                else if(rb_video_file.isChecked()){
+
+                    //intent = new Intent(context, RecordVideo.class);
                 }
 
-                UploadTask uploadTask = Home.recordingRef.putStream(stream);
+                intent.putExtra("filename",filename);
+                intent.putExtra("recipient", recipient_chosen);
 
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    }
-                });
-
-                // Observe state change events such as progress, pause, and resume
-                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        double progress = 100.0 * (taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-
-                        System.out.println("Upload is " + progress + "% done");
-                    }
-                }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-
-                    @Override
-                    public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        System.out.println("Upload is paused");
-                    }
-                });
+                startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        recipient_chosen = (String)parent.getItemAtPosition(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private void showToastMessage(CharSequence text) {
+
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 }

@@ -1,5 +1,9 @@
 <resources>
 
+    <!-- Firebase database -->
+    <string name="users">Users</string>
+
+    <!-- Create Account/Log In -->
     <string name="firstName">First Name:</string>
     <string name="lastName">Last Name:</string>
     <string name="username">Username:</string>

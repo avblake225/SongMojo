@@ -6,107 +6,103 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/create_account_margin_left"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_line"
+        android:layout_marginTop="@dimen/create_account_dialog_margin"
+        android:background="@color/gray"/>
 
-        <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/create_account_text_style"
-            android:text="@string/firstName"/>
+            android:layout_marginLeft="@dimen/create_account_margin_left"
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_firstName"
-            android:textColor="@color/black"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/create_account_text_style"
+                android:text="@string/firstName"/>
+
+            <EditText
+                android:id="@+id/et_firstName"
+                android:textColor="@color/black"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/create_account_margin_left"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/create_account_text_style"
+                android:text="@string/lastName"/>
+
+            <EditText
+                android:id="@+id/et_lastName"
+                android:textColor="@color/black"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/create_account_margin_left"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/create_account_text_style"
+                android:text="@string/username"/>
+
+            <EditText
+                android:id="@+id/et_username"
+                android:textColor="@color/black"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/create_account_margin_left"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/create_account_text_style"
+                android:text="@string/password"/>
+
+            <EditText
+                android:id="@+id/et_password"
+                android:textColor="@color/black"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/create_account_margin_left"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/create_account_text_style"
-            android:text="@string/lastName"/>
-
-        <EditText
-            android:id="@+id/et_lastName"
-            android:textColor="@color/black"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/create_account_margin_left"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/create_account_text_style"
-            android:text="@string/username"/>
-
-        <EditText
-            android:id="@+id/et_username"
-            android:textColor="@color/black"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/create_account_margin_left"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/create_account_text_style"
-            android:text="@string/password"/>
-
-        <EditText
-            android:id="@+id/et_password"
-            android:textColor="@color/black"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/black"
-            android:background="@color/white"/>
-
-        <Button
-            android:id="@+id/btn_create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/black"
-            android:background="@color/white"/>
-
-    </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_line"
+        android:layout_marginTop="@dimen/create_account_dialog_margin"
+        android:background="@color/gray"/>
 
 </LinearLayout>

@@ -1,7 +1,10 @@
 <resources>
 
     <dimen name="login_layout_margin_left">5dp</dimen>
+
+    <!-- Create Account -->
     <dimen name="create_account_margin_left">20dp</dimen>
+    <dimen name="create_account_dialog_margin">5dp</dimen>
 
     <dimen name="header_text_size">20dp</dimen>
     <dimen name="welcome_image_max_height">200dp</dimen>

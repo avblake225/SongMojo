@@ -26,6 +26,7 @@
         <activity android:name=".Login"></activity>
         <activity android:name=".Home"></activity>
         <activity android:name=".UploadFile"></activity>
+        <activity android:name=".RecordAudio"></activity>
         <activity android:name=".UploadVideo"></activity>
     </application>
 

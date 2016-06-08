@@ -40,8 +40,6 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
     public static StorageReference storageRef, recordingRef, audioRecordingRef;
 
-    public Home home;
-
     private Toolbar actionBar;
 
     private DrawerLayout dLayout;
@@ -96,8 +94,6 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
         decorView.setSystemUiVisibility(uiOptions);
-
-        home = this;
 
         // Set up Action Bar
         actionBar = (Toolbar) findViewById(R.id.toolbar);
@@ -164,7 +160,8 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
                         dLayout.closeDrawer(dList);
 
-                        intent = new Intent(home, UploadFile.class);
+                        intent = new Intent(context, UploadFile.class);
+
                         startActivity(intent);
 
                         break;
