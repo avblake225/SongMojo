@@ -56,12 +56,26 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
     private File file;
 
+    private String firstName;
+
+    private LayoutInflater layoutInflater;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+        context = this;
+
+        savedInstanceState = getIntent().getExtras();
+
+        firstName = savedInstanceState.getString("firstName");
+
         layout_container = (LinearLayout)findViewById(R.id.layout_container);
+
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        createWelcomeMessage();
 
         storage = FirebaseStorage.getInstance();
 
@@ -83,8 +97,6 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
         decorView.setSystemUiVisibility(uiOptions);
 
-        context = this;
-
         home = this;
 
         // Set up Action Bar
@@ -100,6 +112,19 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         dList = (ListView) findViewById(R.id.left_drawer);
         drawerAdapter = new ArrayAdapter<>(this,R.layout.drawer_item_layout,context.getResources().getStringArray(R.array.menu_items));
         dList.setAdapter(drawerAdapter);
+    }
+
+    private void createWelcomeMessage(){
+
+        View welcome_layout = layoutInflater.inflate(R.layout.welcome, null);
+
+        TextView tv = (TextView)welcome_layout.findViewById(R.id.tv_welcome);
+
+        String welcome_message = context.getString(R.string.welcome) + " " + firstName;
+
+        tv.setText(welcome_message);
+
+        layout_container.addView(welcome_layout);
     }
 
     @Override

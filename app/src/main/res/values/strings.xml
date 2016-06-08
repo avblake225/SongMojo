@@ -5,6 +5,9 @@
     <string name="username">Username:</string>
     <string name="password">Password:</string>
     <string name="log_in">Log in</string>
+    <string name="logging_in">Logging in...</string>
+    <string name="no_account_found">No account found</string>
+    <string name="welcome">Welcome</string>
     <string name="create_account">Create Account</string>
     <string name="create">Create</string>
     <string name="no_username_entered">No username entered</string>

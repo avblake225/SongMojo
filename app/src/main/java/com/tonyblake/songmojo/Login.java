@@ -1,6 +1,8 @@
 package com.tonyblake.songmojo;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -42,6 +44,8 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
     private User user;
 
     private ArrayList<User> users;
+
+    private ProgressDialog loginDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,35 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                 password = et_password.getText().toString();
 
+                new LoginTask(users){
+
+                    @Override
+                    protected void onPreExecute(){
+
+                        loginDialog = new ProgressDialog(context);
+
+                        loginDialog.setProgressStyle(loginDialog.STYLE_SPINNER);
+                        loginDialog.setIndeterminate(true);
+                        loginDialog.setMessage(context.getString(R.string.logging_in));
+                        loginDialog.show();
+                    }
+
+                    @Override
+                    protected void onPostExecute(User user){
+
+                        loginDialog.dismiss();
+
+                        if(user != null){
+
+                            login(user);
+                        }
+                        else{
+
+                            showToastMessage(context.getString(R.string.no_account_found));
+                        }
+                    }
+
+                }.execute(username,password);
             }
         });
 
@@ -130,6 +163,15 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
         });
     }
 
+    private void login(User user){
+
+        Intent intent = new Intent(this, Home.class);
+
+        intent.putExtra("firstName", user.firstName);
+
+        startActivity(intent);
+    }
+
     @Override
     public void onCreateAccountDialogSearchClick(DialogFragment dialog, String firstName, String lastName, String username, String password) {
 
@@ -141,6 +183,13 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
         databaseRef.setValue(map);
 
-        Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_LONG);
+        showToastMessage(context.getString(R.string.account_created));
+    }
+
+    private void showToastMessage(CharSequence text) {
+
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 }
