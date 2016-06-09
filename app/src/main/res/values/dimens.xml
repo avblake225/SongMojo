@@ -24,14 +24,16 @@
     <dimen name="upload_file_header_input_margin_top">10dp</dimen>
     <dimen name="upload_file_header_input_margin_bottom">10dp</dimen>
     <dimen name="upload_file_header_padding_top">5dp</dimen>
-    <dimen name="upload_file_radio_group_margin_left">20dp</dimen>
+    <dimen name="upload_file_radio_group_margin_left">15dp</dimen>
     <dimen name="upload_file_radio_group_margin_top">8dp</dimen>
     <dimen name="upload_file_spinner_margin">10dp</dimen>
-    <dimen name="btn_proceed_to_recording_margin_top">15dp</dimen>
+    <dimen name="btn_proceed_to_recording_margin">15dp</dimen>
     <dimen name="spinner_padding">5dp</dimen>
+    <dimen name="upload_file_box_margin">15dp</dimen>
 
     <!-- Record Audio screen -->
     <dimen name="tv_filename_margin_bottom">20dp</dimen>
+    <dimen name="record_audio_drawable_padding">5dp</dimen>
 
     <!-- Nav Drawer -->
     <dimen name="divider_line">1dp</dimen>

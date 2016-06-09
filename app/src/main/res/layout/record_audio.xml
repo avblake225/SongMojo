@@ -42,25 +42,37 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Record"
+            android:drawablePadding="@dimen/record_audio_drawable_padding"
+            android:drawableLeft="@drawable/ic_fiber_manual_record_black_24dp"
             android:id="@+id/btn_record"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Stop"
+            android:drawablePadding="@dimen/record_audio_drawable_padding"
+            android:drawableLeft="@drawable/ic_stop_black_24dp"
             android:id="@+id/btn_stop"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="play"
+            android:drawablePadding="@dimen/record_audio_drawable_padding"
+            android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
             android:id="@+id/btn_play"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="upload"
+            android:drawableLeft="@drawable/ic_cloud_upload_black_24dp"
+            android:drawablePadding="@dimen/record_audio_drawable_padding"
             android:id="@+id/btn_upload"/>
 
     </LinearLayout>

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -23,22 +22,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.io.File;
 import java.io.IOException;
 
 public class Home extends AppCompatActivity implements DownloadAudioDialog.DownloadAudioDialogInterface{
 
     private Context context;
-
-    private FirebaseStorage storage;
-
-    public static StorageReference storageRef, recordingRef, audioRecordingRef;
 
     private Toolbar actionBar;
 
@@ -74,21 +63,6 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         createWelcomeMessage();
-
-        storage = FirebaseStorage.getInstance();
-
-        // Create a storage reference
-        storageRef = storage.getReferenceFromUrl("gs://songmojo.appspot.com");
-
-        // Create a reference to recording.3gp
-        recordingRef = storageRef.child("audioTest.3gp");
-
-        // Create a reference to 'audio/recording.3gp'
-        audioRecordingRef = storageRef.child("audio/recording.3gp");
-
-        // While the file names are the same, the references point to different files
-        recordingRef.getName().equals(audioRecordingRef.getName());    // true
-        recordingRef.getPath().equals(audioRecordingRef.getPath());    // false
 
         // Show Status Bar
         View decorView = getWindow().getDecorView();
@@ -203,26 +177,26 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
         layout_container.removeAllViews();
 
-        StorageReference recordingRef = storageRef.child(filename + ".3gp");
+        //StorageReference recordingRef = storageRef.child(filename + ".3gp");
 
         file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename);
 
-        recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-                displayAudioScreen(filename);
-            }
-
-        }).addOnFailureListener(new OnFailureListener() {
-
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-
-                Toast.makeText(context, context.getString(R.string.no_file_found), Toast.LENGTH_LONG);
-            }
-        });
+//        recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//
+//            @Override
+//            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//
+//                displayAudioScreen(filename);
+//            }
+//
+//        }).addOnFailureListener(new OnFailureListener() {
+//
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//
+//                Toast.makeText(context, context.getString(R.string.no_file_found), Toast.LENGTH_LONG);
+//            }
+//        });
     }
 
     private void displayAudioScreen(String filename){

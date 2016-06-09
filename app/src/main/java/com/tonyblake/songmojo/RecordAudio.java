@@ -16,8 +16,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
@@ -27,6 +29,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class RecordAudio extends AppCompatActivity{
+
+    private FirebaseStorage storage;
+
+    private StorageReference storageRef, recordingRef;
 
     private Context context;
 
@@ -54,6 +60,14 @@ public class RecordAudio extends AppCompatActivity{
         filename = savedInstanceState.getString("filename");
         recipient = savedInstanceState.getString("recipient");
 
+        storage = FirebaseStorage.getInstance();
+
+        // Create a storage reference
+        storageRef = storage.getReferenceFromUrl("gs://songmojo.appspot.com");
+
+        // Create a reference to recording.3gp
+        recordingRef = storageRef.child(filename);
+
         tv_filename = (TextView) findViewById(R.id.tv_filename);
 
         // Show Status Bar
@@ -75,7 +89,7 @@ public class RecordAudio extends AppCompatActivity{
 
         stop.setEnabled(false);
         play.setEnabled(false);
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audioTest.3gp";
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 
         myAudioRecorder = new MediaRecorder();
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -174,7 +188,7 @@ public class RecordAudio extends AppCompatActivity{
                     e.printStackTrace();
                 }
 
-                UploadTask uploadTask = Home.recordingRef.putStream(stream);
+                UploadTask uploadTask = recordingRef.putStream(stream);
 
                 uploadTask.addOnFailureListener(new OnFailureListener() {
 
@@ -187,7 +201,7 @@ public class RecordAudio extends AppCompatActivity{
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        showToastMessage("audio upload successful");
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     }
                 });
@@ -212,5 +226,12 @@ public class RecordAudio extends AppCompatActivity{
                 });
             }
         });
+    }
+
+    private void showToastMessage(CharSequence text) {
+
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 }

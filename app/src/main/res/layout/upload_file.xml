@@ -26,7 +26,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/upload_file_box_margin"
+        android:layout_marginRight="@dimen/upload_file_box_margin"
         android:orientation="vertical"
+        android:background="@drawable/upload_file_box"
         android:layout_centerInParent="true">
 
         <LinearLayout
@@ -122,7 +125,8 @@
             android:id="@+id/btn_proceed_to_recording"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/btn_proceed_to_recording_margin_top"
+            android:layout_marginTop="@dimen/btn_proceed_to_recording_margin"
+            android:layout_marginBottom="@dimen/btn_proceed_to_recording_margin"
             android:layout_gravity="center_horizontal"
             android:text="@string/proceed_to_recording"/>
 

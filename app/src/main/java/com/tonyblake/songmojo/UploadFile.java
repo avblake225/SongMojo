@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -119,12 +118,5 @@ public class UploadFile extends AppCompatActivity{
 //                }
             }
         });
-    }
-
-    private void showToastMessage(CharSequence text) {
-
-        int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
     }
 }
