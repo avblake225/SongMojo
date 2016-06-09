@@ -39,6 +39,10 @@
                 android:id="@+id/et_file_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="@string/file_name"
+                android:textColorHint="@color/gray"
+                android:textCursorDrawable="@null"
+                android:background="@android:color/transparent"
                 android:layout_marginLeft="@dimen/upload_file_input_margin_left"
                 style="@style/input_text_style"/>
 
@@ -101,8 +105,8 @@
                 android:id="@+id/select_recipient_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/upload_file_spinner_margin_left"
-                style="@style/spinner_input_text_style"/>
+                android:background="@drawable/spinner_border"
+                android:layout_marginLeft="@dimen/upload_file_spinner_margin"/>
 
         </LinearLayout>
 

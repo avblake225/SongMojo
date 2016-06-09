@@ -64,7 +64,9 @@ public class UploadFile extends AppCompatActivity implements AdapterView.OnItemS
 
         select_recipient_spinner = (Spinner)findViewById(R.id.select_recipient_spinner);
 
-        spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, recipients);
+        spinnerAdapter = new ArrayAdapter<>(this, R.layout.my_custom_spinner, recipients);
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         select_recipient_spinner.setAdapter(spinnerAdapter);
 

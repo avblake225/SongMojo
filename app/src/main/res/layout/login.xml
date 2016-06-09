@@ -22,22 +22,30 @@
 
             <EditText
                 android:id="@+id/et_username"
+                android:padding="@dimen/et_padding"
                 android:hint="@string/username"
                 android:textColorHint="@color/gray"
+                android:textCursorDrawable="@null"
+                android:background="@color/dark_gray"
                 android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/et_password"
+                android:padding="@dimen/et_padding"
+                android:layout_marginTop="@dimen/et_password_margin_top"
                 android:hint="@string/password"
                 android:textColorHint="@color/gray"
+                android:textCursorDrawable="@null"
+                android:background="@color/dark_gray"
                 android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/btn_log_in"
+                android:layout_marginTop="@dimen/btn_log_in_margin_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

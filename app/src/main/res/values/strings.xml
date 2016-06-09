@@ -4,10 +4,10 @@
     <string name="users">Users</string>
 
     <!-- Create Account/Log In -->
-    <string name="firstName">First Name:</string>
-    <string name="lastName">Last Name:</string>
-    <string name="username">Username:</string>
-    <string name="password">Password:</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="log_in">Log in</string>
     <string name="logging_in">Logging in...</string>
     <string name="no_account_found">No account found</string>
@@ -37,6 +37,7 @@
 
     <!-- Upload File screen -->
     <string name="set_file_name">Set File Name:</string>
+    <string name="file_name">File name</string>
     <string name="select_file_type">Select File Type:</string>
     <string name="select_recipient">Select Recipient:</string>
     <string name="proceed_to_recording">Proceed to recording</string>

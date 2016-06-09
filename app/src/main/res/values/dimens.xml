@@ -1,6 +1,10 @@
 <resources>
 
+    <!-- Log In -->
     <dimen name="login_layout_margin_left">5dp</dimen>
+    <dimen name="et_password_margin_top">5dp</dimen>
+    <dimen name="et_padding">5dp</dimen>
+    <dimen name="btn_log_in_margin_top">20dp</dimen>
 
     <!-- Create Account -->
     <dimen name="create_account_margin_left">20dp</dimen>
@@ -20,8 +24,9 @@
     <dimen name="upload_file_header_padding_top">5dp</dimen>
     <dimen name="upload_file_radio_group_margin_left">20dp</dimen>
     <dimen name="upload_file_radio_group_margin_top">8dp</dimen>
-    <dimen name="upload_file_spinner_margin_left">10dp</dimen>
+    <dimen name="upload_file_spinner_margin">10dp</dimen>
     <dimen name="btn_proceed_to_recording_margin_top">15dp</dimen>
+    <dimen name="spinner_padding">5dp</dimen>
 
     <dimen name="divider_line">1dp</dimen>
 
