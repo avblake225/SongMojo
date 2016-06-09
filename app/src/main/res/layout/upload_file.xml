@@ -15,6 +15,14 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:text="@string/upload_file"
+        android:layout_below="@id/toolbar"
+        android:gravity="center_horizontal"
+        style="@style/screen_title_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

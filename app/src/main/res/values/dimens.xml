@@ -16,6 +16,8 @@
     <dimen name="welcome_image_max_height">200dp</dimen>
     <dimen name="welcome_image_max_width">200dp</dimen>
 
+    <dimen name="screen_title_padding">5dp</dimen>
+
     <!-- Upload File screen -->
     <dimen name="upload_file_header_margin_left">25dp</dimen>
     <dimen name="upload_file_input_margin_left">35dp</dimen>
@@ -28,8 +30,11 @@
     <dimen name="btn_proceed_to_recording_margin_top">15dp</dimen>
     <dimen name="spinner_padding">5dp</dimen>
 
-    <dimen name="divider_line">1dp</dimen>
+    <!-- Record Audio screen -->
+    <dimen name="tv_filename_margin_bottom">20dp</dimen>
 
+    <!-- Nav Drawer -->
+    <dimen name="divider_line">1dp</dimen>
     <dimen name="drawer_item_text_size">20dp</dimen>
     <dimen name="drawer_item_padding_left">10dp</dimen>
     <dimen name="drawer_item_padding_top">15dp</dimen>

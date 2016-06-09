@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class UploadFile extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class UploadFile extends AppCompatActivity{
 
     private Context context;
 
@@ -103,35 +102,23 @@ public class UploadFile extends AppCompatActivity implements AdapterView.OnItemS
             @Override
             public void onClick(View v) {
 
-                showToastMessage("To Do...");
-
                 filename = et_file_name.getText().toString();
+
+                recipient_chosen = select_recipient_spinner.getSelectedItem().toString();
 
                 if(rb_audio_file.isChecked()){
 
-                    //intent = new Intent(context, RecordAudio.class);
+                    intent = new Intent(context, RecordAudio.class);
+                    intent.putExtra("filename",filename);
+                    intent.putExtra("recipient", recipient_chosen);
+                    startActivity(intent);
                 }
-                else if(rb_video_file.isChecked()){
-
-                    //intent = new Intent(context, RecordVideo.class);
-                }
-
-//                intent.putExtra("filename",filename);
-//                intent.putExtra("recipient", recipient_chosen);
-//                startActivity(intent);
+//                else if(rb_video_file.isChecked()){
+//
+//                    intent = new Intent(context, RecordVideo.class);
+//                }
             }
         });
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        recipient_chosen = (String)parent.getItemAtPosition(position);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     private void showToastMessage(CharSequence text) {

@@ -1,5 +1,6 @@
 package com.tonyblake.songmojo;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -7,8 +8,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,29 +28,76 @@ import java.io.InputStream;
 
 public class RecordAudio extends AppCompatActivity{
 
-    Button play,stop,record, upload;
+    private Context context;
+
+    private String filename, recipient;
+
+    private TextView tv_filename;
+
+    private Button play,stop,record, upload;
+
     private MediaRecorder myAudioRecorder;
+
     private String outputFile = null;
+
+    private Toolbar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_audio);
 
-        play=(Button)findViewById(R.id.btn_play);
-        stop=(Button)findViewById(R.id.btn_stop);
-        record=(Button)findViewById(R.id.btn_record);
-        upload=(Button)findViewById(R.id.btn_upload);
+        context = this;
+
+        savedInstanceState = getIntent().getExtras();
+
+        filename = savedInstanceState.getString("filename");
+        recipient = savedInstanceState.getString("recipient");
+
+        tv_filename = (TextView) findViewById(R.id.tv_filename);
+
+        // Show Status Bar
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        // Set up Action Bar
+        actionBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(actionBar);
+        actionBar.setNavigationIcon(context.getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
+        actionBar.setTitle(context.getString(R.string.app_name));
+        actionBar.setTitleTextColor(context.getResources().getColor(R.color.white));
+
+        play = (Button) findViewById(R.id.btn_play);
+        stop = (Button) findViewById(R.id.btn_stop);
+        record = (Button) findViewById(R.id.btn_record);
+        upload = (Button) findViewById(R.id.btn_upload);
 
         stop.setEnabled(false);
         play.setEnabled(false);
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audioTest.3gp";
 
-        myAudioRecorder=new MediaRecorder();
+        myAudioRecorder = new MediaRecorder();
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         myAudioRecorder.setOutputFile(outputFile);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        actionBar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                onBackPressed();
+            }
+        });
+
+        tv_filename.setText(filename + context.getString(R.string._mp3));
 
         record.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,8 +170,7 @@ public class RecordAudio extends AppCompatActivity{
                 try {
 
                     stream = new FileInputStream(new File(outputFile));
-                }
-                catch (FileNotFoundException e) {
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
 

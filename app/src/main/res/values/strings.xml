@@ -36,11 +36,16 @@
     <string name="settings">Settings</string>
 
     <!-- Upload File screen -->
+    <string name="upload_file">Upload File</string>
     <string name="set_file_name">Set File Name:</string>
     <string name="file_name">File name</string>
     <string name="select_file_type">Select File Type:</string>
     <string name="select_recipient">Select Recipient:</string>
     <string name="proceed_to_recording">Proceed to recording</string>
+
+    <!-- Record Audio screen -->
+    <string name="record_audio">Record Audio</string>
+    <string name="_mp3">.mp3</string>
 
     <string name="audio_file">Audio File</string>
     <string name="video_file">Video File</string>
