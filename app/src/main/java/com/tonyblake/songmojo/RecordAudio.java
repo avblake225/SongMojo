@@ -1,12 +1,14 @@
 package com.tonyblake.songmojo;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,21 +16,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class RecordAudio extends AppCompatActivity{
+public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface{
 
     private FirebaseStorage storage;
 
@@ -36,17 +31,23 @@ public class RecordAudio extends AppCompatActivity{
 
     private Context context;
 
-    private String filename, recipient;
+    public static String filename, recipient;
 
     private TextView tv_filename;
 
-    private Button play,stop,record, upload;
+    private TextView tv_recipient;
+
+    private Button play, stop, record, send;
 
     private MediaRecorder myAudioRecorder;
 
-    private String outputFile = null;
-
     private Toolbar actionBar;
+
+    private String filePath;
+
+    private ProgressDialog sendingFileDialog;
+
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,8 @@ public class RecordAudio extends AppCompatActivity{
         setContentView(R.layout.record_audio);
 
         context = this;
+
+        fm = getSupportFragmentManager();
 
         savedInstanceState = getIntent().getExtras();
 
@@ -70,6 +73,8 @@ public class RecordAudio extends AppCompatActivity{
 
         tv_filename = (TextView) findViewById(R.id.tv_filename);
 
+        tv_recipient = (TextView) findViewById(R.id.tv_recipient);
+
         // Show Status Bar
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
@@ -85,22 +90,23 @@ public class RecordAudio extends AppCompatActivity{
         play = (Button) findViewById(R.id.btn_play);
         stop = (Button) findViewById(R.id.btn_stop);
         record = (Button) findViewById(R.id.btn_record);
-        upload = (Button) findViewById(R.id.btn_upload);
+        send = (Button) findViewById(R.id.btn_send);
 
         stop.setEnabled(false);
         play.setEnabled(false);
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 
-        myAudioRecorder = new MediaRecorder();
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        myAudioRecorder.setOutputFile(outputFile);
+        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        myAudioRecorder = new MediaRecorder();
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        myAudioRecorder.setOutputFile(filePath);
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -113,16 +119,22 @@ public class RecordAudio extends AppCompatActivity{
 
         tv_filename.setText(filename + context.getString(R.string._mp3));
 
+        tv_recipient.setText(recipient);
+
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try {
+
                     myAudioRecorder.prepare();
                     myAudioRecorder.start();
-                } catch (IllegalStateException e) {
+                }
+                catch (IllegalStateException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
@@ -130,13 +142,14 @@ public class RecordAudio extends AppCompatActivity{
                 record.setEnabled(false);
                 stop.setEnabled(true);
 
-                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_SHORT).show();
             }
         });
 
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 myAudioRecorder.stop();
                 myAudioRecorder.release();
                 myAudioRecorder  = null;
@@ -144,94 +157,88 @@ public class RecordAudio extends AppCompatActivity{
                 stop.setEnabled(false);
                 play.setEnabled(true);
 
-                Toast.makeText(getApplicationContext(), "Audio recorded successfully", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Audio recorded successfully", Toast.LENGTH_SHORT).show();
             }
         });
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) throws IllegalArgumentException,SecurityException,IllegalStateException {
+
                 MediaPlayer m = new MediaPlayer();
 
                 try {
-                    m.setDataSource(outputFile);
-                }
 
+                    m.setDataSource(filePath);
+                }
                 catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 try {
+
                     m.prepare();
                 }
-
                 catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 m.start();
-                Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_SHORT).show();
             }
         });
 
-        upload.setOnClickListener(new View.OnClickListener() {
+        send.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                InputStream stream = null;
+                if(myAudioRecorder == null){
 
-                try {
+                    new SendFileTask(filePath, recordingRef) {
 
-                    stream = new FileInputStream(new File(outputFile));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                        @Override
+                        protected void onPreExecute(){
+
+                            sendingFileDialog = new ProgressDialog(context);
+                            sendingFileDialog.setIndeterminate(true);
+                            sendingFileDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                            sendingFileDialog.setMessage(context.getString(R.string.sending_file));
+                            sendingFileDialog.show();
+                        }
+
+                        @Override
+                        protected void onPostExecute(String fileStatus){
+
+                            sendingFileDialog.dismiss();
+
+                            FileSentDialog fileSentDialog = new FileSentDialog();
+                            fileSentDialog.show(fm, "fileSentDialog");
+                        }
+
+                    }.execute();
                 }
+                else{
 
-                UploadTask uploadTask = recordingRef.putStream(stream);
-
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        showToastMessage("audio upload successful");
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    }
-                });
-
-                // Observe state change events such as progress, pause, and resume
-                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        double progress = 100.0 * (taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-
-                        System.out.println("Upload is " + progress + "% done");
-                    }
-                }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-
-                    @Override
-                    public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        System.out.println("Upload is paused");
-                    }
-                });
+                    Toast.makeText(context,context.getString(R.string.nothing_to_send),Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private void showToastMessage(CharSequence text) {
+    @Override
+    public void onDoneButtonClick(DialogFragment dialog) {
 
-        int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
+        Intent intent = new Intent(this, Home.class);
+        intent.putExtra("filename", filename);
+        intent.putExtra("recipient", recipient);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String currentDateandTime = sdf.format(new Date());
+
+        intent.putExtra("date", currentDateandTime);
+
+        startActivity(intent);
     }
 }

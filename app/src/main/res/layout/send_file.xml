@@ -16,7 +16,7 @@
     </android.support.v7.widget.Toolbar>
 
     <TextView
-        android:text="@string/upload_file"
+        android:text="@string/send_file"
         android:layout_below="@id/toolbar"
         android:gravity="center_horizontal"
         style="@style/screen_title_style"
@@ -26,10 +26,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/upload_file_box_margin"
-        android:layout_marginRight="@dimen/upload_file_box_margin"
+        android:layout_marginLeft="@dimen/layout_box_margin"
+        android:layout_marginRight="@dimen/layout_box_margin"
         android:orientation="vertical"
-        android:background="@drawable/upload_file_box"
+        android:background="@drawable/layout_box"
         android:layout_centerInParent="true">
 
         <LinearLayout

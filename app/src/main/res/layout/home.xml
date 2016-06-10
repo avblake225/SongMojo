@@ -29,6 +29,13 @@
 
             </android.support.v7.widget.Toolbar>
 
+            <TextView
+                android:text="@string/home"
+                android:gravity="center_horizontal"
+                style="@style/screen_title_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

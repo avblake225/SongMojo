@@ -11,10 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class UploadFile extends AppCompatActivity{
+public class SendFile extends AppCompatActivity{
 
     private Context context;
 
@@ -41,7 +42,7 @@ public class UploadFile extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.upload_file);
+        setContentView(R.layout.send_file);
 
         context = this;
 
@@ -112,10 +113,11 @@ public class UploadFile extends AppCompatActivity{
                     intent.putExtra("recipient", recipient_chosen);
                     startActivity(intent);
                 }
-//                else if(rb_video_file.isChecked()){
-//
-//                    intent = new Intent(context, RecordVideo.class);
-//                }
+                else if(rb_video_file.isChecked()){
+
+                    Toast toast = Toast.makeText(context, "Video currently unavailable", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
     }

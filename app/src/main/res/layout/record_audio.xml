@@ -18,6 +18,7 @@
     </android.support.v7.widget.Toolbar>
 
     <TextView
+        android:id="@+id/record_audio_header"
         android:text="@string/record_audio"
         android:layout_below="@id/toolbar"
         android:gravity="center_horizontal"
@@ -26,24 +27,63 @@
         android:layout_height="wrap_content"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/layout_box"
+        android:layout_marginLeft="@dimen/layout_box_margin"
+        android:layout_marginRight="@dimen/layout_box_margin"
         android:orientation="vertical"
         android:layout_centerInParent="true">
 
-        <TextView
-            android:id="@+id/tv_filename"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/tv_filename_margin_bottom"
-            style="@style/header_text_style"/>
+            android:layout_marginLeft="@dimen/record_audio_layout_box_margin_left"
+            android:layout_marginTop="@dimen/record_audio_layout_box_margin_top"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/file_name"
+                style="@style/header_text_style"/>
+
+            <TextView
+                android:id="@+id/tv_filename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/input_filename_margin_left"
+                style="@style/input_text_style"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/record_audio_layout_box_margin_left"
+            android:layout_marginBottom="@dimen/record_audio_layout_box_margin_bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recipient"
+                style="@style/header_text_style"/>
+
+            <TextView
+                android:id="@+id/tv_recipient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/input_recipient_margin_left"
+                style="@style/input_text_style"/>
+
+        </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Record"
+            android:text="@string/record"
             android:drawablePadding="@dimen/record_audio_drawable_padding"
             android:drawableLeft="@drawable/ic_fiber_manual_record_black_24dp"
             android:id="@+id/btn_record"/>
@@ -52,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Stop"
+            android:text="@string/stop"
             android:drawablePadding="@dimen/record_audio_drawable_padding"
             android:drawableLeft="@drawable/ic_stop_black_24dp"
             android:id="@+id/btn_stop"/>
@@ -61,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="play"
+            android:text="@string/play"
             android:drawablePadding="@dimen/record_audio_drawable_padding"
             android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
             android:id="@+id/btn_play"/>
@@ -70,10 +110,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="upload"
-            android:drawableLeft="@drawable/ic_cloud_upload_black_24dp"
+            android:layout_marginBottom="@dimen/btn_upload_margin_bottom"
+            android:text="@string/send"
             android:drawablePadding="@dimen/record_audio_drawable_padding"
-            android:id="@+id/btn_upload"/>
+            android:drawableLeft="@drawable/ic_mail_outline_black_24dp"
+            android:id="@+id/btn_send"/>
 
     </LinearLayout>
 

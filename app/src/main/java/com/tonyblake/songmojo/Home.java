@@ -43,7 +43,7 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
     private File file;
 
-    private String firstName;
+    private String firstName, filename, recipient;
 
     private LayoutInflater layoutInflater;
 
@@ -57,6 +57,10 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         savedInstanceState = getIntent().getExtras();
 
         firstName = savedInstanceState.getString("firstName");
+
+        filename = savedInstanceState.getString("filename");
+
+        recipient = savedInstanceState.getString("recipient");
 
         layout_container = (LinearLayout)findViewById(R.id.layout_container);
 
@@ -90,7 +94,7 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
         TextView tv = (TextView)welcome_layout.findViewById(R.id.tv_welcome);
 
-        String welcome_message = context.getString(R.string.welcome) + " " + firstName;
+        String welcome_message = context.getString(R.string.welcome_message);
 
         tv.setText(welcome_message);
 
@@ -129,24 +133,27 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
                 switch (position) {
 
-                    // Upload File
+                    // Send File
                     case 0:
 
                         dLayout.closeDrawer(dList);
 
-                        intent = new Intent(context, UploadFile.class);
+                        intent = new Intent(context, SendFile.class);
 
                         startActivity(intent);
 
                         break;
 
-                    // Download File
+                    // Get File
                     case 1:
 
                         dLayout.closeDrawer(dList);
 
-                        downloadAudioDialog = new DownloadAudioDialog();
-                        downloadAudioDialog.show(fm, "downloadAudioDialog");
+//                        downloadAudioDialog = new DownloadAudioDialog();
+//                        downloadAudioDialog.show(fm, "downloadAudioDialog");
+
+                        Toast.makeText(context, "Feature currently unavailable", Toast.LENGTH_SHORT).show();;
+
 
                         break;
 
@@ -155,7 +162,7 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
                         dLayout.closeDrawer(dList);
 
-                        // find band members...
+                        Toast.makeText(context,"Feature currently unavailable",Toast.LENGTH_SHORT).show();;
 
                         break;
 
@@ -164,7 +171,25 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
                         dLayout.closeDrawer(dList);
 
-                        // edit band members...
+                        Toast.makeText(context,"Feature currently unavailable",Toast.LENGTH_SHORT).show();;
+
+                        break;
+
+                    // Files sent
+                    case 4:
+
+                        dLayout.closeDrawer(dList);
+
+                        Toast.makeText(context,"Feature currently unavailable",Toast.LENGTH_SHORT).show();;
+
+                        break;
+
+                    // Files received
+                    case 5:
+
+                        dLayout.closeDrawer(dList);
+
+                        Toast.makeText(context,"Feature currently unavailable",Toast.LENGTH_SHORT).show();;
 
                         break;
                 }
