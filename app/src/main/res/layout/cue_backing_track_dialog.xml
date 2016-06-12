@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/background_track_spinner"
+        android:id="@+id/backing_track_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/background_track_spinner_margin_left"

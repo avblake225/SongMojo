@@ -19,7 +19,7 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
-public class CueBackgroundTrackDialog extends DialogFragment {
+public class CueBackingTrackDialog extends DialogFragment {
 
     private Context context;
 
@@ -27,9 +27,9 @@ public class CueBackgroundTrackDialog extends DialogFragment {
 
     private ArrayList<String> files;
 
-    private Spinner background_track_spinner;
+    private Spinner backing_track_spinner;
 
-    private ArrayAdapter<String> background_track_spinnerAdapter;
+    private ArrayAdapter<String> backing_track_spinnerAdapter;
 
     private WindowManager.LayoutParams lp;
 
@@ -42,7 +42,7 @@ public class CueBackgroundTrackDialog extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        view = inflater.inflate(R.layout.cue_background_track_dialog, null);
+        view = inflater.inflate(R.layout.cue_backing_track_dialog, null);
 
         builder.setTitle(R.string.select_track)
                 .setView(view)
@@ -51,9 +51,9 @@ public class CueBackgroundTrackDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        String fileChosen = background_track_spinner.getSelectedItem().toString();
+                        String fileChosen = backing_track_spinner.getSelectedItem().toString();
 
-                        cueBackgroundTrackDialogInterface.onSelectButtonClick(CueBackgroundTrackDialog.this, fileChosen);
+                        cueBackingTrackDialogInterface.onSelectButtonClick(CueBackingTrackDialog.this, fileChosen);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -98,19 +98,19 @@ public class CueBackgroundTrackDialog extends DialogFragment {
         return dialog;
     }
 
-    public interface CueBackgroundTrackDialogInterface {
+    public interface CueBackingTrackDialogInterface {
 
         void onSelectButtonClick(DialogFragment dialog, String fileChosen);
     }
 
-    CueBackgroundTrackDialogInterface cueBackgroundTrackDialogInterface;
+    CueBackingTrackDialogInterface cueBackingTrackDialogInterface;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         try {
-            cueBackgroundTrackDialogInterface = (CueBackgroundTrackDialogInterface) activity;
+            cueBackingTrackDialogInterface = (CueBackingTrackDialogInterface) activity;
         }
         catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
@@ -127,12 +127,12 @@ public class CueBackgroundTrackDialog extends DialogFragment {
         files.add("some file 2");
         files.add("some file 3");
 
-        background_track_spinner = (Spinner) view.findViewById(R.id.background_track_spinner);
+        backing_track_spinner = (Spinner) view.findViewById(R.id.backing_track_spinner);
 
-        background_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, files);
+        backing_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, files);
 
-        background_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        backing_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        background_track_spinner.setAdapter(background_track_spinnerAdapter);
+        backing_track_spinner.setAdapter(backing_track_spinnerAdapter);
     }
 }
