@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/background_track_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/background_track_spinner_margin_left"
+        android:layout_marginTop="@dimen/background_track_spinner_margin_top"
+        android:background="@drawable/spinner_border"/>
+
+</LinearLayout>

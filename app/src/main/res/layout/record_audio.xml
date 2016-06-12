@@ -83,6 +83,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:text="@string/cue_background_track"
+            android:drawablePadding="@dimen/record_audio_drawable_padding"
+            android:drawableLeft="@drawable/ic_queue_music_black_24dp"
+            android:layout_marginBottom="@dimen/btn_cue_background_track_margin_bottom"
+            android:id="@+id/btn_cue_background_track"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="@string/record"
             android:drawablePadding="@dimen/record_audio_drawable_padding"
             android:drawableLeft="@drawable/ic_fiber_manual_record_black_24dp"

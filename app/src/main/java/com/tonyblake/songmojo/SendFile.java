@@ -106,7 +106,11 @@ public class SendFile extends AppCompatActivity{
 
                 recipient_chosen = select_recipient_spinner.getSelectedItem().toString();
 
-                if(rb_audio_file.isChecked()){
+                if("".equals(filename)){
+
+                    Toast.makeText(context, context.getString(R.string.please_set_file_name), Toast.LENGTH_SHORT).show();
+                }
+                else if(rb_audio_file.isChecked()){
 
                     intent = new Intent(context, RecordAudio.class);
                     intent.putExtra("filename",filename);
@@ -115,8 +119,11 @@ public class SendFile extends AppCompatActivity{
                 }
                 else if(rb_video_file.isChecked()){
 
-                    Toast toast = Toast.makeText(context, "Video currently unavailable", Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast.makeText(context, "Video currently unavailable", Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    Toast.makeText(context, context.getString(R.string.please_select_file_type), Toast.LENGTH_SHORT).show();
                 }
             }
         });

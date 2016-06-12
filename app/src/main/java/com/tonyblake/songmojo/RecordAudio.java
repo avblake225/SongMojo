@@ -23,7 +23,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface{
+public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
+                                                            CueBackgroundTrackDialog.CueBackgroundTrackDialogInterface{
 
     private FirebaseStorage storage;
 
@@ -37,7 +38,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     private TextView tv_recipient;
 
-    private Button play, stop, record, send;
+    private Button cue_background_track, play, stop, record, send;
 
     private MediaRecorder myAudioRecorder;
 
@@ -45,9 +46,13 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     private String filePath;
 
+    private CueBackgroundTrackDialog cueBackgroundTrackDialog;
+
     private ProgressDialog sendingFileDialog;
 
     private FragmentManager fm;
+
+    private boolean background_track_cued;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,15 +92,27 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         actionBar.setTitle(context.getString(R.string.app_name));
         actionBar.setTitleTextColor(context.getResources().getColor(R.color.white));
 
+        cue_background_track = (Button) findViewById(R.id.btn_cue_background_track);
+        cue_background_track.setBackgroundResource(android.R.drawable.btn_default);
+
         play = (Button) findViewById(R.id.btn_play);
+        play.setBackgroundResource(android.R.drawable.btn_default);
+
         stop = (Button) findViewById(R.id.btn_stop);
+        stop.setBackgroundResource(android.R.drawable.btn_default);
+
         record = (Button) findViewById(R.id.btn_record);
+        record.setBackgroundResource(android.R.drawable.btn_default);
+
         send = (Button) findViewById(R.id.btn_send);
+        send.setBackgroundResource(android.R.drawable.btn_default);
 
         stop.setEnabled(false);
         play.setEnabled(false);
 
         filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
+
+        background_track_cued = false;
     }
 
     @Override
@@ -120,6 +137,27 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         tv_filename.setText(filename + context.getString(R.string._mp3));
 
         tv_recipient.setText(recipient);
+
+        cue_background_track.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if(background_track_cued){
+
+                    cue_background_track.setBackgroundResource(android.R.drawable.btn_default);
+
+                    background_track_cued = false;
+
+                    Toast.makeText(context,context.getString(R.string.background_track_removed),Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    cueBackgroundTrackDialog = new CueBackgroundTrackDialog();
+                    cueBackgroundTrackDialog.show(fm,"CueBackgroundTrackDialog");
+                }
+            }
+        });
 
         record.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,5 +278,17 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         intent.putExtra("date", currentDateandTime);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onSelectButtonClick(DialogFragment dialog, String fileChosen) {
+
+        cue_background_track.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.clr_pressed));
+
+        background_track_cued = true;
+
+        String background_track_message = fileChosen + " " + context.getString(R.string.set_as_background_track);
+
+        Toast.makeText(context,background_track_message,Toast.LENGTH_SHORT).show();
     }
 }

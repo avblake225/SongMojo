@@ -50,6 +50,8 @@
     <string name="video_file">Video file</string>
     <string name="select_recipient">Select Recipient:</string>
     <string name="proceed_to_recording">Proceed to recording</string>
+    <string name="please_set_file_name">Please set file name</string>
+    <string name="please_select_file_type">Please select file type</string>
 
     <!-- Record Audio screen -->
     <string name="record_audio">Record Audio</string>
@@ -57,11 +59,18 @@
     <string name="_mp3">.mp3</string>
     <string name="recipient">Recipient:</string>
     <string name="temp_file">TempFile</string>
+    <string name="cue_background_track">Cue Background Track</string>
     <string name="record">Record</string>
     <string name="stop">Stop</string>
     <string name="play">Play</string>
     <string name="send">Send</string>
     <string name="nothing_to_send">Nothing to send</string>
+
+    <!-- Cue Background Track dialog -->
+    <string name="select_track">Select file</string>
+    <string name="select">Select</string>
+    <string name="set_as_background_track">set as background track</string>
+    <string name="background_track_removed">Background track removed</string>
 
     <!-- Sending File dialog -->
     <string name="sending_file">Sending file...</string>
