@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/welcome_message_margin_left"
+        android:layout_marginRight="@dimen/welcome_message_margin_right"
         android:textSize="@dimen/header_text_size"
         android:text="testing"
         android:textColor="@color/black"/>

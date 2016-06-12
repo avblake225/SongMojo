@@ -19,7 +19,11 @@ import android.widget.Toast;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,7 +42,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     private TextView tv_recipient;
 
-    private Button cue_background_track, play, stop, record, send;
+    private Button cue_background_track, record, stop, play, pause, send;
 
     private MediaRecorder myAudioRecorder;
 
@@ -53,6 +57,10 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private FragmentManager fm;
 
     private boolean background_track_cued;
+
+    private MediaPlayer mediaPlayer;
+
+    private boolean newRecording;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,24 +103,33 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         cue_background_track = (Button) findViewById(R.id.btn_cue_background_track);
         cue_background_track.setBackgroundResource(android.R.drawable.btn_default);
 
-        play = (Button) findViewById(R.id.btn_play);
-        play.setBackgroundResource(android.R.drawable.btn_default);
+        record = (Button) findViewById(R.id.btn_record);
+        record.setBackgroundResource(android.R.drawable.btn_default);
 
         stop = (Button) findViewById(R.id.btn_stop);
         stop.setBackgroundResource(android.R.drawable.btn_default);
 
-        record = (Button) findViewById(R.id.btn_record);
-        record.setBackgroundResource(android.R.drawable.btn_default);
+        play = (Button) findViewById(R.id.btn_play);
+        play.setBackgroundResource(android.R.drawable.btn_default);
+
+        pause = (Button) findViewById(R.id.btn_pause);
+        pause.setBackgroundResource(android.R.drawable.btn_default);
 
         send = (Button) findViewById(R.id.btn_send);
         send.setBackgroundResource(android.R.drawable.btn_default);
 
         stop.setEnabled(false);
         play.setEnabled(false);
+        pause.setEnabled(false);
+        send.setEnabled(false);
 
         filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 
         background_track_cued = false;
+
+        mediaPlayer = new MediaPlayer();
+
+        newRecording = true;
     }
 
     @Override
@@ -120,10 +137,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         super.onResume();
 
         myAudioRecorder = new MediaRecorder();
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        myAudioRecorder.setOutputFile(filePath);
+
+        setUpAudioRecorder();
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -143,87 +158,145 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
-                if(background_track_cued){
+                if (background_track_cued) {
 
                     cue_background_track.setBackgroundResource(android.R.drawable.btn_default);
 
                     background_track_cued = false;
 
-                    Toast.makeText(context,context.getString(R.string.background_track_removed),Toast.LENGTH_SHORT).show();
-                }
-                else{
+                    Toast.makeText(context, context.getString(R.string.background_track_removed), Toast.LENGTH_SHORT).show();
+                } else {
 
                     cueBackgroundTrackDialog = new CueBackgroundTrackDialog();
-                    cueBackgroundTrackDialog.show(fm,"CueBackgroundTrackDialog");
+                    cueBackgroundTrackDialog.show(fm, "CueBackgroundTrackDialog");
                 }
             }
         });
 
         record.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
                 try {
 
                     myAudioRecorder.prepare();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+
                     myAudioRecorder.start();
                 }
                 catch (IllegalStateException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
 
                 record.setEnabled(false);
                 stop.setEnabled(true);
+                play.setEnabled(false);
+                pause.setEnabled(false);
+                send.setEnabled(false);
 
                 Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_SHORT).show();
             }
         });
 
         stop.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
-                myAudioRecorder.stop();
-                myAudioRecorder.release();
-                myAudioRecorder  = null;
+                if(mediaPlayer.isPlaying()){
 
+                    mediaPlayer.stop();
+                }
+                else{
+
+                    myAudioRecorder.stop();
+                    myAudioRecorder.reset();
+                    myAudioRecorder.release();
+                }
+
+                record.setEnabled(true);
                 stop.setEnabled(false);
                 play.setEnabled(true);
+                pause.setEnabled(false);
+                send.setEnabled(true);
 
                 Toast.makeText(getApplicationContext(), "Audio recorded successfully", Toast.LENGTH_SHORT).show();
             }
         });
 
         play.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) throws IllegalArgumentException,SecurityException,IllegalStateException {
 
-                MediaPlayer m = new MediaPlayer();
+                if(newRecording){
 
-                try {
+                    newRecording = false;
 
-                    m.setDataSource(filePath);
+                    try {
+
+                        mediaPlayer.setDataSource(filePath);
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+
+                        mediaPlayer.prepare();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                try {
-
-                    m.prepare();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                m.start();
+                mediaPlayer.start();
 
                 Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_SHORT).show();
+
+                record.setEnabled(false);
+                stop.setEnabled(true);
+                play.setEnabled(false);
+                pause.setEnabled(true);
+                send.setEnabled(false);
+
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+
+                        record.setEnabled(true);
+                        stop.setEnabled(false);
+                        play.setEnabled(true);
+                        pause.setEnabled(false);
+                        send.setEnabled(true);
+                    }
+                });
+            }
+        });
+
+        pause.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) throws IllegalArgumentException,SecurityException,IllegalStateException {
+
+                if(mediaPlayer.isPlaying()){
+
+                    mediaPlayer.pause();
+                }
+
+                record.setEnabled(false);
+                stop.setEnabled(true);
+                play.setEnabled(true);
+                pause.setEnabled(false);
+                send.setEnabled(false);
             }
         });
 
@@ -232,37 +305,47 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
-                if(myAudioRecorder == null){
+                InputStream stream = null;
 
-                    new SendFileTask(filePath, recordingRef) {
+                try {
 
-                        @Override
-                        protected void onPreExecute(){
+                    stream = new FileInputStream(new File(filePath));
 
-                            sendingFileDialog = new ProgressDialog(context);
-                            sendingFileDialog.setIndeterminate(true);
-                            sendingFileDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                            sendingFileDialog.setMessage(context.getString(R.string.sending_file));
-                            sendingFileDialog.show();
-                        }
-
-                        @Override
-                        protected void onPostExecute(String fileStatus){
-
-                            sendingFileDialog.dismiss();
-
-                            FileSentDialog fileSentDialog = new FileSentDialog();
-                            fileSentDialog.show(fm, "fileSentDialog");
-                        }
-
-                    }.execute();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
-                else{
 
-                    Toast.makeText(context,context.getString(R.string.nothing_to_send),Toast.LENGTH_SHORT).show();
-                }
+                new SendFileTask(stream, recordingRef) {
+
+                    @Override
+                    protected void onPreExecute() {
+
+                        sendingFileDialog = new ProgressDialog(context);
+                        sendingFileDialog.setIndeterminate(true);
+                        sendingFileDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        sendingFileDialog.setMessage(context.getString(R.string.sending_file));
+                        sendingFileDialog.show();
+                    }
+
+                    @Override
+                    protected void onPostExecute(String fileStatus) {
+
+                        sendingFileDialog.dismiss();
+
+                        FileSentDialog fileSentDialog = new FileSentDialog();
+                        fileSentDialog.show(fm, "fileSentDialog");
+                    }
+                }.execute();
             }
         });
+    }
+
+    private void setUpAudioRecorder(){
+
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        myAudioRecorder.setOutputFile(filePath);
     }
 
     @Override

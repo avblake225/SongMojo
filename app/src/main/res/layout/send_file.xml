@@ -16,6 +16,7 @@
     </android.support.v7.widget.Toolbar>
 
     <TextView
+        android:id="@+id/tv_send_file_header"
         android:text="@string/send_file"
         android:layout_below="@id/toolbar"
         android:gravity="center_horizontal"
@@ -23,113 +24,119 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <LinearLayout
+    <ScrollView
+        android:layout_below="@id/tv_send_file_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/layout_box_margin"
-        android:layout_marginRight="@dimen/layout_box_margin"
-        android:orientation="vertical"
-        android:background="@drawable/layout_box"
-        android:layout_centerInParent="true">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/upload_file_header_input_margin_top"
-            android:layout_marginBottom="@dimen/upload_file_header_input_margin_bottom"
-            android:orientation="horizontal">
+            android:layout_margin="@dimen/layout_box_margin"
+            android:orientation="vertical"
+            android:background="@drawable/layout_box"
+            android:layout_centerInParent="true">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/upload_file_header_margin_left"
-                android:text="@string/set_file_name"
-                style="@style/header_text_style"/>
+                android:layout_marginTop="@dimen/upload_file_header_input_margin_top"
+                android:layout_marginBottom="@dimen/upload_file_header_input_margin_bottom"
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/et_file_name"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/upload_file_header_margin_left"
+                    android:text="@string/set_file_name"
+                    style="@style/header_text_style"/>
+
+                <EditText
+                    android:id="@+id/et_file_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/file_name"
+                    android:textColorHint="@color/gray"
+                    android:textCursorDrawable="@null"
+                    android:background="@android:color/transparent"
+                    android:layout_marginLeft="@dimen/upload_file_input_margin_left"
+                    style="@style/input_text_style"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/file_name"
-                android:textColorHint="@color/gray"
-                android:textCursorDrawable="@null"
-                android:background="@android:color/transparent"
-                android:layout_marginLeft="@dimen/upload_file_input_margin_left"
-                style="@style/input_text_style"/>
+                android:layout_marginTop="@dimen/upload_file_header_input_margin_top"
+                android:layout_marginBottom="@dimen/upload_file_header_input_margin_bottom"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/upload_file_header_margin_left"
+                    android:paddingTop="@dimen/upload_file_header_padding_top"
+                    android:text="@string/select_file_type"
+                    style="@style/header_text_style"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/upload_file_header_input_margin_top"
-            android:layout_marginBottom="@dimen/upload_file_header_input_margin_bottom"
-            android:orientation="horizontal">
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/upload_file_radio_group_margin_left">
 
-            <TextView
-                android:layout_width="wrap_content"
+                    <RadioButton
+                        android:id="@+id/rb_audio_file"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/audio_file"
+                        style="@style/input_text_style"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_video_file"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/video_file"
+                        style="@style/input_text_style"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/upload_file_header_margin_left"
+                android:layout_marginTop="@dimen/upload_file_header_input_margin_top"
+                android:layout_marginBottom="@dimen/upload_file_header_input_margin_bottom"
                 android:paddingTop="@dimen/upload_file_header_padding_top"
-                android:text="@string/select_file_type"
-                style="@style/header_text_style"/>
+                android:orientation="horizontal">
 
-            <RadioGroup
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/upload_file_header_margin_left"
+                    android:text="@string/select_recipient"
+                    style="@style/header_text_style"/>
+
+                <Spinner
+                    android:id="@+id/select_recipient_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_border"
+                    android:layout_marginLeft="@dimen/upload_file_spinner_margin"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_proceed_to_recording"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/upload_file_radio_group_margin_left">
-
-                <RadioButton
-                    android:id="@+id/rb_audio_file"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/audio_file"
-                    style="@style/input_text_style"/>
-
-                <RadioButton
-                    android:id="@+id/rb_video_file"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/video_file"
-                    style="@style/input_text_style"/>
-
-            </RadioGroup>
+                android:layout_marginTop="@dimen/btn_proceed_to_recording_margin"
+                android:layout_marginBottom="@dimen/btn_proceed_to_recording_margin"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/proceed_to_recording"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/upload_file_header_input_margin_top"
-            android:layout_marginBottom="@dimen/upload_file_header_input_margin_bottom"
-            android:paddingTop="@dimen/upload_file_header_padding_top"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/upload_file_header_margin_left"
-                android:text="@string/select_recipient"
-                style="@style/header_text_style"/>
-
-            <Spinner
-                android:id="@+id/select_recipient_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/spinner_border"
-                android:layout_marginLeft="@dimen/upload_file_spinner_margin"/>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_proceed_to_recording"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/btn_proceed_to_recording_margin"
-            android:layout_marginBottom="@dimen/btn_proceed_to_recording_margin"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/proceed_to_recording"/>
-
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

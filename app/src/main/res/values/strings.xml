@@ -63,8 +63,8 @@
     <string name="record">Record</string>
     <string name="stop">Stop</string>
     <string name="play">Play</string>
+    <string name="pause">Pause</string>
     <string name="send">Send</string>
-    <string name="nothing_to_send">Nothing to send</string>
 
     <!-- Cue Background Track dialog -->
     <string name="select_track">Select file</string>
