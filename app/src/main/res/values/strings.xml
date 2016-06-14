@@ -61,17 +61,20 @@
     <string name="temp_file">TempFile</string>
     <string name="cue_backing_track">Cue Backing Track</string>
     <string name="record">Record</string>
-    <string name="re_record">Re Record</string>
     <string name="stop">Stop</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="send">Send</string>
 
     <!-- Cue Backing Track dialog -->
-    <string name="select_track">Select file</string>
+    <string name="select_track">Select track</string>
     <string name="select">Select</string>
     <string name="set_as_backing_track">set as backing track</string>
     <string name="backing_track_removed">Backing track removed</string>
+
+    <!-- Record Dialog -->
+    <string name="recording">Recording...</string>
+    <string name="track_saved_to_device">Track saved to device</string>
 
     <!-- Sending File dialog -->
     <string name="sending_file">Sending file...</string>

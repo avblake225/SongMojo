@@ -105,15 +105,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/stop"
-                android:drawablePadding="@dimen/record_audio_drawable_padding"
-                android:drawableLeft="@drawable/ic_stop_black_24dp"
-                android:id="@+id/btn_stop"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:text="@string/play"
                 android:drawablePadding="@dimen/record_audio_drawable_padding"
                 android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
@@ -127,6 +118,15 @@
                 android:drawablePadding="@dimen/record_audio_drawable_padding"
                 android:drawableLeft="@drawable/ic_pause_black_24dp"
                 android:id="@+id/btn_pause"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/stop"
+                android:drawablePadding="@dimen/record_audio_drawable_padding"
+                android:drawableLeft="@drawable/ic_stop_black_24dp"
+                android:id="@+id/btn_stop"/>
 
             <Button
                 android:layout_width="wrap_content"

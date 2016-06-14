@@ -28,7 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
-                                                            CueBackingTrackDialog.CueBackingTrackDialogInterface{
+                                                            CueBackingTrackDialog.CueBackingTrackDialogInterface,
+RecordDialog.RecordDialogInterface{
 
     private FirebaseStorage storage;
 
@@ -42,7 +43,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     private TextView tv_recipient;
 
-    private Button cue_backing_track, record, stop, play, pause, send;
+    private Button cue_backing_track, record, play, pause, stop, send;
 
     private MediaRecorder myAudioRecorder;
 
@@ -108,21 +109,21 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         record = (Button) findViewById(R.id.btn_record);
         record.setBackgroundResource(android.R.drawable.btn_default);
 
-        stop = (Button) findViewById(R.id.btn_stop);
-        stop.setBackgroundResource(android.R.drawable.btn_default);
-
         play = (Button) findViewById(R.id.btn_play);
         play.setBackgroundResource(android.R.drawable.btn_default);
 
         pause = (Button) findViewById(R.id.btn_pause);
         pause.setBackgroundResource(android.R.drawable.btn_default);
 
+        stop = (Button) findViewById(R.id.btn_stop);
+        stop.setBackgroundResource(android.R.drawable.btn_default);
+
         send = (Button) findViewById(R.id.btn_send);
         send.setBackgroundResource(android.R.drawable.btn_default);
 
-        stop.setEnabled(false);
         play.setEnabled(false);
         pause.setEnabled(false);
+        stop.setEnabled(false);
         send.setEnabled(false);
 
         filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
@@ -167,8 +168,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                     backing_track_cued = false;
 
                     Toast.makeText(context, context.getString(R.string.backing_track_removed), Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
 
                     cueBackingTrackDialog = new CueBackingTrackDialog();
                     cueBackingTrackDialog.show(fm, "CueBackingTrackDialog");
@@ -181,93 +181,46 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
-                try {
+                RecordDialog recordDialog = new RecordDialog();
 
-                    setUpAudioRecorder();
-                    myAudioRecorder.prepare();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Bundle bundle = new Bundle();
 
-                try {
+                bundle.putString("filepath",filePath);
 
-                    myAudioRecorder.start();
-                }
-                catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                recordDialog.setArguments(bundle);
 
-                record.setEnabled(false);
-                stop.setEnabled(true);
-                play.setEnabled(false);
-                pause.setEnabled(false);
-                send.setEnabled(false);
-
-                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        stop.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                if(mediaPlayer.isPlaying()){
-
-                    mediaPlayer.stop();
-                }
-                else{
-
-                    myAudioRecorder.stop();
-                    myAudioRecorder.reset();
-                }
-
-                record.setEnabled(true);
-                stop.setEnabled(false);
-                play.setEnabled(true);
-                pause.setEnabled(false);
-                send.setEnabled(true);
-
-                record.setText(context.getString(R.string.re_record));
-
-                Toast.makeText(getApplicationContext(), "Audio recorded successfully", Toast.LENGTH_SHORT).show();
+                recordDialog.show(fm,"recordDialog");
             }
         });
 
         play.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) throws IllegalArgumentException,SecurityException,IllegalStateException {
+            public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
 
-                if(newRecording){
+                if (newRecording) {
 
                     newRecording = false;
 
                     try {
 
                         mediaPlayer.setDataSource(filePath);
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     try {
 
                         mediaPlayer.prepare();
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
 
                 mediaPlayer.start();
 
-                Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_SHORT).show();
-
                 record.setEnabled(false);
-                stop.setEnabled(false);
+                stop.setEnabled(true);
                 play.setEnabled(false);
                 pause.setEnabled(true);
                 send.setEnabled(false);
@@ -290,9 +243,9 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         pause.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v) throws IllegalArgumentException,SecurityException,IllegalStateException {
+            public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
 
-                if(mediaPlayer.isPlaying()){
+                if (mediaPlayer.isPlaying()) {
 
                     mediaPlayer.pause();
                 }
@@ -302,6 +255,21 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                 play.setEnabled(true);
                 pause.setEnabled(false);
                 send.setEnabled(false);
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                mediaPlayer.stop();
+
+                record.setEnabled(true);
+                stop.setEnabled(false);
+                play.setEnabled(true);
+                pause.setEnabled(false);
+                send.setEnabled(true);
             }
         });
 
@@ -347,14 +315,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         });
     }
 
-    private void setUpAudioRecorder(){
-
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        myAudioRecorder.setOutputFile(filePath);
-    }
-
     @Override
     public void onDoneButtonClick(DialogFragment dialog) {
 
@@ -380,5 +340,17 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         String background_track_message = fileChosen + " " + context.getString(R.string.set_as_backing_track);
 
         Toast.makeText(context,background_track_message,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStopButtonClick(DialogFragment dialog) {
+
+        Toast.makeText(context,context.getString(R.string.track_saved_to_device),Toast.LENGTH_SHORT).show();
+
+        record.setEnabled(true);
+        stop.setEnabled(false);
+        play.setEnabled(true);
+        pause.setEnabled(false);
+        send.setEnabled(true);
     }
 }
