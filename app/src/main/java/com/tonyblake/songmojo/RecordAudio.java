@@ -29,7 +29,7 @@ import java.util.Date;
 
 public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
                                                             CueBackingTrackDialog.CueBackingTrackDialogInterface,
-RecordDialog.RecordDialogInterface{
+                                                            RecordDialog.RecordDialogInterface{
 
     private FirebaseStorage storage;
 
@@ -63,7 +63,7 @@ RecordDialog.RecordDialogInterface{
 
     private MediaPlayer mediaPlayer;
 
-    private boolean newRecording;
+    private boolean paused;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,16 +132,16 @@ RecordDialog.RecordDialogInterface{
 
         backing_track_cued = false;
 
+        myAudioRecorder = new MediaRecorder();
+
         mediaPlayer = new MediaPlayer();
 
-        newRecording = true;
+        paused = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        myAudioRecorder = new MediaRecorder();
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -185,11 +185,11 @@ RecordDialog.RecordDialogInterface{
 
                 Bundle bundle = new Bundle();
 
-                bundle.putString("filepath",filePath);
+                bundle.putString("filepath", filePath);
 
                 recordDialog.setArguments(bundle);
 
-                recordDialog.show(fm,"recordDialog");
+                recordDialog.show(fm, "recordDialog");
             }
         });
 
@@ -198,21 +198,31 @@ RecordDialog.RecordDialogInterface{
             @Override
             public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
 
-                if (newRecording) {
+                Toast.makeText(context,context.getString(R.string.track_playing),Toast.LENGTH_SHORT).show();
 
-                    newRecording = false;
+                if(paused) {
+
+                    mediaPlayer.start();
+
+                    paused = false;
+                }
+                else{
+
+                    mediaPlayer.reset();
 
                     try {
 
                         mediaPlayer.setDataSource(filePath);
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     try {
 
                         mediaPlayer.prepare();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -248,6 +258,8 @@ RecordDialog.RecordDialogInterface{
                 if (mediaPlayer.isPlaying()) {
 
                     mediaPlayer.pause();
+
+                    paused = true;
                 }
 
                 record.setEnabled(false);
@@ -345,7 +357,7 @@ RecordDialog.RecordDialogInterface{
     @Override
     public void onStopButtonClick(DialogFragment dialog) {
 
-        Toast.makeText(context,context.getString(R.string.track_saved_to_device),Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,context.getString(R.string.track_saved),Toast.LENGTH_SHORT).show();
 
         record.setEnabled(true);
         stop.setEnabled(false);

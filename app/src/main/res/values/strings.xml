@@ -63,6 +63,7 @@
     <string name="record">Record</string>
     <string name="stop">Stop</string>
     <string name="play">Play</string>
+    <string name="track_playing">Track playing</string>
     <string name="pause">Pause</string>
     <string name="send">Send</string>
 
@@ -74,7 +75,7 @@
 
     <!-- Record Dialog -->
     <string name="recording">Recording...</string>
-    <string name="track_saved_to_device">Track saved to device</string>
+    <string name="track_saved">Track saved</string>
 
     <!-- Sending File dialog -->
     <string name="sending_file">Sending file...</string>
