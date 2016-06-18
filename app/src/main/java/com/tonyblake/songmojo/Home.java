@@ -30,6 +30,8 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
     private Context context;
 
+    public static DBManager dbManager;
+
     private Toolbar actionBar;
 
     private DrawerLayout dLayout;
@@ -56,6 +58,8 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         setContentView(R.layout.home);
 
         context = this;
+
+        dbManager = new DBManager(context);
 
         savedInstanceState = getIntent().getExtras();
 

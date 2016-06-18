@@ -26,12 +26,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
                                                             CueBackingTrackDialog.CueBackingTrackDialogInterface,
                                                             RecordDialog.RecordDialogInterface{
 
     private FirebaseStorage storage;
+
+    private DBManager dbManager;
+
+    private SimpleDateFormat simpleDateFormat;
+
+    private String currentDateandTime;
+
+    private TimeZone gmtTime;
 
     private StorageReference storageRef, recordingRef;
 
@@ -78,6 +87,16 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         filename = savedInstanceState.getString("filename");
         recipient = savedInstanceState.getString("recipient");
+
+        dbManager = Home.dbManager;
+
+        simpleDateFormat = new SimpleDateFormat();
+
+        gmtTime = TimeZone.getTimeZone("GMT");
+
+        simpleDateFormat.setTimeZone(gmtTime);
+
+        currentDateandTime = simpleDateFormat.format(new Date());
 
         storage = FirebaseStorage.getInstance();
 
@@ -316,6 +335,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
                     @Override
                     protected void onPostExecute(String fileStatus) {
+
+                        dbManager.insertData(recipient, filename, currentDateandTime);
 
                         sendingFileDialog.dismiss();
 

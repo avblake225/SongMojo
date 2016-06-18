@@ -89,7 +89,10 @@
     <string name="no_file_name_entered">No file name entered</string>
     <string name="no_file_found">No file found</string>
 
-    <!-- Sent Files screen -->
+    <!-- FilesSent.java -->
+    <string name="select_all_rows_from">SELECT * FROM</string>
+
+    <!-- sent_file_item_layout.xml -->
     <string name="date">Date:</string>
 
 </resources>

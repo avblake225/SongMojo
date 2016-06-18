@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class SentFile {
+public class SentFileListItem {
 
     private LinearLayout files_sent_list;
 
@@ -16,7 +16,7 @@ public class SentFile {
 
     private TextView tv_date;
 
-    public SentFile(LinearLayout files_sent_list, View sent_file_item_layout){
+    public SentFileListItem(LinearLayout files_sent_list, View sent_file_item_layout){
 
         this.sent_file_item_layout = sent_file_item_layout;
 
