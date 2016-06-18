@@ -208,7 +208,9 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
                         dLayout.closeDrawer(dList);
 
-                        Toast.makeText(context,"Feature currently unavailable",Toast.LENGTH_SHORT).show();;
+                        intent = new Intent(context, FilesSent.class);
+
+                        startActivity(intent);
 
                         break;
 
