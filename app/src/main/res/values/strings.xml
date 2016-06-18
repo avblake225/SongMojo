@@ -40,7 +40,7 @@
         <item>Files received</item>
     </string-array>
 
-    <string name="settings">Settings</string>
+    <string name="log_out">Log out</string>
 
     <!-- Send File screen -->
     <string name="send_file">Send File</string>

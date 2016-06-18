@@ -10,10 +10,10 @@ public class MainActivity extends AppCompatActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(this, RecordAudio.class);
-        intent.putExtra("filename", "some file");
-        intent.putExtra("recipient", "some recipient");
+        Intent intent = new Intent(this, Login.class);
+
         startActivity(intent);
+
         finish();
     }
 }

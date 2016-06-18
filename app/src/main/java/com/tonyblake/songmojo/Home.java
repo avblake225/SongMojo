@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,6 +48,8 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
     private LayoutInflater layoutInflater;
 
+    private TextView tv_user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,10 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         layout_container = (LinearLayout)findViewById(R.id.layout_container);
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        tv_user = (TextView)findViewById(R.id.tv_user);
+
+        tv_user.setText(firstName);
 
         createWelcomeMessage();
 
@@ -109,6 +116,27 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         inflater.inflate(R.menu.overflow_menu, menu);
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch (item.getItemId()) {
+
+            case R.id.log_out:
+
+                Intent intent = new Intent(this, Login.class);
+
+                startActivity(intent);
+
+                finish();
+
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
