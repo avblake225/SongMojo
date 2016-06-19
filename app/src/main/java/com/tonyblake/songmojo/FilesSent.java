@@ -49,9 +49,7 @@ public class FilesSent extends AppCompatActivity{
     protected void onResume(){
         super.onResume();
 
-        //String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.getTableName() + ";";
-
-        String query = "SELECT * FROM " + dbManager.getTableName() + " WHERE (RECIPIENT = 'Simon');";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.getTableName() + ";";
 
         try{
 
@@ -73,7 +71,7 @@ public class FilesSent extends AppCompatActivity{
         }
         catch(Exception e){
 
-            Toast.makeText(context,"Error retrieving data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"No files sent", Toast.LENGTH_SHORT).show();
         }
 
         for(SentFile sentFile: sentFiles){

@@ -14,7 +14,7 @@ public class DBManager extends SQLiteOpenHelper{
     public static final String TABLE_NAME = "files_sent_table";
     public static final String COL_1 = "ID";
     public static final String COL_2 = "RECIPIENT";
-    public static final String COL_3 = "FILE NAME";
+    public static final String COL_3 = "FILE_NAME";
     public static final String COL_4 = "DATE";
 
     private File db_file;
@@ -35,6 +35,7 @@ public class DBManager extends SQLiteOpenHelper{
             db = this.getWritableDatabase();
         }
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 
