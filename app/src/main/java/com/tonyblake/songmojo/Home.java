@@ -40,13 +40,11 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 
     private Intent intent;
 
-    private DownloadAudioDialog downloadAudioDialog;
-
     private LinearLayout layout_container;
 
     private File file;
 
-    private String firstName, filename, recipient;
+    private String firstName;
 
     private LayoutInflater layoutInflater;
 
@@ -64,10 +62,6 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
         savedInstanceState = getIntent().getExtras();
 
         firstName = savedInstanceState.getString("firstName");
-
-        filename = savedInstanceState.getString("filename");
-
-        recipient = savedInstanceState.getString("recipient");
 
         layout_container = (LinearLayout)findViewById(R.id.layout_container);
 
@@ -171,6 +165,7 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
                         dLayout.closeDrawer(dList);
 
                         intent = new Intent(context, SendFile.class);
+                        intent.putExtra("firstName",firstName);
 
                         startActivity(intent);
 

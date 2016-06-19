@@ -46,6 +46,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     private Context context;
 
+    private String firstName;
+
     public static String filename, recipient;
 
     private TextView tv_filename;
@@ -85,6 +87,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         savedInstanceState = getIntent().getExtras();
 
+        firstName = savedInstanceState.getString("firstName");
         filename = savedInstanceState.getString("filename");
         recipient = savedInstanceState.getString("recipient");
 
@@ -352,13 +355,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     public void onDoneButtonClick(DialogFragment dialog) {
 
         Intent intent = new Intent(this, Home.class);
-        intent.putExtra("filename", filename);
-        intent.putExtra("recipient", recipient);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String currentDateandTime = sdf.format(new Date());
-
-        intent.putExtra("date", currentDateandTime);
+        intent.putExtra("firstName", firstName);
 
         startActivity(intent);
     }

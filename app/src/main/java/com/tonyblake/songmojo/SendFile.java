@@ -33,6 +33,8 @@ public class SendFile extends AppCompatActivity{
 
     private Button btn_proceed_to_recording;
 
+    private String firstName;
+
     private String filename;
 
     private Intent intent;
@@ -45,6 +47,10 @@ public class SendFile extends AppCompatActivity{
         setContentView(R.layout.send_file);
 
         context = this;
+
+        savedInstanceState = getIntent().getExtras();
+
+        firstName = savedInstanceState.getString("firstName");
 
         recipient_chosen = null;
 
@@ -113,8 +119,11 @@ public class SendFile extends AppCompatActivity{
                 else if(rb_audio_file.isChecked()){
 
                     intent = new Intent(context, RecordAudio.class);
-                    intent.putExtra("filename",filename);
+
+                    intent.putExtra("firstName", firstName);
+                    intent.putExtra("filename", filename);
                     intent.putExtra("recipient", recipient_chosen);
+
                     startActivity(intent);
                 }
                 else if(rb_video_file.isChecked()){

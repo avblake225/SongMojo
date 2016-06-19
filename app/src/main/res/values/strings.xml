@@ -93,6 +93,9 @@
     <string name="select_all_rows_from">SELECT * FROM</string>
     <string name="no_files_sent">No Files Sent</string>
 
+    <!-- files_sent.xml -->
+    <string name="files_sent">Files Sent</string>
+
     <!-- sent_file_item_layout.xml -->
     <string name="date">Date:</string>
 
