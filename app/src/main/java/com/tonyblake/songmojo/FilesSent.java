@@ -54,6 +54,8 @@ public class FilesSent extends AppCompatActivity{
         files_sent_list = (LinearLayout)findViewById(R.id.files_sent_list);
 
         inflator = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        sentFiles = new ArrayList<>();
     }
 
     @Override
@@ -73,9 +75,15 @@ public class FilesSent extends AppCompatActivity{
 
         String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.getTableName() + ";";
 
-        try{
+        if(sentFiles.size() == 0){
 
-            sentFiles = new ArrayList<>();
+            getSentFiles(query);
+        }
+    }
+
+    private void getSentFiles(String query){
+
+        try{
 
             cursor = dbManager.rawQuery(query);
 
