@@ -91,10 +91,14 @@
 
     <!-- FilesSent.java -->
     <string name="select_all_rows_from">SELECT * FROM</string>
+    <string name="delete_from">DELETE FROM</string>
     <string name="no_files_sent">No Files Sent</string>
 
     <!-- files_sent.xml -->
     <string name="files_sent">Files Sent</string>
+    <string name="clear_all">Clear all</string>
+    <string name="files_cleared">Files cleared</string>
+    <string name="nothing_to_clear">Nothing to clear</string>
 
     <!-- sent_file_item_layout.xml -->
     <string name="date">Date:</string>

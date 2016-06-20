@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ public class FilesSent extends AppCompatActivity{
     private Cursor cursor;
 
     private ArrayList<SentFile> sentFiles;
+
+    private Button btn_clear_all;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -56,18 +59,38 @@ public class FilesSent extends AppCompatActivity{
         inflator = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
         sentFiles = new ArrayList<>();
+
+        btn_clear_all = (Button)findViewById(R.id.btn_clear_all);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
 
-        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+        btn_clear_all.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                files_sent_list.removeAllViews();
+                if(sentFiles.size() != 0){
+
+                    files_sent_list.removeAllViews();
+
+                    int numfilesDeleted = dbManager.deleteSentFiles();
+
+                    Toast.makeText(context,context.getString(R.string.files_cleared), Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    Toast.makeText(context,context.getString(R.string.nothing_to_clear), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
 
                 onBackPressed();
             }
