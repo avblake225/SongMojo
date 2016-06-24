@@ -62,6 +62,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     private String filePath;
 
+    private String backing_track;
+
     private File file;
 
     private CueBackingTrackDialog cueBackingTrackDialog;
@@ -75,6 +77,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private MediaPlayer mediaPlayer;
 
     private boolean paused;
+
+    private boolean backing_track_playing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +163,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         mediaPlayer = new MediaPlayer();
 
         paused = false;
+
+        backing_track_playing = false;
     }
 
     @Override
@@ -203,6 +209,13 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
+                if(backing_track_cued){
+
+                    playFile(backing_track);
+
+                    backing_track_playing = true;
+                }
+
                 RecordDialog recordDialog = new RecordDialog();
 
                 Bundle bundle = new Bundle();
@@ -222,53 +235,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
                 Toast.makeText(context,context.getString(R.string.track_playing),Toast.LENGTH_SHORT).show();
 
-                if(paused) {
-
-                    mediaPlayer.start();
-
-                    paused = false;
-                }
-                else{
-
-                    mediaPlayer.reset();
-
-                    try {
-
-                        mediaPlayer.setDataSource(filePath);
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-
-                        mediaPlayer.prepare();
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                mediaPlayer.start();
-
-                record.setEnabled(false);
-                stop.setEnabled(true);
-                play.setEnabled(false);
-                pause.setEnabled(true);
-                send.setEnabled(false);
-
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-
-                        record.setEnabled(true);
-                        stop.setEnabled(false);
-                        play.setEnabled(true);
-                        pause.setEnabled(false);
-                        send.setEnabled(true);
-                    }
-                });
+                playFile(filePath);
             }
         });
 
@@ -348,12 +315,64 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                             FileSentDialog fileSentDialog = new FileSentDialog();
                             fileSentDialog.show(fm, "fileSentDialog");
                         }
+
                     }.execute();
                 }
                 else{
 
                     Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
                 }
+            }
+        });
+    }
+
+    private void playFile(String filePath){
+
+        if(paused) {
+
+            mediaPlayer.start();
+
+            paused = false;
+        }
+        else{
+
+            mediaPlayer.reset();
+
+            try {
+
+                mediaPlayer.setDataSource(filePath);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                mediaPlayer.prepare();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        mediaPlayer.start();
+
+        record.setEnabled(false);
+        stop.setEnabled(true);
+        play.setEnabled(false);
+        pause.setEnabled(true);
+        send.setEnabled(false);
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+
+                record.setEnabled(true);
+                stop.setEnabled(false);
+                play.setEnabled(true);
+                pause.setEnabled(false);
+                send.setEnabled(true);
             }
         });
     }
@@ -375,6 +394,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         backing_track_cued = true;
 
+        backing_track = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileChosen;
+
         String background_track_message = fileChosen + " " + context.getString(R.string.set_as_backing_track);
 
         Toast.makeText(context,background_track_message,Toast.LENGTH_SHORT).show();
@@ -382,6 +403,23 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     @Override
     public void onStopButtonClick(DialogFragment dialog) {
+
+        if(backing_track_playing){
+
+            mediaPlayer.stop();
+
+            record.setEnabled(true);
+            stop.setEnabled(false);
+            play.setEnabled(true);
+            pause.setEnabled(false);
+            send.setEnabled(true);
+
+            backing_track_playing = false;
+
+            cue_backing_track.setBackgroundResource(android.R.drawable.btn_default);
+
+            backing_track_cued = false;
+        }
 
         Toast.makeText(context,context.getString(R.string.track_saved),Toast.LENGTH_SHORT).show();
 

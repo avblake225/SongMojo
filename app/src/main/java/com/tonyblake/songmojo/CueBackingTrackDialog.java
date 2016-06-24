@@ -123,9 +123,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         files = new ArrayList<>();
 
-        files.add("some file 1");
-        files.add("some file 2");
-        files.add("some file 3");
+        files.add("wonderwall");
 
         backing_track_spinner = (Spinner) view.findViewById(R.id.backing_track_spinner);
 
