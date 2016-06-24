@@ -66,7 +66,7 @@ public class CreateAccountDialog extends DialogFragment {
 
                             password = et_password.getText().toString();
 
-                            createAccountDialogInterface.onCreateAccountDialogSearchClick(CreateAccountDialog.this, firstName, lastName, username, password);
+                            createAccountDialogInterface.onCreateAccountDialogCreateClick(CreateAccountDialog.this, firstName, lastName, username, password);
                         }
                     }
                 })
@@ -93,10 +93,10 @@ public class CreateAccountDialog extends DialogFragment {
             public void onShow(final DialogInterface dialog) {
 
                 Button cancelButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
-                Button searchButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                Button createButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
 
                 cancelButton.setTextColor(Color.BLACK);
-                searchButton.setTextColor(Color.BLACK);
+                createButton.setTextColor(Color.BLACK);
 
                 final Drawable cancelButtonBackground = getResources().getDrawable(R.drawable.background_color);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -105,7 +105,7 @@ public class CreateAccountDialog extends DialogFragment {
 
                 final Drawable searchButtonBackground = getResources().getDrawable(R.drawable.background_color);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    searchButton.setBackground(searchButtonBackground);
+                    createButton.setBackground(searchButtonBackground);
                 }
             }
         });
@@ -115,7 +115,7 @@ public class CreateAccountDialog extends DialogFragment {
 
     public interface CreateAccountDialogInterface {
 
-        void onCreateAccountDialogSearchClick(DialogFragment dialog, String firstName, String lastName, String username, String password);
+        void onCreateAccountDialogCreateClick(DialogFragment dialog, String firstName, String lastName, String username, String password);
     }
 
     CreateAccountDialogInterface createAccountDialogInterface;
@@ -146,6 +146,7 @@ public class CreateAccountDialog extends DialogFragment {
     }
 
     private void showToastMessage(CharSequence text) {
+
         int duration = Toast.LENGTH_LONG;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();

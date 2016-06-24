@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -109,9 +108,13 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                             login(user);
                         }
+                        else if(!Utils.connectedToNetwork(context)){
+
+                            Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
+                        }
                         else{
 
-                            showToastMessage(context.getString(R.string.no_account_found));
+                            Utils.showToastMessage(context, context.getString(R.string.no_account_found));
                         }
                     }
 
@@ -135,9 +138,9 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.getValue(User.class) != null){
+                if (dataSnapshot.getValue(User.class) != null) {
 
-                    for (DataSnapshot userID: dataSnapshot.getChildren()) {
+                    for (DataSnapshot userID : dataSnapshot.getChildren()) {
 
                         User user = new User();
 
@@ -146,7 +149,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
                         user.username = (String) userID.child("username").getValue();
                         user.password = (String) userID.child("password").getValue();
 
-                        if(!users.contains(user)){
+                        if (!users.contains(user)) {
 
                             users.add(user);
                         }
@@ -172,19 +175,19 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
     }
 
     @Override
-    public void onCreateAccountDialogSearchClick(DialogFragment dialog, String firstName, String lastName, String username, String password) {
+    public void onCreateAccountDialogCreateClick(DialogFragment dialog, String firstName, String lastName, String username, String password) {
 
-        User newUser = new User(firstName, lastName, username, password);
+        if(Utils.connectedToNetwork(context)){
 
-        databaseRef.child(username).setValue(newUser);
+            User newUser = new User(firstName, lastName, username, password);
 
-        showToastMessage(context.getString(R.string.account_created));
-    }
+            databaseRef.child(username).setValue(newUser);
 
-    private void showToastMessage(CharSequence text) {
+            Utils.showToastMessage(context, context.getString(R.string.account_created));
+        }
+        else{
 
-        int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
+            Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
+        }
     }
 }

@@ -16,6 +16,7 @@
     <string name="no_username_entered">No username entered</string>
     <string name="no_password_entered">No password_entered</string>
     <string name="account_created">Account created</string>
+    <string name="no_network_connection">Error: No network connection</string>
 
     <string name="app_name">SongMojo</string>
     <string name="record_video">Record Video</string>

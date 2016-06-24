@@ -324,29 +324,36 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                     e.printStackTrace();
                 }
 
-                new SendFileTask(stream, recordingRef) {
+                if(Utils.connectedToNetwork(context)){
 
-                    @Override
-                    protected void onPreExecute() {
+                    new SendFileTask(stream, recordingRef) {
 
-                        sendingFileDialog = new ProgressDialog(context);
-                        sendingFileDialog.setIndeterminate(true);
-                        sendingFileDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        sendingFileDialog.setMessage(context.getString(R.string.sending_file));
-                        sendingFileDialog.show();
-                    }
+                        @Override
+                        protected void onPreExecute() {
 
-                    @Override
-                    protected void onPostExecute(String fileStatus) {
+                            sendingFileDialog = new ProgressDialog(context);
+                            sendingFileDialog.setIndeterminate(true);
+                            sendingFileDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                            sendingFileDialog.setMessage(context.getString(R.string.sending_file));
+                            sendingFileDialog.show();
+                        }
 
-                        dbManager.insertData(recipient, filename, currentDateandTime);
+                        @Override
+                        protected void onPostExecute(String fileStatus) {
 
-                        sendingFileDialog.dismiss();
+                            dbManager.insertData(recipient, filename, currentDateandTime);
 
-                        FileSentDialog fileSentDialog = new FileSentDialog();
-                        fileSentDialog.show(fm, "fileSentDialog");
-                    }
-                }.execute();
+                            sendingFileDialog.dismiss();
+
+                            FileSentDialog fileSentDialog = new FileSentDialog();
+                            fileSentDialog.show(fm, "fileSentDialog");
+                        }
+                    }.execute();
+                }
+                else{
+
+                    Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
+                }
             }
         });
     }
