@@ -41,6 +41,8 @@ public class SendFile extends AppCompatActivity{
 
     private Toolbar actionBar;
 
+    public static boolean audioFile, videoFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +120,9 @@ public class SendFile extends AppCompatActivity{
                 }
                 else if(rb_audio_file.isChecked()){
 
+                    audioFile = true;
+                    videoFile = false;
+
                     intent = new Intent(context, RecordAudio.class);
 
                     intent.putExtra("firstName", firstName);
@@ -128,7 +133,16 @@ public class SendFile extends AppCompatActivity{
                 }
                 else if(rb_video_file.isChecked()){
 
-                    Toast.makeText(context, "Video currently unavailable", Toast.LENGTH_SHORT).show();
+                    audioFile = false;
+                    videoFile = true;
+
+                    intent = new Intent(context, RecordVideo.class);
+
+                    intent.putExtra("firstName", firstName);
+                    intent.putExtra("filename", filename);
+                    intent.putExtra("recipient", recipient_chosen);
+
+                    startActivity(intent);
                 }
                 else{
 

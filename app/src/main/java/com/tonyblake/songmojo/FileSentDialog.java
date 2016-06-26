@@ -98,7 +98,16 @@ public class FileSentDialog extends DialogFragment {
 
         tv_file_sent = (TextView) view.findViewById(R.id.tv_file_sent);
 
-        String message = RecordAudio.filename + context.getString(R.string._mp3) + " sent to " + RecordAudio.recipient;
+        String message = "";
+
+        if(SendFile.audioFile){
+
+            message = RecordAudio.filename + context.getString(R.string._mp3) + " sent to " + RecordAudio.recipient;
+        }
+        else if(SendFile.videoFile){
+
+            message = RecordVideo.filename + context.getString(R.string._mp4) + " sent to " + RecordVideo.recipient;
+        }
 
         tv_file_sent.setText(message);
     }

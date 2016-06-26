@@ -68,6 +68,9 @@
     <string name="pause">Pause</string>
     <string name="send">Send</string>
 
+    <!-- Record Video -->
+    <string name="video_saved">Video saved</string>
+
     <!-- Cue Backing Track dialog -->
     <string name="select_track">Select track</string>
     <string name="select">Select</string>
@@ -82,6 +85,9 @@
     <string name="sending_file">Sending file...</string>
     <string name="file_sent">File sent</string>
     <string name="done">Done</string>
+
+    <!-- FileSentDialog.java -->
+    <string name="_mp4">.mp4</string>
 
     <!-- Download file dialog -->
     <string name="enter_file_name">Enter file name</string>
