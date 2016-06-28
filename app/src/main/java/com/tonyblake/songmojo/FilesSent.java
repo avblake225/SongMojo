@@ -120,7 +120,9 @@ public class FilesSent extends AppCompatActivity{
 
                 sentFile.filename = cursor.getString(2);
 
-                sentFile.date = cursor.getString(3);
+                sentFile.filetype = cursor.getString(3);
+
+                sentFile.date = cursor.getString(4);
 
                 sentFiles.add(sentFile);
             }
@@ -139,6 +141,7 @@ public class FilesSent extends AppCompatActivity{
 
             sentFileListItem.setRecipient(sentFile.recipient);
             sentFileListItem.setFileName(sentFile.filename);
+            sentFileListItem.setFileType(sentFile.filetype);
             sentFileListItem.setDate(sentFile.date);
             sentFileListItem.finish();
         }
@@ -148,6 +151,7 @@ public class FilesSent extends AppCompatActivity{
 
         private String recipient;
         private String filename;
+        private String filetype;
         private String date;
     }
 }

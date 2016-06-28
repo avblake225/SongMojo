@@ -15,7 +15,8 @@ public class DBManager extends SQLiteOpenHelper{
     public static final String COL_1 = "ID";
     public static final String COL_2 = "RECIPIENT";
     public static final String COL_3 = "FILE_NAME";
-    public static final String COL_4 = "DATE";
+    public static final String COL_4 = "FILE_TYPE";
+    public static final String COL_5 = "DATE";
 
     private File db_file;
 
@@ -39,16 +40,17 @@ public class DBManager extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, RECIPIENT TEXT, FILE_NAME TEXT, DATE TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, RECIPIENT TEXT, FILE_NAME TEXT, FILE_TYPE TEXT, DATE TEXT)");
     }
 
-    public boolean insertData(String recipient, String file_name, String date){
+    public boolean insertData(String recipient, String file_name, String file_type, String date){
 
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COL_2, recipient);
         contentValues.put(COL_3, file_name);
-        contentValues.put(COL_4, date);
+        contentValues.put(COL_4, file_type);
+        contentValues.put(COL_5, date);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 

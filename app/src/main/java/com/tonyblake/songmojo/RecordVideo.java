@@ -248,7 +248,14 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                         @Override
                         protected void onPostExecute(String fileStatus) {
 
-                            dbManager.insertData(recipient, filename, currentDateandTime);
+                            if(SendFile.audioFile){
+
+                                dbManager.insertData(recipient, filename, context.getString(R.string.audio_file), currentDateandTime);
+                            }
+                            else if(SendFile.videoFile){
+
+                                dbManager.insertData(recipient, filename, context.getString(R.string.video_file), currentDateandTime);
+                            }
 
                             sendingFileDialog.dismiss();
 
