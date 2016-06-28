@@ -74,7 +74,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     private boolean backing_track_cued;
 
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer audioPlayer;
 
     private boolean paused;
 
@@ -160,7 +160,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         myAudioRecorder = new MediaRecorder();
 
-        mediaPlayer = new MediaPlayer();
+        audioPlayer = new MediaPlayer();
 
         paused = false;
 
@@ -244,9 +244,9 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
 
-                if (mediaPlayer.isPlaying()) {
+                if (audioPlayer.isPlaying()) {
 
-                    mediaPlayer.pause();
+                    audioPlayer.pause();
 
                     paused = true;
                 }
@@ -264,7 +264,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
-                mediaPlayer.stop();
+                audioPlayer.stop();
 
                 record.setEnabled(true);
                 stop.setEnabled(false);
@@ -337,17 +337,17 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         if(paused) {
 
-            mediaPlayer.start();
+            audioPlayer.start();
 
             paused = false;
         }
         else{
 
-            mediaPlayer.reset();
+            audioPlayer.reset();
 
             try {
 
-                mediaPlayer.setDataSource(filePath);
+                audioPlayer.setDataSource(filePath);
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -355,14 +355,14 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
             try {
 
-                mediaPlayer.prepare();
+                audioPlayer.prepare();
             }
             catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        mediaPlayer.start();
+        audioPlayer.start();
 
         record.setEnabled(false);
         stop.setEnabled(true);
@@ -370,7 +370,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         pause.setEnabled(true);
         send.setEnabled(false);
 
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        audioPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -413,7 +413,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         if(backing_track_playing){
 
-            mediaPlayer.stop();
+            audioPlayer.stop();
 
             record.setEnabled(true);
             stop.setEnabled(false);

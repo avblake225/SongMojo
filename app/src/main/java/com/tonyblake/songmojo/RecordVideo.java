@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +18,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +60,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     private FragmentManager fm;
 
-    Button btn_record, btn_stop, btn_play, btn_send;
+    Button record, stop, play, send;
 
     boolean recording;
 
@@ -71,6 +75,12 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
     private String filepath;
 
     private File file;
+
+    private MediaPlayer videoPlayer;
+
+    private ImageView fullscreen_icon;
+
+    private Chronometer chronometer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,14 +145,22 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         FrameLayout myCameraPreview = (FrameLayout)findViewById(R.id.videoview);
         myCameraPreview.addView(myCameraSurfaceView);
 
-        btn_record = (Button)findViewById(R.id.btn_record);
-        btn_stop = (Button)findViewById(R.id.btn_stop);
-        btn_play = (Button)findViewById(R.id.btn_play);
-        btn_send = (Button)findViewById(R.id.btn_send);
+        record = (Button)findViewById(R.id.btn_record);
+        stop = (Button)findViewById(R.id.btn_stop);
+        play = (Button)findViewById(R.id.btn_play);
+        send = (Button)findViewById(R.id.btn_send);
 
         filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 
         file = new File(filepath);
+
+        videoPlayer = new MediaPlayer();
+
+        fullscreen_icon = (ImageView)findViewById(R.id.fullscreen_icon);
+
+        // Set up timer
+        chronometer = (Chronometer) findViewById(R.id.my_chronometer);
+        chronometer.setBase(SystemClock.elapsedRealtime());
     }
 
     @Override
@@ -158,7 +176,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             }
         });
 
-        btn_record.setOnClickListener(new View.OnClickListener() {
+        record.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -172,6 +190,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                 }
 
                 videoRecorder.start();
+                chronometer.start();
                 recording = true;
 
                 Toast.makeText(context,
@@ -180,7 +199,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             }
         });
 
-        btn_stop.setOnClickListener(new View.OnClickListener() {
+        stop.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -188,6 +207,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                 if (recording) {
                     // stop recording and release camera
                     videoRecorder.stop();  // stop the recording
+                    chronometer.stop();
                     releaseVideoRecorder(); // release the MediaRecorder object
 
                     //Exit after saved
@@ -205,18 +225,18 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             }
         });
 
-        btn_play.setOnClickListener(new View.OnClickListener() {
+        play.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(context,
-                        "Video playback currently unavailable",
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.video_playing), Toast.LENGTH_LONG).show();
+
+                playFile(filepath);
             }
         });
 
-        btn_send.setOnClickListener(new View.OnClickListener() {
+        send.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -270,6 +290,56 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                     Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
                 }
 
+            }
+        });
+
+        fullscreen_icon.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(context, FullScreenVideo.class);
+
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void playFile(String filePath){
+
+
+        try {
+
+            videoPlayer.setDataSource(filePath);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            videoPlayer.prepare();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        videoPlayer.start();
+
+        record.setEnabled(false);
+        stop.setEnabled(true);
+        play.setEnabled(false);
+        send.setEnabled(false);
+
+        videoPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+
+                record.setEnabled(true);
+                stop.setEnabled(false);
+                play.setEnabled(true);
+                send.setEnabled(true);
             }
         });
     }

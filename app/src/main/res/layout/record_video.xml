@@ -38,13 +38,41 @@
         <FrameLayout
             android:id="@+id/videoview"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/videoview_margin_bottom"
+                android:weightSum="1"
+                android:orientation="vertical">
+
+                <Chronometer
+                    android:id="@+id/my_chronometer"
+                    android:format="%s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="@dimen/chronometer_text_size"/>
+
+                <ImageView
+                    android:id="@+id/fullscreen_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:paddingRight="@dimen/fullscreen_icon_padding"
+                    android:src="@drawable/ic_fullscreen_black_24dp"/>
+
+            </LinearLayout>
+
+         </FrameLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/record_video_margin_bottom"
+            android:background="@color/white"
             android:layout_alignParentBottom="true">
 
             <Button

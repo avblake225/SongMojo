@@ -70,6 +70,7 @@
 
     <!-- Record Video -->
     <string name="video_saved">Video saved</string>
+    <string name="video_playing">Video playing</string>
 
     <!-- Cue Backing Track dialog -->
     <string name="select_track">Select track</string>
