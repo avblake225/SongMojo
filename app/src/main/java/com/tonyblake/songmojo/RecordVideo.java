@@ -2,11 +2,13 @@ package com.tonyblake.songmojo;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,11 +32,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class RecordVideo extends AppCompatActivity{
+public class RecordVideo extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface{
 
     private Camera myCamera;
     private MyCameraSurfaceView myCameraSurfaceView;
-    private MediaRecorder mediaRecorder;
+    private MediaRecorder videoRecorder;
 
     public static String firstName, filename, recipient;
 
@@ -138,7 +140,7 @@ public class RecordVideo extends AppCompatActivity{
         btn_play = (Button)findViewById(R.id.btn_play);
         btn_send = (Button)findViewById(R.id.btn_send);
 
-        filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
+        filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename + context.getString(R.string._mp4);
 
         file = new File(filepath);
     }
@@ -161,7 +163,7 @@ public class RecordVideo extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                if (!prepareMediaRecorder()) {
+                if (!prepareVideoRecorder()) {
 
                     Toast.makeText(RecordVideo.this,
                             "Fail in prepareMediaRecorder()!\n - Ended -",
@@ -169,7 +171,7 @@ public class RecordVideo extends AppCompatActivity{
                     finish();
                 }
 
-                mediaRecorder.start();
+                videoRecorder.start();
                 recording = true;
 
                 Toast.makeText(context,
@@ -185,8 +187,8 @@ public class RecordVideo extends AppCompatActivity{
 
                 if (recording) {
                     // stop recording and release camera
-                    mediaRecorder.stop();  // stop the recording
-                    releaseMediaRecorder(); // release the MediaRecorder object
+                    videoRecorder.stop();  // stop the recording
+                    releaseVideoRecorder(); // release the MediaRecorder object
 
                     //Exit after saved
                     //finish();
@@ -295,49 +297,63 @@ public class RecordVideo extends AppCompatActivity{
         return cameraId;
     }
 
-    private boolean prepareMediaRecorder(){
+    private boolean prepareVideoRecorder(){
+
         myCamera = getCameraInstance();
-        mediaRecorder = new MediaRecorder();
+
+        videoRecorder = new MediaRecorder();
 
         myCamera.unlock();
-        mediaRecorder.setCamera(myCamera);
 
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-        mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        videoRecorder.setCamera(myCamera);
 
-        mediaRecorder.setProfile(CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH));
+        videoRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        videoRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
-        mediaRecorder.setOutputFile("/sdcard/" + filename +".mp4");
-        mediaRecorder.setMaxDuration(60000); // Set max duration 60 sec.
-        //mediaRecorder.setMaxFileSize(5000000); // Set max file size 5M
+        videoRecorder.setProfile(CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH));
 
-        mediaRecorder.setPreviewDisplay(myCameraSurfaceView.getHolder().getSurface());
+        videoRecorder.setOutputFile(filepath);
+
+        //videoRecorder.setMaxDuration(60000); // Set max duration 60 sec.
+        //videoRecorder.setMaxFileSize(5000000); // Set max file size 5M
+
+        videoRecorder.setPreviewDisplay(myCameraSurfaceView.getHolder().getSurface());
 
         try {
-            mediaRecorder.prepare();
-        } catch (IllegalStateException e) {
-            releaseMediaRecorder();
-            return false;
-        } catch (IOException e) {
-            releaseMediaRecorder();
+
+            videoRecorder.prepare();
+        }
+        catch (IllegalStateException e) {
+
+            releaseVideoRecorder();
+
             return false;
         }
-        return true;
+        catch (IOException e) {
 
+            releaseVideoRecorder();
+
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        releaseMediaRecorder();       // if you are using MediaRecorder, release it first
-        releaseCamera();              // release the camera immediately on pause event
+
+        releaseVideoRecorder();
+        releaseCamera();
     }
 
-    private void releaseMediaRecorder(){
-        if (mediaRecorder != null) {
-            mediaRecorder.reset();   // clear recorder configuration
-            mediaRecorder.release(); // release the recorder object
-            mediaRecorder = null;
+    private void releaseVideoRecorder(){
+
+        if (videoRecorder != null) {
+
+            videoRecorder.reset();   // clear recorder configuration
+            videoRecorder.release(); // release the recorder object
+            videoRecorder = null;
             myCamera.lock();           // lock camera for later use
         }
     }
@@ -347,6 +363,16 @@ public class RecordVideo extends AppCompatActivity{
             myCamera.release();        // release the camera for other applications
             myCamera = null;
         }
+    }
+
+    @Override
+    public void onDoneButtonClick(DialogFragment dialog) {
+
+        Intent intent = new Intent(this, Home.class);
+
+        intent.putExtra("firstName", firstName);
+
+        startActivity(intent);
     }
 
     public class MyCameraSurfaceView extends SurfaceView implements SurfaceHolder.Callback{

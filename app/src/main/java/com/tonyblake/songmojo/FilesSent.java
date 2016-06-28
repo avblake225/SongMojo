@@ -117,7 +117,9 @@ public class FilesSent extends AppCompatActivity{
                 SentFile sentFile = new SentFile();
 
                 sentFile.recipient = cursor.getString(1);
-                sentFile.filename = cursor.getString(2) + context.getString(R.string._mp3);
+
+                sentFile.filename = cursor.getString(2);
+
                 sentFile.date = cursor.getString(3);
 
                 sentFiles.add(sentFile);

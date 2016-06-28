@@ -24,21 +24,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/screen_title">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/scrollview_padding_bottom">
+
+            <LinearLayout
+                android:id="@+id/files_sent_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/files_sent_list_margin"
+                android:orientation="vertical"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
     <LinearLayout
-        android:id="@+id/files_sent_list"
-        android:layout_below="@id/screen_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/files_sent_list_margin"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true">
 
-    <Button
-        android:id="@+id/btn_clear_all"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/btn_clear_all_margin_bottom"
-        android:text="@string/clear_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_clear_all"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/clear_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </RelativeLayout>

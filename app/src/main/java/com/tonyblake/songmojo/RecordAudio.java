@@ -152,7 +152,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         stop.setEnabled(false);
         send.setEnabled(false);
 
-        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
+        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename + context.getString(R.string._mp3);
 
         file = new File(filePath);
 

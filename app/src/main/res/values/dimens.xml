@@ -65,7 +65,7 @@
 
     <!-- files_sent.xml -->
     <dimen name="files_sent_list_margin">15dp</dimen>
-    <dimen name="btn_clear_all_margin_bottom">10dp</dimen>
+    <dimen name="scrollview_padding_bottom">40dp</dimen>
 
     <!-- Sent File Item Layout -->
     <dimen name="sent_file_item_layout_margin_top">10dp</dimen>
