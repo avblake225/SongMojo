@@ -110,8 +110,6 @@ public class SendFile extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                filename = et_file_name.getText().toString();
-
                 recipient_chosen = select_recipient_spinner.getSelectedItem().toString();
 
                 if("".equals(filename)){
@@ -122,6 +120,8 @@ public class SendFile extends AppCompatActivity{
 
                     audioFile = true;
                     videoFile = false;
+
+                    filename = et_file_name.getText().toString() + context.getString(R.string._mp3);
 
                     intent = new Intent(context, RecordAudio.class);
 
@@ -135,6 +135,8 @@ public class SendFile extends AppCompatActivity{
 
                     audioFile = false;
                     videoFile = true;
+
+                    filename = et_file_name.getText().toString() + context.getString(R.string._mp4);
 
                     intent = new Intent(context, RecordVideo.class);
 

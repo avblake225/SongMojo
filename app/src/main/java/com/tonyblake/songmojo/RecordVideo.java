@@ -109,7 +109,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         setContentView(R.layout.record_video);
 
         tv_filename = (TextView)findViewById(R.id.tv_filename);
-        tv_filename.setText(filename + ".mp4");
+        tv_filename.setText(filename);
 
         // Show Status Bar
         View decorView = getWindow().getDecorView();
@@ -140,7 +140,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         btn_play = (Button)findViewById(R.id.btn_play);
         btn_send = (Button)findViewById(R.id.btn_send);
 
-        filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename + context.getString(R.string._mp4);
+        filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 
         file = new File(filepath);
     }

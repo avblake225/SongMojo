@@ -102,11 +102,11 @@ public class FileSentDialog extends DialogFragment {
 
         if(SendFile.audioFile){
 
-            message = RecordAudio.filename + context.getString(R.string._mp3) + " sent to " + RecordAudio.recipient;
+            message = RecordAudio.filename + " sent to " + RecordAudio.recipient;
         }
         else if(SendFile.videoFile){
 
-            message = RecordVideo.filename + context.getString(R.string._mp4) + " sent to " + RecordVideo.recipient;
+            message = RecordVideo.filename + " sent to " + RecordVideo.recipient;
         }
 
         tv_file_sent.setText(message);

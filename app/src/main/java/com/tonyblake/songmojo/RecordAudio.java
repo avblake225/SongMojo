@@ -152,7 +152,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         stop.setEnabled(false);
         send.setEnabled(false);
 
-        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename + context.getString(R.string._mp3);
+        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 
         file = new File(filePath);
 
@@ -180,7 +180,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             }
         });
 
-        tv_filename.setText(filename + context.getString(R.string._mp3));
+        tv_filename.setText(filename);
 
         tv_recipient.setText(recipient);
 
