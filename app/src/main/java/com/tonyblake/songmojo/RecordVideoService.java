@@ -6,7 +6,6 @@ import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -23,13 +22,13 @@ public class RecordVideoService extends Service {
     @Override
     public void onCreate() {
 
-        prepareVideoRecorder();
-
         camera = RecordVideo.myCamera;
 
         cameraSurfaceView = RecordVideo.myCameraSurfaceView;
 
         filepath = RecordVideo.filepath;
+
+        prepareVideoRecorder();
     }
 
     @Override
@@ -42,8 +41,6 @@ public class RecordVideoService extends Service {
 
         videoRecorder.start();
 
-        Toast.makeText(this,"recording service started",Toast.LENGTH_SHORT).show();
-
         return START_STICKY;
     }
 
@@ -52,8 +49,6 @@ public class RecordVideoService extends Service {
         super.onDestroy();
 
         videoRecorder.stop();
-
-        Toast.makeText(this,"recording service stopped",Toast.LENGTH_SHORT).show();
     }
 
     private void prepareVideoRecorder(){
@@ -70,9 +65,6 @@ public class RecordVideoService extends Service {
         videoRecorder.setProfile(CamcorderProfile.get(Utils.cameraId, CamcorderProfile.QUALITY_HIGH));
 
         videoRecorder.setOutputFile(filepath);
-
-        //videoRecorder.setMaxDuration(60000); // Set max duration 60 sec.
-        //videoRecorder.setMaxFileSize(5000000); // Set max file size 5M
 
         videoRecorder.setPreviewDisplay(cameraSurfaceView.getHolder().getSurface());
 

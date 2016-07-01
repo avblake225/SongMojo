@@ -33,12 +33,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <RelativeLayout
-        android:layout_below="@id/tv_filename"
+    <LinearLayout
+        android:id="@+id/videoview_layout"
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:background="@color/orange"
-        android:layout_height="350dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/videoview"
@@ -47,9 +46,10 @@
 
          </FrameLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/buttons_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

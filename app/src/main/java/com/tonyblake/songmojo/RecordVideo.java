@@ -3,6 +3,7 @@ package com.tonyblake.songmojo;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -12,10 +13,13 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,15 +75,23 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     private MediaPlayer videoPlayer;
 
-    private View enter_fullscreen_icon;
+    private View chronometer_icon, enter_fullscreen_icon;
 
     private LayoutInflater inflator;
 
     private Intent recordVideoIntent;
 
+    private DisplayMetrics displayMetrics;
+
+    private Display display;
+
+    private int display_height;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.record_video);
 
         context = this;
 
@@ -111,8 +123,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
         recording = false;
 
-        setContentView(R.layout.record_video);
-
         tv_filename = (TextView)findViewById(R.id.tv_filename);
         tv_filename.setText(filename);
 
@@ -129,15 +139,32 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         actionBar.setTitleTextColor(context.getResources().getColor(R.color.white));
 
         record = (Button)findViewById(R.id.btn_record);
+        record.setEnabled(true);
+
         stop = (Button)findViewById(R.id.btn_stop);
+        stop.setEnabled(false);
+
         play = (Button)findViewById(R.id.btn_play);
+        play.setEnabled(false);
+
         send = (Button)findViewById(R.id.btn_send);
+        send.setEnabled(false);
 
         filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 
         file = new File(filepath);
 
         videoPlayer = new MediaPlayer();
+
+        displayMetrics = this.getResources().getDisplayMetrics();
+
+        // Get display height
+        display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        display_height = size.y; // px
+
+        makeVideoViewHeightDynamic();
     }
 
     @Override
@@ -158,7 +185,11 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
         inflator = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        // Overlay fullscreen icon
+        // Overlay chronometer icon
+        chronometer_icon = inflator.inflate(R.layout.chronometer,null);
+        myCameraPreview.addView(chronometer_icon);
+
+        // Overlay enter fullscreen icon
         enter_fullscreen_icon = inflator.inflate(R.layout.enter_fullscreen_icon,null);
         myCameraPreview.addView(enter_fullscreen_icon);
 
@@ -176,6 +207,11 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
+                record.setEnabled(false);
+                play.setEnabled(false);
+                stop.setEnabled(true);
+                send.setEnabled(false);
+
                 recordVideoIntent = new Intent(context, RecordVideoService.class);
                 startService(recordVideoIntent);
 
@@ -191,6 +227,11 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
             @Override
             public void onClick(View v) {
+
+                record.setEnabled(true);
+                play.setEnabled(true);
+                stop.setEnabled(false);
+                send.setEnabled(true);
 
                 if (recording) {
                     // stop recording and release camera
@@ -212,6 +253,11 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
             @Override
             public void onClick(View v) {
+
+                record.setEnabled(false);
+                play.setEnabled(false);
+                stop.setEnabled(true);
+                send.setEnabled(false);
 
                 Toast.makeText(context, context.getString(R.string.video_playing), Toast.LENGTH_LONG).show();
 
@@ -290,6 +336,20 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         });
     }
 
+    private void makeVideoViewHeightDynamic(){
+
+        // Measure height of buttons panel
+        LinearLayout buttons_panel = (LinearLayout)findViewById(R.id.buttons_panel);
+        buttons_panel.measure(0,0);
+        int buttons_panel_height = buttons_panel.getMeasuredHeight(); // px
+
+        // Adjust height of videoview layout
+        LinearLayout videoview_layout = (LinearLayout)findViewById(R.id.videoview_layout);
+        int new_videoview_layout_height_px = display_height - buttons_panel_height;
+        int new_videoview_layout_height_dp = pxToDp(new_videoview_layout_height_px);
+        videoview_layout.getLayoutParams().height = new_videoview_layout_height_px;
+    }
+
     private void playFile(String filePath){
 
 
@@ -360,5 +420,10 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         intent.putExtra("firstName", firstName);
 
         startActivity(intent);
+    }
+
+    private int pxToDp(int px){
+
+        return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }

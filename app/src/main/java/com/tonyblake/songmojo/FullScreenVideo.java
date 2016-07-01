@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -13,9 +14,9 @@ public class FullScreenVideo extends AppCompatActivity{
     private Camera myCamera;
     private MyCameraSurfaceView myCameraSurfaceView;
 
-    private View fullscreen_exit_icon;
+    private View chronometer_icon, exit_fullscreen_icon;
 
-    //private Chronometer chronometer;
+    private Chronometer chronometer;
 
     private LayoutInflater inflator;
 
@@ -39,16 +40,20 @@ public class FullScreenVideo extends AppCompatActivity{
 
         inflator = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        // Overlay fullscreen icon
-        fullscreen_exit_icon = inflator.inflate(R.layout.exit_fullscreen_icon,null);
-        myCameraPreview.addView(fullscreen_exit_icon);
+        // Overlay chronometer icon
+        chronometer_icon = inflator.inflate(R.layout.chronometer,null);
+        myCameraPreview.addView(chronometer_icon);
+
+        // Overlay exit fullscreen icon
+        exit_fullscreen_icon = inflator.inflate(R.layout.exit_fullscreen_icon,null);
+        myCameraPreview.addView(exit_fullscreen_icon);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
 
-        fullscreen_exit_icon.setOnClickListener(new View.OnClickListener() {
+        exit_fullscreen_icon.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

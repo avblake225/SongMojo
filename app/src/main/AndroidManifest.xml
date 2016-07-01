@@ -30,6 +30,9 @@
         <activity android:name=".RecordAudio"></activity>
         <activity android:name=".RecordVideo"></activity>
         <activity android:name=".FullScreenVideo"></activity>
+
+        <service android:name=".RecordVideoService" />
+
     </application>
 
 </manifest>
