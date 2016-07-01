@@ -9,18 +9,16 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,8 +62,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     boolean recording;
 
-    private int cameraId;
-
     private Toolbar actionBar;
 
     private Context context;
@@ -78,9 +74,9 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     private MediaPlayer videoPlayer;
 
-    private ImageView fullscreen_icon;
+    private View enter_fullscreen_icon;
 
-    private Chronometer chronometer;
+    private LayoutInflater inflator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,18 +129,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         actionBar.setTitle(context.getString(R.string.app_name));
         actionBar.setTitleTextColor(context.getResources().getColor(R.color.white));
 
-        //Get Camera for preview
-        myCamera = getCameraInstance();
-        if(myCamera == null){
-            Toast.makeText(RecordVideo.this,
-                    "Fail to get Camera",
-                    Toast.LENGTH_LONG).show();
-        }
-
-        myCameraSurfaceView = new MyCameraSurfaceView(this, myCamera);
-        FrameLayout myCameraPreview = (FrameLayout)findViewById(R.id.videoview);
-        myCameraPreview.addView(myCameraSurfaceView);
-
         record = (Button)findViewById(R.id.btn_record);
         stop = (Button)findViewById(R.id.btn_stop);
         play = (Button)findViewById(R.id.btn_play);
@@ -155,17 +139,29 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         file = new File(filepath);
 
         videoPlayer = new MediaPlayer();
-
-        fullscreen_icon = (ImageView)findViewById(R.id.fullscreen_icon);
-
-        // Set up timer
-        chronometer = (Chronometer) findViewById(R.id.my_chronometer);
-        chronometer.setBase(SystemClock.elapsedRealtime());
     }
 
     @Override
     protected void onResume(){
         super.onResume();
+
+        //Get Camera for preview
+        myCamera = Utils.getCameraInstance();
+        if(myCamera == null){
+            Toast.makeText(RecordVideo.this,
+                    "Fail to get Camera",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        myCameraSurfaceView = new MyCameraSurfaceView(this, myCamera);
+        FrameLayout myCameraPreview = (FrameLayout)findViewById(R.id.videoview);
+        myCameraPreview.addView(myCameraSurfaceView);
+
+        inflator = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        // Overlay fullscreen icon
+        enter_fullscreen_icon = inflator.inflate(R.layout.enter_fullscreen_icon,null);
+        myCameraPreview.addView(enter_fullscreen_icon);
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -190,7 +186,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                 }
 
                 videoRecorder.start();
-                chronometer.start();
                 recording = true;
 
                 Toast.makeText(context,
@@ -207,7 +202,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                 if (recording) {
                     // stop recording and release camera
                     videoRecorder.stop();  // stop the recording
-                    chronometer.stop();
                     releaseVideoRecorder(); // release the MediaRecorder object
 
                     //Exit after saved
@@ -217,10 +211,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                             context.getString(R.string.video_saved),
                             Toast.LENGTH_LONG).show();
 
-                } else {
-
-                    //Release Camera before MediaRecorder start
-                    releaseCamera();
                 }
             }
         });
@@ -240,6 +230,8 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
             @Override
             public void onClick(View v) {
+
+                releaseCamera();
 
                 InputStream stream = null;
 
@@ -293,7 +285,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             }
         });
 
-        fullscreen_icon.setOnClickListener(new View.OnClickListener() {
+        enter_fullscreen_icon.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -344,39 +336,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         });
     }
 
-    private Camera getCameraInstance(){
-        // TODO Auto-generated method stub
-        Camera c = null;
-        try {
-
-            cameraId = findFrontFacingCamera();
-
-            c = Camera.open(cameraId); // attempt to get a Camera instance
-        }
-        catch (Exception e){
-            // Camera is not available (in use or does not exist)
-        }
-        return c; // returns null if camera is unavailable
-    }
-
-    private int findFrontFacingCamera() {
-        int cameraId = -1;
-        // Search for the front facing camera
-        int numberOfCameras = Camera.getNumberOfCameras();
-        for (int i = 0; i < numberOfCameras; i++) {
-            Camera.CameraInfo info = new Camera.CameraInfo();
-            Camera.getCameraInfo(i, info);
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                cameraId = i;
-                break;
-            }
-        }
-        return cameraId;
-    }
-
     private boolean prepareVideoRecorder(){
-
-        myCamera = getCameraInstance();
 
         videoRecorder = new MediaRecorder();
 
@@ -387,7 +347,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         videoRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         videoRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
-        videoRecorder.setProfile(CamcorderProfile.get(cameraId, CamcorderProfile.QUALITY_HIGH));
+        videoRecorder.setProfile(CamcorderProfile.get(Utils.cameraId, CamcorderProfile.QUALITY_HIGH));
 
         videoRecorder.setOutputFile(filepath);
 
@@ -421,7 +381,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         super.onPause();
 
         releaseVideoRecorder();
-        releaseCamera();
     }
 
     private void releaseVideoRecorder(){

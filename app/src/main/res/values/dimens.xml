@@ -76,7 +76,8 @@
 
     <!-- record_video.xml -->
     <dimen name="tv_filename_margin">10dp</dimen>
-    <dimen name="fullscreen_icon_padding">10dp</dimen>
+    <dimen name="fullscreen_icon_margin">10dp</dimen>
+    <dimen name="exit_fullscreen_icon_margin">10dp</dimen>
     <dimen name="videoview_margin_bottom">50dp</dimen>
 
     <!-- Misc -->
