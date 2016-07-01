@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
-import android.media.CamcorderProfile;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -14,8 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -36,8 +33,8 @@ import java.util.TimeZone;
 
 public class RecordVideo extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface{
 
-    private Camera myCamera;
-    private MyCameraSurfaceView myCameraSurfaceView;
+    public static Camera myCamera;
+    public static MyCameraSurfaceView myCameraSurfaceView;
     private MediaRecorder videoRecorder;
 
     public static String firstName, filename, recipient;
@@ -68,7 +65,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     private TextView tv_filename;
 
-    private String filepath;
+    public static String filepath;
 
     private File file;
 
@@ -77,6 +74,8 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
     private View enter_fullscreen_icon;
 
     private LayoutInflater inflator;
+
+    private Intent recordVideoIntent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -177,15 +176,9 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
-                if (!prepareVideoRecorder()) {
+                recordVideoIntent = new Intent(context, RecordVideoService.class);
+                startService(recordVideoIntent);
 
-                    Toast.makeText(RecordVideo.this,
-                            "Fail in prepareMediaRecorder()!\n - Ended -",
-                            Toast.LENGTH_LONG).show();
-                    finish();
-                }
-
-                videoRecorder.start();
                 recording = true;
 
                 Toast.makeText(context,
@@ -201,7 +194,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
                 if (recording) {
                     // stop recording and release camera
-                    videoRecorder.stop();  // stop the recording
+                    stopService(recordVideoIntent);
                     releaseVideoRecorder(); // release the MediaRecorder object
 
                     //Exit after saved
@@ -336,51 +329,16 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         });
     }
 
-    private boolean prepareVideoRecorder(){
-
-        videoRecorder = new MediaRecorder();
-
-        myCamera.unlock();
-
-        videoRecorder.setCamera(myCamera);
-
-        videoRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
-        videoRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-
-        videoRecorder.setProfile(CamcorderProfile.get(Utils.cameraId, CamcorderProfile.QUALITY_HIGH));
-
-        videoRecorder.setOutputFile(filepath);
-
-        //videoRecorder.setMaxDuration(60000); // Set max duration 60 sec.
-        //videoRecorder.setMaxFileSize(5000000); // Set max file size 5M
-
-        videoRecorder.setPreviewDisplay(myCameraSurfaceView.getHolder().getSurface());
-
-        try {
-
-            videoRecorder.prepare();
-        }
-        catch (IllegalStateException e) {
-
-            releaseVideoRecorder();
-
-            return false;
-        }
-        catch (IOException e) {
-
-            releaseVideoRecorder();
-
-            return false;
-        }
-
-        return true;
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
+    }
 
-        releaseVideoRecorder();
+    private void releaseCamera(){
+        if (myCamera != null){
+            myCamera.release();        // release the camera for other applications
+            myCamera = null;
+        }
     }
 
     private void releaseVideoRecorder(){
@@ -394,13 +352,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         }
     }
 
-    private void releaseCamera(){
-        if (myCamera != null){
-            myCamera.release();        // release the camera for other applications
-            myCamera = null;
-        }
-    }
-
     @Override
     public void onDoneButtonClick(DialogFragment dialog) {
 
@@ -409,69 +360,5 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         intent.putExtra("firstName", firstName);
 
         startActivity(intent);
-    }
-
-    public class MyCameraSurfaceView extends SurfaceView implements SurfaceHolder.Callback{
-
-        private SurfaceHolder mHolder;
-        private Camera mCamera;
-
-        public MyCameraSurfaceView(Context context, Camera camera) {
-            super(context);
-            mCamera = camera;
-
-            // Install a SurfaceHolder.Callback so we get notified when the
-            // underlying surface is created and destroyed.
-            mHolder = getHolder();
-            mHolder.addCallback(this);
-            // deprecated setting, but required on Android versions prior to 3.0
-            mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        }
-
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int weight,
-                                   int height) {
-            // If your preview can change or rotate, take care of those events here.
-            // Make sure to stop the preview before resizing or reformatting it.
-
-            if (mHolder.getSurface() == null){
-                // preview surface does not exist
-                return;
-            }
-
-            // stop preview before making changes
-            try {
-                mCamera.stopPreview();
-            } catch (Exception e){
-                // ignore: tried to stop a non-existent preview
-            }
-
-            // make any resize, rotate or reformatting changes here
-
-            // start preview with new settings
-            try {
-                mCamera.setPreviewDisplay(mHolder);
-                mCamera.startPreview();
-
-            } catch (Exception e){
-            }
-        }
-
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-            // TODO Auto-generated method stub
-            // The Surface has been created, now tell the camera where to draw the preview.
-            try {
-                mCamera.setPreviewDisplay(holder);
-                mCamera.startPreview();
-            } catch (IOException e) {
-            }
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            // TODO Auto-generated method stub
-
-        }
     }
 }

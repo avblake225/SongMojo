@@ -1,8 +1,6 @@
 package com.tonyblake.songmojo;
 
-import android.content.Context;
 import android.hardware.Camera;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -14,9 +12,6 @@ public class FullScreenVideo extends AppCompatActivity{
 
     private Camera myCamera;
     private MyCameraSurfaceView myCameraSurfaceView;
-    private MediaRecorder videoRecorder;
-
-    private Context context;
 
     private View fullscreen_exit_icon;
 
@@ -29,8 +24,6 @@ public class FullScreenVideo extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.fullscreen_video);
-
-        context = this;
 
         // Get Camera for preview
         myCamera = Utils.getCameraInstance();
