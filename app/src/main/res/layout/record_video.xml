@@ -35,9 +35,11 @@
 
     <LinearLayout
         android:id="@+id/videoview_layout"
+        android:layout_below="@id/tv_filename"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/videoview_margin_bottom">
 
         <FrameLayout
             android:id="@+id/videoview"

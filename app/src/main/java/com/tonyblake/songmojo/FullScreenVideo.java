@@ -14,9 +14,9 @@ public class FullScreenVideo extends AppCompatActivity{
     private Camera myCamera;
     private MyCameraSurfaceView myCameraSurfaceView;
 
-    private View chronometer_icon, exit_fullscreen_icon;
+    private View stopwatch_icon, exit_fullscreen_icon;
 
-    private Chronometer chronometer;
+    private Chronometer stopwatch;
 
     private LayoutInflater inflator;
 
@@ -41,8 +41,12 @@ public class FullScreenVideo extends AppCompatActivity{
         inflator = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
         // Overlay chronometer icon
-        chronometer_icon = inflator.inflate(R.layout.chronometer,null);
-        myCameraPreview.addView(chronometer_icon);
+        stopwatch_icon = inflator.inflate(R.layout.chronometer,null);
+        myCameraPreview.addView(stopwatch_icon);
+        stopwatch = (Chronometer)stopwatch_icon.findViewById(R.id.stopwatch);
+        stopwatch.setBase(RecordVideoService.time_elapsed);
+        stopwatch.start();
+        RecordVideoService.recording = true;
 
         // Overlay exit fullscreen icon
         exit_fullscreen_icon = inflator.inflate(R.layout.exit_fullscreen_icon,null);
@@ -58,6 +62,7 @@ public class FullScreenVideo extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
+                stopwatch.stop();
                 onBackPressed();
             }
         });

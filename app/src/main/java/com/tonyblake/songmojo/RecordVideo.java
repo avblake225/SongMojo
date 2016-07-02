@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -75,7 +77,9 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     private MediaPlayer videoPlayer;
 
-    private View chronometer_icon, enter_fullscreen_icon;
+    private View stopwatch_icon, enter_fullscreen_icon;
+
+    private Chronometer stopwatch;
 
     private LayoutInflater inflator;
 
@@ -164,14 +168,14 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         display.getSize(size);
         display_height = size.y; // px
 
-        makeVideoViewHeightDynamic();
+        //makeVideoViewHeightDynamic(); // Needs debugging
     }
 
     @Override
     protected void onResume(){
         super.onResume();
 
-        //Get Camera for preview
+        // Get Camera for preview
         myCamera = Utils.getCameraInstance();
         if(myCamera == null){
             Toast.makeText(RecordVideo.this,
@@ -186,8 +190,15 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         inflator = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
 
         // Overlay chronometer icon
-        chronometer_icon = inflator.inflate(R.layout.chronometer,null);
-        myCameraPreview.addView(chronometer_icon);
+        stopwatch_icon = inflator.inflate(R.layout.chronometer,null);
+        myCameraPreview.addView(stopwatch_icon);
+        stopwatch = (Chronometer)stopwatch_icon.findViewById(R.id.stopwatch);
+
+        if(RecordVideoService.recording){
+
+            stopwatch.setBase(RecordVideoService.time_elapsed);
+            stopwatch.start();
+        }
 
         // Overlay enter fullscreen icon
         enter_fullscreen_icon = inflator.inflate(R.layout.enter_fullscreen_icon,null);
@@ -215,6 +226,9 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                 recordVideoIntent = new Intent(context, RecordVideoService.class);
                 startService(recordVideoIntent);
 
+                stopwatch.setBase(SystemClock.elapsedRealtime());
+                stopwatch.start();
+
                 recording = true;
 
                 Toast.makeText(context,
@@ -237,6 +251,8 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                     // stop recording and release camera
                     stopService(recordVideoIntent);
                     releaseVideoRecorder(); // release the MediaRecorder object
+                    stopwatch.stop();
+                    RecordVideoService.recording = false;
 
                     //Exit after saved
                     //finish();
@@ -330,7 +346,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, FullScreenVideo.class);
-
                 startActivity(intent);
             }
         });
@@ -338,14 +353,23 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     private void makeVideoViewHeightDynamic(){
 
+        // Measure height of app bar
+        actionBar.measure(0,0);
+        int actionBar_height = actionBar.getMeasuredHeight();
+
+        // Measure tv_filename height
+        tv_filename.measure(0,0);
+        int tv_filename_height = tv_filename.getMeasuredHeight();
+
         // Measure height of buttons panel
         LinearLayout buttons_panel = (LinearLayout)findViewById(R.id.buttons_panel);
         buttons_panel.measure(0,0);
-        int buttons_panel_height = buttons_panel.getMeasuredHeight(); // px
+        int buttons_panel_height = buttons_panel.getMeasuredHeight();
 
-        // Adjust height of videoview layout
+        // Subtract all from height of videoview layout
         LinearLayout videoview_layout = (LinearLayout)findViewById(R.id.videoview_layout);
-        int new_videoview_layout_height_px = display_height - buttons_panel_height;
+        int sum = actionBar_height + tv_filename_height + buttons_panel_height;
+        int new_videoview_layout_height_px = display_height - sum;
         int new_videoview_layout_height_dp = pxToDp(new_videoview_layout_height_px);
         videoview_layout.getLayoutParams().height = new_videoview_layout_height_px;
     }

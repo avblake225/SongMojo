@@ -6,6 +6,7 @@ import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.IBinder;
+import android.os.SystemClock;
 
 import java.io.IOException;
 
@@ -19,6 +20,10 @@ public class RecordVideoService extends Service {
 
     private String filepath;
 
+    public static long time_elapsed;
+
+    public static boolean recording;
+
     @Override
     public void onCreate() {
 
@@ -27,6 +32,10 @@ public class RecordVideoService extends Service {
         cameraSurfaceView = RecordVideo.myCameraSurfaceView;
 
         filepath = RecordVideo.filepath;
+
+        time_elapsed = 0;
+
+        recording = false;
 
         prepareVideoRecorder();
     }
@@ -40,6 +49,8 @@ public class RecordVideoService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         videoRecorder.start();
+
+        time_elapsed = SystemClock.elapsedRealtime();
 
         return START_STICKY;
     }
