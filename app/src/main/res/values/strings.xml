@@ -113,4 +113,8 @@
     <string name="file_type">File type:</string>
     <string name="date">Date:</string>
 
+    <!-- ClearAllDialog.java -->
+    <string name="confirm_clear_all">Are you sure you want to clear all sent files?</string>
+    <string name="yes">Yes</string>
+
 </resources>

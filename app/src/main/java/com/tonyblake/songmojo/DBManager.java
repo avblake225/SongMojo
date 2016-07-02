@@ -78,11 +78,9 @@ public class DBManager extends SQLiteOpenHelper{
         return res;
     }
 
-    public int deleteSentFiles(){
+    public void deleteSentFiles(){
 
-        int numFilesDeleted = db.delete(TABLE_NAME,null,null);
-
-        return numFilesDeleted;
+        db.delete(TABLE_NAME,null,null);
     }
 
     public String getTableName(){

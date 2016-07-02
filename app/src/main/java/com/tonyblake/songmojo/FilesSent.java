@@ -3,6 +3,8 @@ package com.tonyblake.songmojo;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -13,7 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class FilesSent extends AppCompatActivity{
+public class FilesSent extends AppCompatActivity implements ClearAllDialog.ClearAllDialogInterface{
 
     private Context context;
 
@@ -33,12 +35,16 @@ public class FilesSent extends AppCompatActivity{
 
     private Button btn_clear_all;
 
+    private FragmentManager fm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.files_sent);
 
         context = this;
+
+        fm = getSupportFragmentManager();
 
         // Show Status Bar
         View decorView = getWindow().getDecorView();
@@ -72,18 +78,8 @@ public class FilesSent extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                if(sentFiles.size() != 0){
-
-                    files_sent_list.removeAllViews();
-
-                    int numfilesDeleted = dbManager.deleteSentFiles();
-
-                    Toast.makeText(context,context.getString(R.string.files_cleared), Toast.LENGTH_SHORT).show();
-                }
-                else{
-
-                    Toast.makeText(context,context.getString(R.string.nothing_to_clear), Toast.LENGTH_SHORT).show();
-                }
+                ClearAllDialog clearAllDialog = new ClearAllDialog();
+                clearAllDialog.show(fm, "clearAllDialog");
             }
         });
 
@@ -147,6 +143,23 @@ public class FilesSent extends AppCompatActivity{
             sentFileListItem.setFileType(sentFile.filetype);
             sentFileListItem.setDate(sentFile.date);
             sentFileListItem.finish();
+        }
+    }
+
+    @Override
+    public void onYesButtonClick(DialogFragment dialog) {
+
+        if(sentFiles.size() != 0){
+
+            files_sent_list.removeAllViews();
+
+            dbManager.deleteSentFiles();
+
+            Toast.makeText(context,context.getString(R.string.files_cleared), Toast.LENGTH_SHORT).show();
+        }
+        else{
+
+            Toast.makeText(context,context.getString(R.string.nothing_to_clear), Toast.LENGTH_SHORT).show();
         }
     }
 
