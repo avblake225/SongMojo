@@ -101,6 +101,7 @@
     <string name="select_all_rows_from">SELECT * FROM</string>
     <string name="delete_from">DELETE FROM</string>
     <string name="no_files_sent">No Files Sent</string>
+    <string name="duration">Duration</string>
 
     <!-- files_sent.xml -->
     <string name="files_sent">Files Sent</string>

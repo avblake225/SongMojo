@@ -71,6 +71,7 @@
     <dimen name="sent_file_item_layout_margin_top">10dp</dimen>
     <dimen name="sent_file_item_layout_inner_margin">15dp</dimen>
     <dimen name="tv_file_name_margin_left">13dp</dimen>
+    <dimen name="tv_duration_margin_left">25dp</dimen>
     <dimen name="tv_file_type_margin_left">21dp</dimen>
     <dimen name="tv_date_margin_left">45dp</dimen>
 

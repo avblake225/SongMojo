@@ -14,6 +14,8 @@ public class SentFileListItem {
 
     private TextView tv_file_name;
 
+    private TextView tv_duration;
+
     private TextView tv_file_type;
 
     private TextView tv_date;
@@ -28,6 +30,8 @@ public class SentFileListItem {
 
         tv_file_name = (TextView)sent_file_item_layout.findViewById(R.id.tv_file_name);
 
+        tv_duration = (TextView)sent_file_item_layout.findViewById(R.id.tv_duration);
+
         tv_file_type = (TextView)sent_file_item_layout.findViewById(R.id.tv_file_type);
 
         tv_date = (TextView)sent_file_item_layout.findViewById(R.id.tv_date);
@@ -41,6 +45,11 @@ public class SentFileListItem {
     public void setFileName(String filename){
 
         tv_file_name.setText(filename);
+    }
+
+    public void setDuration(String duration){
+
+        tv_duration.setText(duration);
     }
 
     public void setFileType(String filetype){

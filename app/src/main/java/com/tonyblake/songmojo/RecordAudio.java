@@ -310,11 +310,11 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
                             if(SendFile.audioFile){
 
-                                dbManager.insertData(recipient, filename, context.getString(R.string.audio_file), currentDateandTime);
+                                dbManager.insertData(recipient, filename, "00:00", context.getString(R.string.audio_file), currentDateandTime);
                             }
                             else if(SendFile.videoFile){
 
-                                dbManager.insertData(recipient, filename, context.getString(R.string.video_file), currentDateandTime);
+                                dbManager.insertData(recipient, filename, "00:00", context.getString(R.string.video_file), currentDateandTime);
                             }
 
                             sendingFileDialog.dismiss();
