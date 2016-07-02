@@ -91,6 +91,10 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     private int display_height;
 
+    private long start_time, stop_time, time_elapsed;
+
+    private String duration;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,7 +230,8 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                 recordVideoIntent = new Intent(context, RecordVideoService.class);
                 startService(recordVideoIntent);
 
-                stopwatch.setBase(SystemClock.elapsedRealtime());
+                start_time = SystemClock.elapsedRealtime();
+                stopwatch.setBase(start_time);
                 stopwatch.start();
 
                 recording = true;
@@ -252,6 +257,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                     stopService(recordVideoIntent);
                     releaseVideoRecorder(); // release the MediaRecorder object
                     stopwatch.stop();
+                    stop_time = SystemClock.elapsedRealtime();
                     RecordVideoService.recording = false;
 
                     //Exit after saved
@@ -286,6 +292,10 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
+                time_elapsed = stop_time - start_time;
+
+                duration = Utils.formatInterval(time_elapsed);
+
                 releaseCamera();
 
                 InputStream stream = null;
@@ -315,14 +325,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                         @Override
                         protected void onPostExecute(String fileStatus) {
 
-                            if(SendFile.audioFile){
-
-                                dbManager.insertData(recipient, filename, "00:00", context.getString(R.string.audio_file), currentDateandTime);
-                            }
-                            else if(SendFile.videoFile){
-
-                                dbManager.insertData(recipient, filename, "00:00", context.getString(R.string.video_file), currentDateandTime);
-                            }
+                            dbManager.insertData(recipient, filename, duration, context.getString(R.string.video_file), currentDateandTime);
 
                             sendingFileDialog.dismiss();
 

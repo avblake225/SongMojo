@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -79,6 +80,10 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private boolean paused;
 
     private boolean backing_track_playing;
+
+    private long start_time, stop_time, time_elapsed;
+
+    private String duration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,6 +214,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
+                start_time = SystemClock.elapsedRealtime() ;
+
                 if(backing_track_cued){
 
                     playFile(backing_track);
@@ -308,14 +315,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                         @Override
                         protected void onPostExecute(String fileStatus) {
 
-                            if(SendFile.audioFile){
-
-                                dbManager.insertData(recipient, filename, "00:00", context.getString(R.string.audio_file), currentDateandTime);
-                            }
-                            else if(SendFile.videoFile){
-
-                                dbManager.insertData(recipient, filename, "00:00", context.getString(R.string.video_file), currentDateandTime);
-                            }
+                            dbManager.insertData(recipient, filename, duration, context.getString(R.string.audio_file), currentDateandTime);
 
                             sendingFileDialog.dismiss();
 
@@ -410,6 +410,12 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     @Override
     public void onStopButtonClick(DialogFragment dialog) {
+
+        stop_time = SystemClock.elapsedRealtime();
+
+        time_elapsed = stop_time - start_time;
+
+        duration = Utils.formatInterval(time_elapsed);
 
         if(backing_track_playing){
 

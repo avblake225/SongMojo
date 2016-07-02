@@ -6,6 +6,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import java.util.concurrent.TimeUnit;
+
 public class Utils {
 
     public static int cameraId;
@@ -64,5 +66,14 @@ public class Utils {
             }
         }
         return cameraId;
+    }
+
+    public static String formatInterval(final long millis) {
+
+        final long hr = TimeUnit.MILLISECONDS.toHours(millis);
+        final long min = TimeUnit.MILLISECONDS.toMinutes(millis - TimeUnit.HOURS.toMillis(hr));
+        final long sec = TimeUnit.MILLISECONDS.toSeconds(millis - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
+
+        return String.format("%02d:%02d", min, sec);
     }
 }
