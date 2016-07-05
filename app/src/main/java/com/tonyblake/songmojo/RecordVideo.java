@@ -246,7 +246,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                 stop.setEnabled(false);
                 send.setEnabled(true);
 
-                if (recording) {
+                if (RecordVideoService.recording) {
                     // stop recording and release camera
                     stopService(recordVideoIntent);
                     releaseVideoRecorder(); // release the MediaRecorder object
