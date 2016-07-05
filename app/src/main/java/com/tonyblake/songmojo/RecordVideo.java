@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.hardware.Camera;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -74,8 +72,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
     public static String filepath;
 
     private File file;
-
-    private MediaPlayer videoPlayer;
 
     private View stopwatch_icon, enter_fullscreen_icon;
 
@@ -161,8 +157,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
 
         file = new File(filepath);
-
-        videoPlayer = new MediaPlayer();
 
         displayMetrics = this.getResources().getDisplayMetrics();
 
@@ -276,14 +270,9 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
-                record.setEnabled(false);
-                play.setEnabled(false);
-                stop.setEnabled(true);
-                send.setEnabled(false);
-
-                Toast.makeText(context, context.getString(R.string.video_playing), Toast.LENGTH_LONG).show();
-
-                playFile(filepath);
+                Intent intent = new Intent(context,VideoPlayback.class);
+                intent.putExtra("filepath",filepath);
+                startActivity(intent);
             }
         });
 
@@ -375,45 +364,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         int new_videoview_layout_height_px = display_height - sum;
         int new_videoview_layout_height_dp = pxToDp(new_videoview_layout_height_px);
         videoview_layout.getLayoutParams().height = new_videoview_layout_height_px;
-    }
-
-    private void playFile(String filePath){
-
-
-        try {
-
-            videoPlayer.setDataSource(filePath);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-
-            videoPlayer.prepare();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        videoPlayer.start();
-
-        record.setEnabled(false);
-        stop.setEnabled(true);
-        play.setEnabled(false);
-        send.setEnabled(false);
-
-        videoPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-
-                record.setEnabled(true);
-                stop.setEnabled(false);
-                play.setEnabled(true);
-                send.setEnabled(true);
-            }
-        });
     }
 
     @Override
