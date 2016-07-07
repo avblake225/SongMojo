@@ -61,8 +61,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     Button record, stop, play, send;
 
-    boolean recording;
-
     private Toolbar actionBar;
 
     private Context context;
@@ -124,8 +122,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         recordingRef = storageRef.child(filename);
 
         fm = getSupportFragmentManager();
-
-        recording = false;
 
         tv_filename = (TextView)findViewById(R.id.tv_filename);
         tv_filename.setText(filename);
@@ -228,7 +224,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                 stopwatch.setBase(start_time);
                 stopwatch.start();
 
-                recording = true;
+                RecordVideoService.recording = true;
 
                 Toast.makeText(context,
                         context.getString(R.string.recording),

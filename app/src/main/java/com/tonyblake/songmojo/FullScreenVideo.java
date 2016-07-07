@@ -44,9 +44,12 @@ public class FullScreenVideo extends AppCompatActivity{
         stopwatch_icon = inflator.inflate(R.layout.chronometer,null);
         myCameraPreview.addView(stopwatch_icon);
         stopwatch = (Chronometer)stopwatch_icon.findViewById(R.id.stopwatch);
-        stopwatch.setBase(RecordVideoService.time_elapsed);
-        stopwatch.start();
-        RecordVideoService.recording = true;
+
+        if(RecordVideoService.recording){
+
+            stopwatch.setBase(RecordVideoService.time_elapsed);
+            stopwatch.start();
+        }
 
         // Overlay exit fullscreen icon
         exit_fullscreen_icon = inflator.inflate(R.layout.exit_fullscreen_icon,null);

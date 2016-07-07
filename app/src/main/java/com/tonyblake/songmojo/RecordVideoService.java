@@ -35,8 +35,6 @@ public class RecordVideoService extends Service {
 
         time_elapsed = 0;
 
-        recording = false;
-
         prepareVideoRecorder();
     }
 
@@ -49,6 +47,8 @@ public class RecordVideoService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         videoRecorder.start();
+
+        recording = true;
 
         time_elapsed = SystemClock.elapsedRealtime();
 
