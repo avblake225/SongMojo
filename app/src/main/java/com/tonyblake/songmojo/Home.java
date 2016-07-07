@@ -26,7 +26,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-public class Home extends AppCompatActivity implements DownloadAudioDialog.DownloadAudioDialogInterface{
+public class Home extends AppCompatActivity implements GetFileDialog.GetFileDialogInterface{
 
     private Context context;
 
@@ -49,6 +49,8 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
     private LayoutInflater layoutInflater;
 
     private TextView tv_user;
+
+    private GetFileDialog getFileDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,13 +176,12 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
                     // Get File
                     case 1:
 
+                        getAvailableFiles();
+
                         dLayout.closeDrawer(dList);
 
-//                        downloadAudioDialog = new DownloadAudioDialog();
-//                        downloadAudioDialog.show(fm, "downloadAudioDialog");
-
-                        Toast.makeText(context, "Feature currently unavailable", Toast.LENGTH_SHORT).show();;
-
+                        getFileDialog = new GetFileDialog();
+                        getFileDialog.show(fm, "getFileDialog");
 
                         break;
 
@@ -227,7 +228,7 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
     }
 
     @Override
-    public void onDownloadAudioDialogSearchClick(DialogFragment dialog, final String filename) {
+    public void onGetFileDialogOkButtonClick(DialogFragment dialog, final String filename) {
 
         layout_container.removeAllViews();
 
@@ -251,6 +252,11 @@ public class Home extends AppCompatActivity implements DownloadAudioDialog.Downl
 //                Toast.makeText(context, context.getString(R.string.no_file_found), Toast.LENGTH_LONG);
 //            }
 //        });
+    }
+
+    private void getAvailableFiles(){
+
+       // get available files from remote database
     }
 
     private void displayAudioScreen(String filename){

@@ -45,9 +45,9 @@
     <dimen name="btn_upload_margin_bottom">5dp</dimen>
     <dimen name="btn_cue_background_track_margin_bottom">5dp</dimen>
 
-    <!-- Cue Background Track Dialog -->
-    <dimen name="background_track_spinner_margin_left">20dp</dimen>
-    <dimen name="background_track_spinner_margin_top">10dp</dimen>
+    <!-- select_track_dialog.xml -->
+    <dimen name="track_spinner_margin_left">20dp</dimen>
+    <dimen name="track_spinner_margin_top">10dp</dimen>
 
     <!-- Record Dialog -->
     <dimen name="ic_mic_width">80dp</dimen>

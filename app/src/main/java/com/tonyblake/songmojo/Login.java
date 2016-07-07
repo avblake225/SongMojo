@@ -64,7 +64,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
         database = FirebaseDatabase.getInstance();
 
-        databaseRef = database.getReference();
+        databaseRef = database.getReference().child("users");
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 

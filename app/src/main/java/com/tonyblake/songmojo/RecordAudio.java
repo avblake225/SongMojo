@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -30,7 +32,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
-                                                            CueBackingTrackDialog.CueBackingTrackDialogInterface,
+                                                            GetFileDialog.GetFileDialogInterface,
                                                             RecordDialog.RecordDialogInterface{
 
     private FirebaseStorage storage;
@@ -67,7 +69,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
     private File file;
 
-    private CueBackingTrackDialog cueBackingTrackDialog;
+    private GetFileDialog getFileDialog;
 
     private ProgressDialog sendingFileDialog;
 
@@ -84,6 +86,10 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private long start_time, stop_time, time_elapsed;
 
     private String duration;
+
+    private FirebaseDatabase database;
+
+    private DatabaseReference databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +176,10 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         paused = false;
 
         backing_track_playing = false;
+
+        database = FirebaseDatabase.getInstance();
+
+        databaseRef = database.getReference().child("files");
     }
 
     @Override
@@ -203,8 +213,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                     Toast.makeText(context, context.getString(R.string.backing_track_removed), Toast.LENGTH_SHORT).show();
                 } else {
 
-                    cueBackingTrackDialog = new CueBackingTrackDialog();
-                    cueBackingTrackDialog.show(fm, "CueBackingTrackDialog");
+                    getFileDialog = new GetFileDialog();
+                    getFileDialog.show(fm, "getFileDialog");
                 }
             }
         });
@@ -317,6 +327,10 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
                             dbManager.insertData(recipient, filename, duration, context.getString(R.string.audio_file), currentDateandTime);
 
+                            AvailableFile availableFile = new AvailableFile(firstName, removePrefix(filename), recipient);
+
+                            databaseRef.child(removePrefix(filename)).setValue(availableFile);
+
                             sendingFileDialog.dismiss();
 
                             FileSentDialog fileSentDialog = new FileSentDialog();
@@ -331,6 +345,31 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                 }
             }
         });
+    }
+
+    private String removePrefix(String filename){
+
+        char[] chars = new char[filename.length()-4];
+
+        for(int i=0;i<filename.length();i++){
+
+            char letter = filename.charAt(i);
+
+            String letter_str = String.valueOf(letter);
+
+            if(letter_str.equals(".")){
+
+                break;
+            }
+            else{
+
+                chars[i] = letter;
+            }
+        }
+
+        String filenameWithoutPrefix = new String(chars);
+
+        return filenameWithoutPrefix;
     }
 
     private void playFile(String filePath){
@@ -395,7 +434,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     }
 
     @Override
-    public void onSelectButtonClick(DialogFragment dialog, String fileChosen) {
+    public void onGetFileDialogOkButtonClick(DialogFragment dialog, String fileChosen) {
 
         cue_backing_track.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.clr_pressed));
 

@@ -19,7 +19,7 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
-public class CueBackingTrackDialog extends DialogFragment {
+public class GetFileDialog extends DialogFragment {
 
     private Context context;
 
@@ -27,9 +27,9 @@ public class CueBackingTrackDialog extends DialogFragment {
 
     private ArrayList<String> files;
 
-    private Spinner backing_track_spinner;
+    private Spinner select_track_spinner;
 
-    private ArrayAdapter<String> backing_track_spinnerAdapter;
+    private ArrayAdapter<String> select_track_spinnerAdapter;
 
     private WindowManager.LayoutParams lp;
 
@@ -42,18 +42,18 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        view = inflater.inflate(R.layout.cue_backing_track_dialog, null);
+        view = inflater.inflate(R.layout.select_track_dialog, null);
 
         builder.setTitle(R.string.select_track)
                 .setView(view)
-                .setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        String fileChosen = backing_track_spinner.getSelectedItem().toString();
+                        String fileChosen = select_track_spinner.getSelectedItem().toString();
 
-                        cueBackingTrackDialogInterface.onSelectButtonClick(CueBackingTrackDialog.this, fileChosen);
+                        getFileDialogInterface.onGetFileDialogOkButtonClick(GetFileDialog.this, fileChosen);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -78,10 +78,10 @@ public class CueBackingTrackDialog extends DialogFragment {
             public void onShow(final DialogInterface dialog) {
 
                 Button cancelButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_NEGATIVE);
-                Button selectButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                Button okButton = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
 
                 cancelButton.setTextColor(Color.BLACK);
-                selectButton.setTextColor(Color.BLACK);
+                okButton.setTextColor(Color.BLACK);
 
                 final Drawable cancelButtonBackground = getResources().getDrawable(R.drawable.background_color);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -90,7 +90,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
                 final Drawable searchButtonBackground = getResources().getDrawable(R.drawable.background_color);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    selectButton.setBackground(searchButtonBackground);
+                    okButton.setBackground(searchButtonBackground);
                 }
             }
         });
@@ -98,19 +98,19 @@ public class CueBackingTrackDialog extends DialogFragment {
         return dialog;
     }
 
-    public interface CueBackingTrackDialogInterface {
+    public interface GetFileDialogInterface {
 
-        void onSelectButtonClick(DialogFragment dialog, String fileChosen);
+        void onGetFileDialogOkButtonClick(DialogFragment dialog, String fileChosen);
     }
 
-    CueBackingTrackDialogInterface cueBackingTrackDialogInterface;
+    GetFileDialogInterface getFileDialogInterface;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         try {
-            cueBackingTrackDialogInterface = (CueBackingTrackDialogInterface) activity;
+            getFileDialogInterface = (GetFileDialogInterface) activity;
         }
         catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
@@ -125,12 +125,12 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         files.add("wonderwall");
 
-        backing_track_spinner = (Spinner) view.findViewById(R.id.backing_track_spinner);
+        select_track_spinner = (Spinner) view.findViewById(R.id.select_track_spinner);
 
-        backing_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, files);
+        select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, files);
 
-        backing_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        backing_track_spinner.setAdapter(backing_track_spinnerAdapter);
+        select_track_spinner.setAdapter(select_track_spinnerAdapter);
     }
 }
