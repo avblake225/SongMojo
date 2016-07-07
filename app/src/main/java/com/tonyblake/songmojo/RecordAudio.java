@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -33,7 +32,7 @@ import java.util.TimeZone;
 
 public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
                                                             GetFileDialog.GetFileDialogInterface,
-                                                            RecordDialog.RecordDialogInterface{
+                                                            RecordAudioDialog.RecordDialogInterface{
 
     private FirebaseStorage storage;
 
@@ -58,8 +57,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private TextView tv_recipient;
 
     private Button cue_backing_track, record, play, pause, stop, send;
-
-    private MediaRecorder myAudioRecorder;
 
     private Toolbar actionBar;
 
@@ -169,8 +166,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         backing_track_cued = false;
 
-        myAudioRecorder = new MediaRecorder();
-
         audioPlayer = new MediaPlayer();
 
         paused = false;
@@ -233,7 +228,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                     backing_track_playing = true;
                 }
 
-                RecordDialog recordDialog = new RecordDialog();
+                RecordAudioDialog recordDialog = new RecordAudioDialog();
 
                 Bundle bundle = new Bundle();
 
@@ -296,7 +291,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
-                myAudioRecorder.release();
+                RecordAudioDialog.audioRecorder.release();
 
                 InputStream stream = null;
 

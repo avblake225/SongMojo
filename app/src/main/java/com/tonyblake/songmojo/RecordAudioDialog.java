@@ -22,13 +22,13 @@ import android.widget.ImageView;
 
 import java.io.IOException;
 
-public class RecordDialog extends DialogFragment {
+public class RecordAudioDialog extends DialogFragment {
 
     private View view;
 
     private WindowManager.LayoutParams lp;
 
-    private MediaRecorder audioRecorder;
+    public static MediaRecorder audioRecorder;
 
     private ImageView ic_mic;
 
@@ -81,7 +81,7 @@ public class RecordDialog extends DialogFragment {
 
                         chronometer.stop();
 
-                        recordDialogInterface.onStopButtonClick(RecordDialog.this);
+                        recordDialogInterface.onStopButtonClick(RecordAudioDialog.this);
                     }
                 });
 
