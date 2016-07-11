@@ -76,10 +76,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         databaseRef = database.getReference().child("files");
 
-        availableFiles = new ArrayList<>();
-
-        filenames = new ArrayList<>();
-
         context = this;
 
         dbManager = new DBManager(context);
@@ -165,6 +161,10 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     @Override
     protected void onResume() {
         super.onResume();
+
+        availableFiles = new ArrayList<>();
+
+        filenames = new ArrayList<>();
 
         databaseRef.addValueEventListener(new ValueEventListener() {
 
