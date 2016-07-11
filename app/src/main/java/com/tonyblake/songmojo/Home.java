@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -23,11 +24,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
@@ -290,28 +296,36 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     @Override
     public void onGetFileDialogOkButtonClick(DialogFragment dialog, final String filename) {
 
-        layout_container.removeAllViews();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
 
-        //StorageReference recordingRef = storageRef.child(filename + ".3gp");
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://songmojo.appspot.com");
 
-        file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename);
+        final String filenameWithPrefix = filename + context.getString(R.string._mp3);
 
-//        recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-//
-//            @Override
-//            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-//
-//                displayAudioScreen(filename);
-//            }
-//
-//        }).addOnFailureListener(new OnFailureListener() {
-//
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//
-//                Toast.makeText(context, context.getString(R.string.no_file_found), Toast.LENGTH_LONG);
-//            }
-//        });
+        StorageReference recordingRef = storageRef.child(filenameWithPrefix);
+
+        file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/" + filenameWithPrefix);
+
+        recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                String msg = filename + " downloaded successfully";
+
+                Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+
+                String msg = "Error downloading " + filename;
+
+                Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void displayAudioScreen(String filename){
