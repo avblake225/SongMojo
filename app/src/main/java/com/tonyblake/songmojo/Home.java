@@ -304,7 +304,13 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         StorageReference recordingRef = storageRef.child(filenameWithPrefix);
 
-        file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/" + filenameWithPrefix);
+        File songMojoDirectory = new File(Environment.getExternalStorageDirectory() + File.separator + "SongMojo");
+        songMojoDirectory.mkdirs();
+
+        File downloadsDirectory = new File(songMojoDirectory + File.separator + "Downloads");
+        downloadsDirectory.mkdirs();
+
+        file = new File(downloadsDirectory + File.separator + filenameWithPrefix);
 
         recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
 
