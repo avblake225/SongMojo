@@ -3,6 +3,7 @@ package com.tonyblake.songmojo;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
-public class FilesSent extends AppCompatActivity implements ClearAllDialog.ClearAllDialogInterface{
+public class FilesReceived extends AppCompatActivity implements ClearAllDialog.ClearAllDialogInterface{
 
     private Context context;
 
@@ -26,19 +28,25 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
 
     private TextView tv_screen_title;
 
-    private LinearLayout files_sent_list;
+    private LinearLayout files_received_list;
 
     private LayoutInflater inflator;
 
-    private View sent_file_item_layout;
+    private View received_file_item_layout;
 
     private Cursor cursor;
 
-    private ArrayList<SentFile> sentFiles;
+    private ArrayList<ReceivedFile> receivedFiles;
 
     private Button btn_clear_all;
 
     private FragmentManager fm;
+
+    private String downloadsFolderPath;
+
+    private File downloadsFolder;
+
+    private File[] downloads;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -64,15 +72,21 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
         dbManager = Home.dbManager;
 
         tv_screen_title = (TextView)findViewById(R.id.screen_title);
-        tv_screen_title.setText(context.getString(R.string.files_sent));
+        tv_screen_title.setText(context.getString(R.string.files_received));
 
-        files_sent_list = (LinearLayout)findViewById(R.id.files_sent_or_received_list);
+        files_received_list = (LinearLayout)findViewById(R.id.files_sent_or_received_list);
 
         inflator = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        sentFiles = new ArrayList<>();
+        receivedFiles = new ArrayList<>();
 
         btn_clear_all = (Button)findViewById(R.id.btn_clear_all);
+
+        downloadsFolderPath = Environment.getExternalStorageDirectory() + File.separator + "SongMojo" + File.separator + "Downloads";
+
+        downloadsFolder = new File(downloadsFolderPath);
+
+        downloads = downloadsFolder.listFiles();
     }
 
     @Override
@@ -98,67 +112,46 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
             }
         });
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.getTableName() + ";";
+        if(receivedFiles.size() == 0){
 
-        if(sentFiles.size() == 0){
-
-            getSentFiles(query);
+            getReceivedFiles();
         }
     }
 
-    private void getSentFiles(String query){
+    private void getReceivedFiles(){
 
-        try{
+        for(File file: downloads){
 
-            cursor = dbManager.rawQuery(query);
+            ReceivedFile receivedFile = new ReceivedFile();
 
-            cursor.moveToFirst();
+            receivedFile.filename = file.getName();
 
-            do {
-
-                SentFile sentFile = new SentFile();
-
-                sentFile.recipient = cursor.getString(1);
-
-                sentFile.filename = cursor.getString(2);
-
-                sentFile.duration = cursor.getString(3);
-
-                sentFile.filetype = cursor.getString(4);
-
-                sentFile.date = cursor.getString(5);
-
-                sentFiles.add(sentFile);
-            }
-            while (cursor.moveToNext());
-        }
-        catch(Exception e){
-
+            receivedFiles.add(receivedFile);
         }
 
-        for(SentFile sentFile: sentFiles){
+        for(ReceivedFile file: receivedFiles){
 
-            sent_file_item_layout = inflator.inflate(R.layout.sent_file_item_layout,null);
+            received_file_item_layout = inflator.inflate(R.layout.received_file_item_layout,null);
 
-            SentFileListItem sentFileListItem = new SentFileListItem(files_sent_list, sent_file_item_layout);
+            ReceivedFileListItem receivedFileListItem = new ReceivedFileListItem(files_received_list, received_file_item_layout);
 
-            sentFileListItem.setRecipient(sentFile.recipient);
-            sentFileListItem.setFileName(sentFile.filename);
-            sentFileListItem.setDuration(sentFile.duration);
-            sentFileListItem.setFileType(sentFile.filetype);
-            sentFileListItem.setDate(sentFile.date);
-            sentFileListItem.finish();
+            receivedFileListItem.setFileName(file.filename);
+
+            receivedFileListItem.finish();
         }
     }
 
     @Override
     public void onYesButtonClick(DialogFragment dialog) {
 
-        if(sentFiles.size() != 0){
+        if(receivedFiles.size() != 0){
 
-            files_sent_list.removeAllViews();
+            files_received_list.removeAllViews();
 
-            dbManager.deleteSentFiles();
+            for(File file: downloads){
+
+                file.delete();
+            }
 
             Toast.makeText(context,context.getString(R.string.files_cleared), Toast.LENGTH_SHORT).show();
         }
@@ -168,12 +161,8 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
         }
     }
 
-    private class SentFile{
+    private class ReceivedFile{
 
-        private String recipient;
         private String filename;
-        private String duration;
-        private String filetype;
-        private String date;
     }
 }

@@ -285,7 +285,9 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         dLayout.closeDrawer(dList);
 
-                        Toast.makeText(context,"Feature currently unavailable",Toast.LENGTH_SHORT).show();;
+                        intent = new Intent(context, FilesReceived.class);
+
+                        startActivity(intent);
 
                         break;
                 }

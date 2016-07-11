@@ -103,8 +103,9 @@
     <string name="no_files_sent">No Files Sent</string>
     <string name="duration">Duration</string>
 
-    <!-- files_sent.xml -->
+    <!-- files_sent_or_received.xml -->
     <string name="files_sent">Files Sent</string>
+    <string name="files_received">Files Received</string>
     <string name="clear_all">Clear all</string>
     <string name="files_cleared">Files cleared</string>
     <string name="nothing_to_clear">Nothing to clear</string>
@@ -114,7 +115,7 @@
     <string name="date">Date:</string>
 
     <!-- ClearAllDialog.java -->
-    <string name="confirm_clear_all">Are you sure you want to clear all sent files?</string>
+    <string name="confirm_clear_all">Are you sure you want to clear all files?</string>
     <string name="yes">Yes</string>
 
 </resources>

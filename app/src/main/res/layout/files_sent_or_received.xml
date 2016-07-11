@@ -17,7 +17,6 @@
 
     <TextView
         android:id="@+id/screen_title"
-        android:text="@string/files_sent"
         android:layout_below="@id/toolbar"
         android:gravity="center_horizontal"
         style="@style/screen_title_style"
@@ -36,10 +35,10 @@
             android:paddingBottom="@dimen/scrollview_padding_bottom">
 
             <LinearLayout
-                android:id="@+id/files_sent_list"
+                android:id="@+id/files_sent_or_received_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/files_sent_list_margin"
+                android:layout_margin="@dimen/files_sent_or_received_list_margin"
                 android:orientation="vertical"/>
 
         </LinearLayout>
