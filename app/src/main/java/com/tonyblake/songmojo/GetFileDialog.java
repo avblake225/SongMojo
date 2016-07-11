@@ -23,9 +23,9 @@ public class GetFileDialog extends DialogFragment {
 
     private Context context;
 
-    private View view;
+    private ArrayList<String> filenames;
 
-    private ArrayList<String> files;
+    private View view;
 
     private Spinner select_track_spinner;
 
@@ -37,6 +37,8 @@ public class GetFileDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         context = getActivity();
+
+        filenames = getArguments().getStringArrayList("filenames");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -121,13 +123,9 @@ public class GetFileDialog extends DialogFragment {
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        files = new ArrayList<>();
-
-        files.add("wonderwall");
-
         select_track_spinner = (Spinner) view.findViewById(R.id.select_track_spinner);
 
-        select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, files);
+        select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, filenames);
 
         select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 

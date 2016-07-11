@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class RecordVideoService extends Service {
 
-    private MediaRecorder videoRecorder;
+    public static MediaRecorder videoRecorder;
 
     private Camera camera;
 

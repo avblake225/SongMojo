@@ -23,10 +23,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Home extends AppCompatActivity implements GetFileDialog.GetFileDialogInterface{
+
+    private FirebaseDatabase database;
+
+    private DatabaseReference databaseRef;
+
+    private ArrayList<AvailableFile> availableFiles;
+
+    private ArrayList<String> filenames;
 
     private Context context;
 
@@ -56,6 +71,14 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
+        database = FirebaseDatabase.getInstance();
+
+        databaseRef = database.getReference().child("files");
+
+        availableFiles = new ArrayList<>();
+
+        filenames = new ArrayList<>();
 
         context = this;
 
@@ -143,6 +166,33 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     protected void onResume() {
         super.onResume();
 
+        databaseRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue(User.class) != null) {
+
+                    for (DataSnapshot userID : dataSnapshot.getChildren()) {
+
+                        AvailableFile availableFile = new AvailableFile();
+
+                        availableFile.sender = (String) userID.child("sender").getValue();
+                        availableFile.filename = (String) userID.child("filename").getValue();
+                        availableFile.recipient = (String) userID.child("recipient").getValue();
+
+                        availableFiles.add(availableFile);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
+
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -176,11 +226,21 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                     // Get File
                     case 1:
 
-                        getAvailableFiles();
+                        for(AvailableFile availableFile: availableFiles){
+
+                            filenames.add(availableFile.filename);
+                        }
 
                         dLayout.closeDrawer(dList);
 
                         getFileDialog = new GetFileDialog();
+
+                        Bundle bundle = new Bundle();
+
+                        bundle.putStringArrayList("filenames", filenames);
+
+                        getFileDialog.setArguments(bundle);
+
                         getFileDialog.show(fm, "getFileDialog");
 
                         break;
@@ -252,11 +312,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 //                Toast.makeText(context, context.getString(R.string.no_file_found), Toast.LENGTH_LONG);
 //            }
 //        });
-    }
-
-    private void getAvailableFiles(){
-
-       // get available files from remote database
     }
 
     private void displayAudioScreen(String filename){

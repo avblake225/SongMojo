@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.hardware.Camera;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -38,8 +37,8 @@ import java.util.TimeZone;
 public class RecordVideo extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface{
 
     public static Camera myCamera;
+
     public static MyCameraSurfaceView myCameraSurfaceView;
-    private MediaRecorder videoRecorder;
 
     public static String firstName, filename, recipient;
 
@@ -376,11 +375,11 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     private void releaseVideoRecorder(){
 
-        if (videoRecorder != null) {
+        if (RecordVideoService.videoRecorder != null) {
 
-            videoRecorder.reset();   // clear recorder configuration
-            videoRecorder.release(); // release the recorder object
-            videoRecorder = null;
+            RecordVideoService.videoRecorder.reset();   // clear recorder configuration
+            RecordVideoService.videoRecorder.release(); // release the recorder object
+            RecordVideoService.videoRecorder = null;
             myCamera.lock();           // lock camera for later use
         }
     }

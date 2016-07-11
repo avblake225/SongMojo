@@ -6,6 +6,10 @@ public class AvailableFile {
     public String filename;
     public String recipient;
 
+    public AvailableFile() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
     public AvailableFile(String sender, String filename, String recipient){
 
         this.sender = sender;

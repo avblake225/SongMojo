@@ -118,7 +118,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         // Create a storage reference
         storageRef = storage.getReferenceFromUrl("gs://songmojo.appspot.com");
 
-        // Create a reference to recording.3gp
+        // Create a file object
         recordingRef = storageRef.child(filename);
 
         tv_filename = (TextView) findViewById(R.id.tv_filename);
@@ -228,15 +228,15 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                     backing_track_playing = true;
                 }
 
-                RecordAudioDialog recordDialog = new RecordAudioDialog();
+                RecordAudioDialog recordAudioDialog = new RecordAudioDialog();
 
                 Bundle bundle = new Bundle();
 
                 bundle.putString("filepath", filePath);
 
-                recordDialog.setArguments(bundle);
+                recordAudioDialog.setArguments(bundle);
 
-                recordDialog.show(fm, "recordDialog");
+                recordAudioDialog.show(fm, "recordDialog");
             }
         });
 
