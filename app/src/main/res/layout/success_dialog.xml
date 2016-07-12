@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/file_sent_dialog_margin"
-        android:layout_marginRight="@dimen/file_sent_dialog_margin"
+        android:layout_marginLeft="@dimen/success_dialog_margin"
+        android:layout_marginRight="@dimen/success_dialog_margin"
         android:orientation="horizontal">
 
         <ImageView
@@ -18,7 +18,7 @@
             android:src="@drawable/ic_done_black_24dp"/>
 
         <TextView
-            android:id="@+id/tv_file_sent"
+            android:id="@+id/tv_success_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/tv_file_sent_margin"

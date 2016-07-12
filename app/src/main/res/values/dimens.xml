@@ -60,8 +60,8 @@
     <dimen name="ic_done_width">50dp</dimen>
     <dimen name="tv_file_sent_margin">5dp</dimen>
 
-    <!-- file_sent_dialog.xml -->
-    <dimen name="file_sent_dialog_margin">20dp</dimen>
+    <!-- success_dialog.xml -->
+    <dimen name="success_dialog_margin">20dp</dimen>
 
     <!-- files_sent_or_received.xml -->
     <dimen name="files_sent_or_received_list_margin">15dp</dimen>

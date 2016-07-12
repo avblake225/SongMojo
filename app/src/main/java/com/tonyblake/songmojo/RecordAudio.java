@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -47,6 +48,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private StorageReference storageRef, recordingRef;
 
     private Context context;
+
+    private ArrayList<String> availableFilenames;
 
     private String firstName;
 
@@ -99,6 +102,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         savedInstanceState = getIntent().getExtras();
 
+        availableFilenames = savedInstanceState.getStringArrayList("availableFilenames");
         firstName = savedInstanceState.getString("firstName");
         filename = savedInstanceState.getString("filename");
         recipient = savedInstanceState.getString("recipient");
@@ -160,7 +164,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         stop.setEnabled(false);
         send.setEnabled(false);
 
-        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename;
+        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + filename;
 
         file = new File(filePath);
 
@@ -209,6 +213,11 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                 } else {
 
                     getFileDialog = new GetFileDialog();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArrayList("availableFilenames", availableFilenames);
+                    getFileDialog.setArguments(bundle);
+
                     getFileDialog.show(fm, "getFileDialog");
                 }
             }
@@ -305,7 +314,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
                 if(Utils.connectedToNetwork(context)){
 
-                    new SendFileTask(stream, recordingRef) {
+                    new SendFileTask(context, stream, recordingRef) {
 
                         @Override
                         protected void onPreExecute() {
@@ -318,7 +327,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                         }
 
                         @Override
-                        protected void onPostExecute(String fileStatus) {
+                        protected void onPostExecute(String result) {
 
                             dbManager.insertData(recipient, filename, duration, context.getString(R.string.audio_file), currentDateandTime);
 
@@ -435,7 +444,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         backing_track_cued = true;
 
-        backing_track = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileChosen;
+        backing_track = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SongMojo/Downloads/" + fileChosen + context.getString(R.string._mp3);
 
         String background_track_message = fileChosen + " " + context.getString(R.string.set_as_backing_track);
 

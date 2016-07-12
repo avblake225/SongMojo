@@ -35,6 +35,8 @@ public class SendFile extends AppCompatActivity{
 
     private String firstName;
 
+    private ArrayList<String> availableFilenames;
+
     private String filename;
 
     private Intent intent;
@@ -53,6 +55,7 @@ public class SendFile extends AppCompatActivity{
         savedInstanceState = getIntent().getExtras();
 
         firstName = savedInstanceState.getString("firstName");
+        availableFilenames = savedInstanceState.getStringArrayList("availableFilenames");
 
         recipient_chosen = null;
 
@@ -125,6 +128,7 @@ public class SendFile extends AppCompatActivity{
 
                     intent = new Intent(context, RecordAudio.class);
 
+                    intent.putExtra("availableFilenames",availableFilenames);
                     intent.putExtra("firstName", firstName);
                     intent.putExtra("filename", filename);
                     intent.putExtra("recipient", recipient_chosen);

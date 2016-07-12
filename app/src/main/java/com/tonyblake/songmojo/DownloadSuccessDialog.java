@@ -1,6 +1,5 @@
 package com.tonyblake.songmojo;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -15,7 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FileSentDialog extends DialogFragment {
+public class DownloadSuccessDialog extends DialogFragment {
 
     private View view;
 
@@ -23,10 +22,14 @@ public class FileSentDialog extends DialogFragment {
 
     private WindowManager.LayoutParams lp;
 
+    private String filename;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        filename = getArguments().getString("filename");
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -39,7 +42,7 @@ public class FileSentDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        fileSentDialogInterface.onDoneButtonClick(FileSentDialog.this);
+                        dismiss();
                     }
                 });
 
@@ -71,41 +74,13 @@ public class FileSentDialog extends DialogFragment {
         return dialog;
     }
 
-    public interface FileSentDialogInterface {
-
-        void onDoneButtonClick(DialogFragment dialog);
-    }
-
-    FileSentDialogInterface fileSentDialogInterface;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        try {
-            fileSentDialogInterface = (FileSentDialogInterface) activity;
-        }
-        catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
-        }
-    }
-
     @Override
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
+        String message = filename + " downloaded successfully";
+
         tv_success_msg = (TextView) view.findViewById(R.id.tv_success_msg);
-
-        String message = "";
-
-        if(SendFile.audioFile){
-
-            message = RecordAudio.filename + " sent to " + RecordAudio.recipient;
-        }
-        else if(SendFile.videoFile){
-
-            message = RecordVideo.filename + " sent to " + RecordVideo.recipient;
-        }
 
         tv_success_msg.setText(message);
     }

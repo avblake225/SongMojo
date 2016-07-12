@@ -87,6 +87,13 @@
     <string name="file_sent">File sent</string>
     <string name="done">Done</string>
 
+    <!-- Get File Progress Dialog -->
+    <string name="downloading_file">Downloading file...</string>
+
+    <!-- GetFileTask.java -->
+    <string name="success">Success</string>
+    <string name="fail">Fail</string>
+
     <!-- FileSentDialog.java -->
     <string name="_mp4">.mp4</string>
 
@@ -117,5 +124,8 @@
     <!-- ClearAllDialog.java -->
     <string name="confirm_clear_all">Are you sure you want to clear all files?</string>
     <string name="yes">Yes</string>
+
+    <!-- Misc -->
+    <string name="error_downloading_file">Error downloading file</string>
 
 </resources>

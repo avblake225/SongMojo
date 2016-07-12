@@ -294,7 +294,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
                 if(Utils.connectedToNetwork(context)){
 
-                    new SendFileTask(stream, recordingRef) {
+                    new SendFileTask(context, stream, recordingRef) {
 
                         @Override
                         protected void onPreExecute() {

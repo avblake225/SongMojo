@@ -23,7 +23,7 @@ public class GetFileDialog extends DialogFragment {
 
     private Context context;
 
-    private ArrayList<String> filenames;
+    private ArrayList<String> availableFilenames;
 
     private View view;
 
@@ -38,7 +38,7 @@ public class GetFileDialog extends DialogFragment {
 
         context = getActivity();
 
-        filenames = getArguments().getStringArrayList("filenames");
+        availableFilenames = getArguments().getStringArrayList("availableFilenames");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -125,7 +125,7 @@ public class GetFileDialog extends DialogFragment {
 
         select_track_spinner = (Spinner) view.findViewById(R.id.select_track_spinner);
 
-        select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, filenames);
+        select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, availableFilenames);
 
         select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 

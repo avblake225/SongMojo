@@ -1,11 +1,10 @@
 package com.tonyblake.songmojo;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -24,16 +23,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +41,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
     private ArrayList<AvailableFile> availableFiles;
 
-    private ArrayList<String> filenames;
+    private ArrayList<String> availableFilenames;
 
     private Context context;
 
@@ -63,8 +57,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
     private LinearLayout layout_container;
 
-    private File file;
-
     private String firstName;
 
     private LayoutInflater layoutInflater;
@@ -72,6 +64,10 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     private TextView tv_user;
 
     private GetFileDialog getFileDialog;
+
+    private ProgressDialog getFileProgressDialog;
+
+    private FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +114,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         dList = (ListView) findViewById(R.id.left_drawer);
         drawerAdapter = new ArrayAdapter<>(this,R.layout.drawer_item_layout,context.getResources().getStringArray(R.array.menu_items));
         dList.setAdapter(drawerAdapter);
+
+        fm = getSupportFragmentManager();
     }
 
     private void createWelcomeMessage(){
@@ -170,7 +168,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         availableFiles = new ArrayList<>();
 
-        filenames = new ArrayList<>();
+        availableFilenames = new ArrayList<>();
 
         databaseRef.addValueEventListener(new ValueEventListener() {
 
@@ -189,6 +187,11 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         availableFiles.add(availableFile);
                     }
+                }
+
+                for (AvailableFile availableFile : availableFiles) {
+
+                    availableFilenames.add(availableFile.filename);
                 }
             }
 
@@ -223,7 +226,9 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         dLayout.closeDrawer(dList);
 
                         intent = new Intent(context, SendFile.class);
-                        intent.putExtra("firstName",firstName);
+
+                        intent.putExtra("firstName", firstName);
+                        intent.putExtra("availableFilenames", availableFilenames);
 
                         startActivity(intent);
 
@@ -232,18 +237,13 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                     // Get File
                     case 1:
 
-                        for(AvailableFile availableFile: availableFiles){
-
-                            filenames.add(availableFile.filename);
-                        }
-
                         dLayout.closeDrawer(dList);
 
                         getFileDialog = new GetFileDialog();
 
                         Bundle bundle = new Bundle();
 
-                        bundle.putStringArrayList("filenames", filenames);
+                        bundle.putStringArrayList("availableFilenames", availableFilenames);
 
                         getFileDialog.setArguments(bundle);
 
@@ -256,7 +256,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         dLayout.closeDrawer(dList);
 
-                        Toast.makeText(context,"Feature currently unavailable",Toast.LENGTH_SHORT).show();;
+                        Toast.makeText(context, "Feature currently unavailable", Toast.LENGTH_SHORT).show();
+                        ;
 
                         break;
 
@@ -265,7 +266,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         dLayout.closeDrawer(dList);
 
-                        Toast.makeText(context,"Feature currently unavailable",Toast.LENGTH_SHORT).show();;
+                        Toast.makeText(context, "Feature currently unavailable", Toast.LENGTH_SHORT).show();
+                        ;
 
                         break;
 
@@ -298,45 +300,46 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     @Override
     public void onGetFileDialogOkButtonClick(DialogFragment dialog, final String filename) {
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
+        if(Utils.connectedToNetwork(context)){
 
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://songmojo.appspot.com");
+            new GetFileTask(filename,context){
 
-        final String filenameWithPrefix = filename + context.getString(R.string._mp3);
+                @Override
+                protected void onPreExecute() {
 
-        StorageReference recordingRef = storageRef.child(filenameWithPrefix);
+                    getFileProgressDialog = new ProgressDialog(context);
+                    getFileProgressDialog.setIndeterminate(true);
+                    getFileProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    getFileProgressDialog.setMessage(context.getString(R.string.downloading_file));
+                    getFileProgressDialog.show();
+                }
 
-        File songMojoDirectory = new File(Environment.getExternalStorageDirectory() + File.separator + "SongMojo");
-        songMojoDirectory.mkdirs();
+                @Override
+                protected void onPostExecute(String result) {
 
-        File downloadsDirectory = new File(songMojoDirectory + File.separator + "Downloads");
-        downloadsDirectory.mkdirs();
+                    getFileProgressDialog.dismiss();
 
-        file = new File(downloadsDirectory + File.separator + filenameWithPrefix);
+                    DownloadSuccessDialog downloadSuccessDialog = new DownloadSuccessDialog();
 
-        recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    Bundle bundle = new Bundle();
 
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    bundle.putString("filename", filename);
 
-                String msg = filename + " downloaded successfully";
+                    downloadSuccessDialog.setArguments(bundle);
 
-                Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
-            }
+                    downloadSuccessDialog.show(fm, "downloadSuccessDialog");
+                }
+            }.execute();
+        }
+        else{
 
-        }).addOnFailureListener(new OnFailureListener() {
-
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-
-                String msg = "Error downloading " + filename;
-
-                Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
-            }
-        });
+            Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
+        }
     }
 
     private void displayAudioScreen(String filename){
+
+        final File file = new File(filename);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
