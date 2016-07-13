@@ -19,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -34,10 +35,12 @@ public class RecordAudioDialog extends DialogFragment {
 
     private Chronometer chronometer;
 
+    private String filepath;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        String filepath = getArguments().get("filepath").toString();
+        filepath = getArguments().get("filepath").toString();
 
         audioRecorder = new MediaRecorder();
 
@@ -76,8 +79,15 @@ public class RecordAudioDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        audioRecorder.stop();
-                        audioRecorder.reset();
+                        try{
+
+                            audioRecorder.stop();
+                            audioRecorder.reset();
+                        }
+                        catch(IllegalStateException e){
+
+                            Toast.makeText(getActivity(),e.toString(),Toast.LENGTH_LONG).show();
+                        }
 
                         chronometer.stop();
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -69,6 +70,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
     private FragmentManager fm;
 
+    public static File songMojoDirectory, downloadsDirectory, recordingsDirectory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +119,15 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         dList.setAdapter(drawerAdapter);
 
         fm = getSupportFragmentManager();
+
+        songMojoDirectory = new File(Environment.getExternalStorageDirectory() + File.separator + context.getString(R.string.songmojo));
+        songMojoDirectory.mkdirs();
+
+        downloadsDirectory = new File(songMojoDirectory + File.separator + context.getString(R.string.downloads));
+        downloadsDirectory.mkdirs();
+
+        recordingsDirectory = new File(songMojoDirectory + File.separator + context.getString(R.string.recordings));
+        recordingsDirectory.mkdirs();
     }
 
     private void createWelcomeMessage(){
@@ -267,7 +279,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         dLayout.closeDrawer(dList);
 
                         Toast.makeText(context, "Feature currently unavailable", Toast.LENGTH_SHORT).show();
-                        ;
 
                         break;
 

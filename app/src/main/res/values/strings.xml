@@ -21,7 +21,7 @@
     <string name="app_name">SongMojo</string>
     <string name="record_video">Record Video</string>
 
-    <!-- Home screen -->
+    <!-- Home.java / home.xml -->
     <string name="home">Home</string>
     <string name="welcome_message">Welcome to SongMojo, the file sharing platform for musicians.
                                     Use this app to easily collaborate with your band members by
@@ -31,6 +31,10 @@
     <drawable name="clr_pressed">#FFD700</drawable>
     <drawable name="white">#FFFFFF</drawable>
     <drawable name="black">#000000</drawable>
+
+    <string name="songmojo">SongMojo</string>
+    <string name="downloads">Downloads</string>
+    <string name="recordings">Recordings</string>
 
     <string-array name="menu_items">
         <item>Send File</item>

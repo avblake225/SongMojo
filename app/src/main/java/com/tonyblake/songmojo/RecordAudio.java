@@ -164,7 +164,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         stop.setEnabled(false);
         send.setEnabled(false);
 
-        filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + filename;
+        filePath = Home.recordingsDirectory + File.separator + filename;
 
         file = new File(filePath);
 
@@ -228,7 +228,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             @Override
             public void onClick(View v) {
 
-                start_time = SystemClock.elapsedRealtime() ;
+                start_time = SystemClock.elapsedRealtime();
 
                 if(backing_track_cued){
 
