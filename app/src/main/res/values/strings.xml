@@ -129,6 +129,9 @@
     <string name="confirm_clear_all">Are you sure you want to clear all files?</string>
     <string name="yes">Yes</string>
 
+    <!-- FindBandMemberDialog.java -->
+    <string name="find_band_member">Find Band Member</string>
+
     <!-- Misc -->
     <string name="error_downloading_file">Error downloading file</string>
 

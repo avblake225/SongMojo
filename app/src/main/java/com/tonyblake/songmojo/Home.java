@@ -68,6 +68,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
     private ProgressDialog getFileProgressDialog;
 
+    private FindBandMemberDialog findBandMemberDialog;
+
     private FragmentManager fm;
 
     public static File songMojoDirectory, downloadsDirectory, recordingsDirectory;
@@ -268,8 +270,9 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         dLayout.closeDrawer(dList);
 
-                        Toast.makeText(context, "Feature currently unavailable", Toast.LENGTH_SHORT).show();
-                        ;
+                        findBandMemberDialog = new FindBandMemberDialog();
+
+                        findBandMemberDialog.show(fm, "findBandMemberDialog");
 
                         break;
 
