@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
     private CreateAccountDialog createAccountDialog;
 
-    private ArrayList<User> users;
+    public static ArrayList<User> users;
 
     private ProgressDialog loginProgressDialog;
 
@@ -146,6 +146,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                         user.firstName = (String) userID.child("firstName").getValue();
                         user.lastName = (String) userID.child("lastName").getValue();
+                        user.fullName = user.firstName + " " + user.lastName;
                         user.username = (String) userID.child("username").getValue();
                         user.password = (String) userID.child("password").getValue();
 

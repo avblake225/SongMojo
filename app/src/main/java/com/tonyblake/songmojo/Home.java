@@ -34,7 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Home extends AppCompatActivity implements GetFileDialog.GetFileDialogInterface{
+public class Home extends AppCompatActivity implements GetFileDialog.GetFileDialogInterface, FindBandMemberDialog.FindBandMemberDialogInterface{
 
     private FirebaseDatabase database;
 
@@ -394,5 +394,36 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                 Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onOkButtonClick(DialogFragment dialog, String fullname) {
+
+        boolean userFound = false;
+
+        for(User user: Login.users){
+
+            if(fullname.equals(user.fullName)){
+
+                userFound = true;
+
+                break;
+            }
+        }
+
+        String msg;
+
+        if(userFound){
+
+            // TODO: add band member to local DB
+
+            msg = fullname + " added to band members";
+        }
+        else{
+
+            msg = "Could not find user " + fullname;
+        }
+
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 }

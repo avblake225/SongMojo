@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <AutoCompleteTextView
+        android:id="@+id/tv_name_entered"
+        android:hint="@string/enter_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/tv_name_entered_margin_top"
+        android:layout_marginLeft="@dimen/tv_name_entered_margin_left_right"
+        android:layout_marginRight="@dimen/tv_name_entered_margin_left_right"
+        android:textColorHint="@color/gray"
+        android:background="@android:color/transparent"/>
+
+</LinearLayout>
