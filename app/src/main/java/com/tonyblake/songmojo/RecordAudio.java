@@ -329,7 +329,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                         @Override
                         protected void onPostExecute(String result) {
 
-                            dbManager.insertData(recipient, filename, duration, context.getString(R.string.audio_file), currentDateandTime); // save locally
+                            dbManager.insertDataIntoFilesSentTable(recipient, filename, duration, context.getString(R.string.audio_file), currentDateandTime); // save locally
 
                             AvailableFile availableFile = new AvailableFile(firstName, removePrefix(filename), recipient, currentDateandTime);
 

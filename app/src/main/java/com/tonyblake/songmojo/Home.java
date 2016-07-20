@@ -415,7 +415,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         if(userFound){
 
-            // TODO: add band member to local DB
+            dbManager.insertDataIntoBandMembersTable(fullname);
 
             msg = fullname + " added to band members";
         }

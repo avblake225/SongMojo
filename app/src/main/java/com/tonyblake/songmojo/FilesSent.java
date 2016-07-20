@@ -98,7 +98,7 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
             }
         });
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.getTableName() + ";";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_SENT_TABLE() + ";";
 
         if(sentFiles.size() == 0){
 

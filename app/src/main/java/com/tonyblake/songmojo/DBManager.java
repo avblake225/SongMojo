@@ -11,13 +11,20 @@ import java.io.File;
 public class DBManager extends SQLiteOpenHelper{
 
     public static final String DATABASE_NAME = "songmojodatabase.db";
-    public static final String TABLE_NAME = "files_sent_table";
-    public static final String COL_1 = "ID";
-    public static final String COL_2 = "RECIPIENT";
-    public static final String COL_3 = "FILE_NAME";
-    public static final String COL_4 = "DURATION";
-    public static final String COL_5 = "FILE_TYPE";
-    public static final String COL_6 = "DATE";
+
+    // Files Sent Table
+    public static final String FILES_SENT_TABLE = "files_sent_table";
+    public static final String FILES_SENT_TABLE_COL_1 = "ID";
+    public static final String FILES_SENT_TABLE_COL_2 = "RECIPIENT";
+    public static final String FILES_SENT_TABLE_COL_3 = "FILE_NAME";
+    public static final String FILES_SENT_TABLE_COL_4 = "DURATION";
+    public static final String FILES_SENT_TABLE_COL_5 = "FILE_TYPE";
+    public static final String FILES_SENT_TABLE_COL_6 = "DATE";
+
+    // Band Members Table
+    public static final String BAND_MEMBERS_TABLE = "band_members_table";
+    public static final String BAND_MEMBERS_TABLE_COL_1 = "ID";
+    public static final String BAND_MEMBERS_TABLE_COL_2 = "FULLNAME";
 
     private File db_file;
 
@@ -41,20 +48,37 @@ public class DBManager extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
+        db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
+        db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FULLNAME TEXT)");
     }
 
-    public boolean insertData(String recipient, String file_name, String duration, String file_type, String date){
+    public boolean insertDataIntoFilesSentTable(String recipient, String file_name, String duration, String file_type, String date){
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(COL_2, recipient);
-        contentValues.put(COL_3, file_name);
-        contentValues.put(COL_4, duration);
-        contentValues.put(COL_5, file_type);
-        contentValues.put(COL_6, date);
+        contentValues.put(FILES_SENT_TABLE_COL_2, recipient);
+        contentValues.put(FILES_SENT_TABLE_COL_3, file_name);
+        contentValues.put(FILES_SENT_TABLE_COL_4, duration);
+        contentValues.put(FILES_SENT_TABLE_COL_5, file_type);
+        contentValues.put(FILES_SENT_TABLE_COL_6, date);
 
-        long result = db.insert(TABLE_NAME, null, contentValues);
+        long result = db.insert(FILES_SENT_TABLE, null, contentValues);
+
+        if(result == -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public boolean insertDataIntoBandMembersTable(String fullname){
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(BAND_MEMBERS_TABLE_COL_2, fullname);
+
+        long result = db.insert(FILES_SENT_TABLE, null, contentValues);
 
         if(result == -1){
             return false;
@@ -67,7 +91,8 @@ public class DBManager extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS" + FILES_SENT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + BAND_MEMBERS_TABLE);
         onCreate(db);
 
     }
@@ -80,11 +105,16 @@ public class DBManager extends SQLiteOpenHelper{
 
     public void deleteSentFiles(){
 
-        db.delete(TABLE_NAME,null,null);
+        db.delete(FILES_SENT_TABLE,null,null);
     }
 
-    public String getTableName(){
+    public String FILES_SENT_TABLE(){
 
-        return TABLE_NAME;
+        return FILES_SENT_TABLE;
+    }
+
+    public String BAND_MEMBERS_TABLE(){
+
+        return BAND_MEMBERS_TABLE;
     }
 }

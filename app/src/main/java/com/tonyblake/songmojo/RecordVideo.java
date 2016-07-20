@@ -309,7 +309,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                         @Override
                         protected void onPostExecute(String fileStatus) {
 
-                            dbManager.insertData(recipient, filename, duration, context.getString(R.string.video_file), currentDateandTime);
+                            dbManager.insertDataIntoFilesSentTable(recipient, filename, duration, context.getString(R.string.video_file), currentDateandTime);
 
                             sendingFileDialog.dismiss();
 

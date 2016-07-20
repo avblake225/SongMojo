@@ -92,7 +92,7 @@
 
     <!-- find_band_member_dialog.xml -->
     <dimen name="tv_name_entered_margin_top">10dp</dimen>
-    <dimen name="tv_name_entered_margin_left_right">22dp</dimen>
+    <dimen name="tv_name_entered_margin_left_right">23dp</dimen>
 
     <!-- Misc -->
     <dimen name="layout_box_margin">15dp</dimen>

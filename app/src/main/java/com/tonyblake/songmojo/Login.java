@@ -140,21 +140,21 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                 if (dataSnapshot.getValue(User.class) != null) {
 
-                    for (DataSnapshot userID : dataSnapshot.getChildren()) {
+                        for (DataSnapshot userID : dataSnapshot.getChildren()) {
 
-                        User user = new User();
+                            User user = new User();
 
-                        user.firstName = (String) userID.child("firstName").getValue();
-                        user.lastName = (String) userID.child("lastName").getValue();
-                        user.fullName = user.firstName + " " + user.lastName;
-                        user.username = (String) userID.child("username").getValue();
-                        user.password = (String) userID.child("password").getValue();
+                            user.firstName = (String) userID.child("firstName").getValue();
+                            user.lastName = (String) userID.child("lastName").getValue();
+                            user.fullName = user.firstName + " " + user.lastName;
+                            user.username = (String) userID.child("username").getValue();
+                            user.password = (String) userID.child("password").getValue();
 
-                        if (!users.contains(user)) {
+                            if (!users.contains(user)) {
 
-                            users.add(user);
+                                users.add(user);
+                            }
                         }
-                    }
                 }
             }
 
