@@ -195,9 +195,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         AvailableFile availableFile = new AvailableFile();
 
-                        availableFile.sender = (String) userID.child("sender").getValue();
                         availableFile.filename = (String) userID.child("filename").getValue();
-                        availableFile.recipient = (String) userID.child("recipient").getValue();
 
                         availableFiles.add(availableFile);
                     }

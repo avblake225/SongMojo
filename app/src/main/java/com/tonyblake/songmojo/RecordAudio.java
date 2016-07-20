@@ -331,9 +331,9 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
                             dbManager.insertDataIntoFilesSentTable(recipient, filename, duration, context.getString(R.string.audio_file), currentDateandTime); // save locally
 
-                            AvailableFile availableFile = new AvailableFile(firstName, removePrefix(filename), recipient, currentDateandTime);
+                            AvailableFile availableFile = new AvailableFile(firstName, Utils.removePrefix(filename), recipient, currentDateandTime, duration, context.getString(R.string.audio_file));
 
-                            databaseRef.child(removePrefix(filename)).setValue(availableFile); // upload to remote
+                            databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
                             sendingFileDialog.dismiss();
 
@@ -349,31 +349,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                 }
             }
         });
-    }
-
-    private String removePrefix(String filename){
-
-        char[] chars = new char[filename.length()-4];
-
-        for(int i=0;i<filename.length();i++){
-
-            char letter = filename.charAt(i);
-
-            String letter_str = String.valueOf(letter);
-
-            if(letter_str.equals(".")){
-
-                break;
-            }
-            else{
-
-                chars[i] = letter;
-            }
-        }
-
-        String filenameWithoutPrefix = new String(chars);
-
-        return filenameWithoutPrefix;
     }
 
     private void playFile(String filePath){

@@ -76,4 +76,29 @@ public class Utils {
 
         return String.format("%02d:%02d", min, sec);
     }
+
+    public static String removePrefix(String filename){
+
+        char[] chars = new char[filename.length()-4];
+
+        for(int i=0;i<filename.length();i++){
+
+            char letter = filename.charAt(i);
+
+            String letter_str = String.valueOf(letter);
+
+            if(letter_str.equals(".")){
+
+                break;
+            }
+            else{
+
+                chars[i] = letter;
+            }
+        }
+
+        String filenameWithoutPrefix = new String(chars);
+
+        return filenameWithoutPrefix;
+    }
 }
