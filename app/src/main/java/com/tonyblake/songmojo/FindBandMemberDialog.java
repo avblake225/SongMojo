@@ -61,7 +61,7 @@ public class FindBandMemberDialog extends DialogFragment {
                             fullname = tv_name_entered.getText().toString();
                         }
 
-                        findBandMemberDialogInterface.onOkButtonClick(FindBandMemberDialog.this, fullname);
+                        findBandMemberDialogInterface.onFindBandMemberDialogOkButtonClick(FindBandMemberDialog.this, fullname);
 
                     }
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -111,7 +111,7 @@ public class FindBandMemberDialog extends DialogFragment {
 
     public interface FindBandMemberDialogInterface{
 
-        void onOkButtonClick(DialogFragment dialog, String name);
+        void onFindBandMemberDialogOkButtonClick(DialogFragment dialog, String name);
     }
 
     FindBandMemberDialogInterface findBandMemberDialogInterface;

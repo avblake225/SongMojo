@@ -108,7 +108,7 @@ public class DBManager extends SQLiteOpenHelper{
 
         contentValues.put(BAND_MEMBERS_TABLE_COL_2, fullname);
 
-        long result = db.insert(FILES_SENT_TABLE, null, contentValues);
+        long result = db.insert(BAND_MEMBERS_TABLE, null, contentValues);
 
         if(result == -1){
             return false;
@@ -141,6 +141,11 @@ public class DBManager extends SQLiteOpenHelper{
     public void deleteDownloadedFiles(){
 
         db.delete(FILES_DOWNLOADED_TABLE,null,null);
+    }
+
+    public void deleteBandMembers(){
+
+        db.delete(BAND_MEMBERS_TABLE,null,null);
     }
 
     public String FILES_SENT_TABLE(){

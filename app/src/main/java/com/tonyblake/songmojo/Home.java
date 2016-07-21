@@ -282,7 +282,9 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         dLayout.closeDrawer(dList);
 
-                        Toast.makeText(context, "Feature currently unavailable", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(context, EditBandMembers.class);
+
+                        startActivity(intent);
 
                         break;
 
@@ -406,7 +408,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     }
 
     @Override
-    public void onOkButtonClick(DialogFragment dialog, String fullname) {
+    public void onFindBandMemberDialogOkButtonClick(DialogFragment dialog, String fullname) {
 
         boolean userFound = false;
 

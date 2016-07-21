@@ -138,6 +138,13 @@
     <!-- received_file_item_layout.xml -->
     <string name="sender">Sender:</string>
 
+    <!-- EditBandMembers.java -->
+    <string name="edit_band_members">Edit Band Members</string>
+    <string name="band_members_cleared">Band Members Cleared</string>
+
+    <!-- band_member_item_layout.xml -->
+    <string name="name">Name:</string>
+
     <!-- Misc -->
     <string name="error_downloading_file">Error downloading file</string>
 
