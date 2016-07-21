@@ -244,7 +244,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         intent = new Intent(context, SendFile.class);
 
                         intent.putExtra("firstName", firstName);
-                        intent.putExtra("availableFilenames", availableFilenames);
 
                         startActivity(intent);
 

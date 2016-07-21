@@ -27,12 +27,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
 public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
-                                                            GetFileDialog.GetFileDialogInterface,
+                                                            CueBackingTrackDialog.CueBackingTrackDialogInterface,
                                                             RecordAudioDialog.RecordDialogInterface{
 
     private FirebaseStorage storage;
@@ -48,8 +47,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private StorageReference storageRef, recordingRef;
 
     private Context context;
-
-    private ArrayList<String> availableFilenames;
 
     private String firstName;
 
@@ -70,6 +67,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private File file;
 
     private GetFileDialog getFileDialog;
+
+    private CueBackingTrackDialog cueBackingTrackDialog;
 
     private ProgressDialog sendingFileDialog;
 
@@ -102,7 +101,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
         savedInstanceState = getIntent().getExtras();
 
-        availableFilenames = savedInstanceState.getStringArrayList("availableFilenames");
         firstName = savedInstanceState.getString("firstName");
         filename = savedInstanceState.getString("filename");
         recipient = savedInstanceState.getString("recipient");
@@ -212,13 +210,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                     Toast.makeText(context, context.getString(R.string.backing_track_removed), Toast.LENGTH_SHORT).show();
                 } else {
 
-                    getFileDialog = new GetFileDialog();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArrayList("availableFilenames", availableFilenames);
-                    getFileDialog.setArguments(bundle);
-
-                    getFileDialog.show(fm, "getFileDialog");
+                    cueBackingTrackDialog = new CueBackingTrackDialog();
+                    cueBackingTrackDialog.show(fm, "getFileDialog");
                 }
             }
         });
@@ -413,7 +406,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     }
 
     @Override
-    public void onGetFileDialogOkButtonClick(DialogFragment dialog, String fileChosen) {
+    public void onCueBackingTrackDialogOkButtonClick(DialogFragment dialog, String fileChosen) {
 
         cue_backing_track.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.clr_pressed));
 
