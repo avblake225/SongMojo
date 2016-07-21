@@ -112,7 +112,7 @@
     <string name="select_all_rows_from">SELECT * FROM</string>
     <string name="delete_from">DELETE FROM</string>
     <string name="no_files_sent">No Files Sent</string>
-    <string name="duration">Duration</string>
+    <string name="duration">Duration:</string>
 
     <!-- files_sent_or_received.xml -->
     <string name="files_sent">Files Sent</string>
@@ -134,6 +134,9 @@
 
     <!-- find_band_member_dialog.xml -->
     <string name="enter_name">Enter name</string>
+
+    <!-- received_file_item_layout.xml -->
+    <string name="sender">Sender:</string>
 
     <!-- Misc -->
     <string name="error_downloading_file">Error downloading file</string>

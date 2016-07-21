@@ -21,6 +21,15 @@ public class DBManager extends SQLiteOpenHelper{
     public static final String FILES_SENT_TABLE_COL_5 = "FILE_TYPE";
     public static final String FILES_SENT_TABLE_COL_6 = "DATE";
 
+    // Files Downloaded Table
+    public static final String FILES_DOWNLOADED_TABLE = "files_downloaded_table";
+    public static final String FILES_DOWNLOADED_TABLE_COL_1 = "ID";
+    public static final String FILES_DOWNLOADED_TABLE_COL_2 = "SENDER";
+    public static final String FILES_DOWNLOADED_TABLE_COL_3 = "FILE_NAME";
+    public static final String FILES_DOWNLOADED_TABLE_COL_4 = "DURATION";
+    public static final String FILES_DOWNLOADED_TABLE_COL_5 = "FILE_TYPE";
+    public static final String FILES_DOWNLOADED_TABLE_COL_6 = "DATE";
+
     // Band Members Table
     public static final String BAND_MEMBERS_TABLE = "band_members_table";
     public static final String BAND_MEMBERS_TABLE_COL_1 = "ID";
@@ -49,6 +58,7 @@ public class DBManager extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
+        db.execSQL("CREATE TABLE " + FILES_DOWNLOADED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FULLNAME TEXT)");
     }
 
@@ -63,6 +73,26 @@ public class DBManager extends SQLiteOpenHelper{
         contentValues.put(FILES_SENT_TABLE_COL_6, date);
 
         long result = db.insert(FILES_SENT_TABLE, null, contentValues);
+
+        if(result == -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public boolean insertDataIntoFilesDownloadedTable(String sender, String file_name, String duration, String file_type, String date){
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_2, sender);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_3, file_name);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_4, duration);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_5, file_type);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_6, date);
+
+        long result = db.insert(FILES_DOWNLOADED_TABLE, null, contentValues);
 
         if(result == -1){
             return false;
@@ -92,9 +122,9 @@ public class DBManager extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS" + FILES_SENT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + FILES_DOWNLOADED_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + BAND_MEMBERS_TABLE);
         onCreate(db);
-
     }
 
     public Cursor rawQuery(String query){
@@ -108,9 +138,19 @@ public class DBManager extends SQLiteOpenHelper{
         db.delete(FILES_SENT_TABLE,null,null);
     }
 
+    public void deleteDownloadedFiles(){
+
+        db.delete(FILES_DOWNLOADED_TABLE,null,null);
+    }
+
     public String FILES_SENT_TABLE(){
 
         return FILES_SENT_TABLE;
+    }
+
+    public String FILES_DOWNLOADED_TABLE(){
+
+        return FILES_DOWNLOADED_TABLE;
     }
 
     public String BAND_MEMBERS_TABLE(){

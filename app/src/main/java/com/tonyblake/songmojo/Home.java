@@ -195,7 +195,11 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         AvailableFile availableFile = new AvailableFile();
 
+                        availableFile.sender = (String) userID.child("sender").getValue();
                         availableFile.filename = (String) userID.child("filename").getValue();
+                        availableFile.currentDateAndTime = (String) userID.child("currentDateAndTime").getValue();
+                        availableFile.duration = (String) userID.child("duration").getValue();
+                        availableFile.filetype = (String) userID.child("filetype").getValue();
 
                         availableFiles.add(availableFile);
                     }
@@ -328,6 +332,14 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                 @Override
                 protected void onPostExecute(String result) {
+
+                    for(AvailableFile availableFile: availableFiles){
+
+                        if(filename.equals(availableFile.filename)){
+
+                            dbManager.insertDataIntoFilesDownloadedTable(availableFile.sender, filename, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
+                        }
+                    }
 
                     getFileProgressDialog.dismiss();
 

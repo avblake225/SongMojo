@@ -10,7 +10,7 @@ public class ReceivedFileListItem {
 
     private View received_file_item_layout;
 
-    private TextView tv_file_name;
+    private TextView tv_sender, tv_file_name, tv_date, tv_file_type, tv_duration;
 
     public ReceivedFileListItem(LinearLayout files_received_list, View received_file_item_layout){
 
@@ -18,12 +18,36 @@ public class ReceivedFileListItem {
 
         this.files_sent_or_received_list = files_received_list;
 
+        tv_sender = (TextView)received_file_item_layout.findViewById(R.id.tv_sender);
         tv_file_name = (TextView)received_file_item_layout.findViewById(R.id.tv_file_name);
+        tv_date = (TextView)received_file_item_layout.findViewById(R.id.tv_date);
+        tv_file_type = (TextView)received_file_item_layout.findViewById(R.id.tv_file_type);
+        tv_duration = (TextView)received_file_item_layout.findViewById(R.id.tv_duration);
+    }
+
+    public void setSender(String sender){
+
+        tv_sender.setText(sender);
     }
 
     public void setFileName(String filename){
 
         tv_file_name.setText(filename);
+    }
+
+    public void setDate(String date){
+
+        tv_date.setText(date);
+    }
+
+    public void setFileType(String filetype){
+
+        tv_file_type.setText(filetype);
+    }
+
+    public void setDuration(String duration){
+
+        tv_duration.setText(duration);
     }
 
     public void finish(){
