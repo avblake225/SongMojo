@@ -133,6 +133,13 @@ public class DBManager extends SQLiteOpenHelper{
         return res;
     }
 
+    public void deleteBandMember(String bandMember){
+
+        String query = "DELETE FROM " + BAND_MEMBERS_TABLE + " WHERE FULLNAME = '" + bandMember + "';";
+
+        db.execSQL(query);
+    }
+
     public void deleteSentFiles(){
 
         db.delete(FILES_SENT_TABLE,null,null);

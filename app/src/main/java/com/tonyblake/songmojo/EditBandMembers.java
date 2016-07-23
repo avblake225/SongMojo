@@ -9,14 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class EditBandMembers extends AppCompatActivity implements ClearAllDialog.ClearAllDialogInterface{
+public class EditBandMembers extends AppCompatActivity implements DeleteBandMemberDialog.DeleteBandMemberDialogInterface{
 
     private Context context;
 
@@ -28,8 +27,6 @@ public class EditBandMembers extends AppCompatActivity implements ClearAllDialog
 
     private Cursor cursor;
 
-    private Button btn_clear_all;
-
     private FragmentManager fm;
 
     private ArrayList<BandMember> bandMembersToDisplay;
@@ -39,6 +36,8 @@ public class EditBandMembers extends AppCompatActivity implements ClearAllDialog
     private EditBandMembers editBandMembers;
 
     private BandMemberAdapter adapter;
+
+    private DeleteBandMemberDialog deleteBandMemberDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -69,23 +68,11 @@ public class EditBandMembers extends AppCompatActivity implements ClearAllDialog
 
         tv_screen_title = (TextView)findViewById(R.id.screen_title);
         tv_screen_title.setText(context.getString(R.string.edit_band_members));
-
-        btn_clear_all = (Button)findViewById(R.id.btn_clear_all);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-
-        btn_clear_all.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                ClearAllDialog clearAllDialog = new ClearAllDialog();
-                clearAllDialog.show(fm, "clearAllDialog");
-            }
-        });
 
         appBar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -96,15 +83,15 @@ public class EditBandMembers extends AppCompatActivity implements ClearAllDialog
             }
         });
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.BAND_MEMBERS_TABLE() + ";";
-
         if(bandMembersToDisplay.size() == 0){
 
-            getBandMembers(query);
+            getBandMembers();
         }
     }
 
-    private void getBandMembers(String query){
+    private void getBandMembers(){
+
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.BAND_MEMBERS_TABLE() + ";";
 
         try{
 
@@ -126,34 +113,54 @@ public class EditBandMembers extends AppCompatActivity implements ClearAllDialog
 
         }
 
-        editBandMembers = this;
+        if(bandMembersToDisplay.size() == 0){
 
-        Resources res = getResources();
-
-        adapter = new BandMemberAdapter(editBandMembers , bandMembersToDisplay, res);
-
-        band_members_list.setAdapter(adapter);
-    }
-
-    @Override
-    public void onYesButtonClick(DialogFragment dialog) {
-
-        if(bandMembersToDisplay.size() != 0){
-
-            band_members_list.removeAllViews();
-
-            dbManager.deleteBandMembers();
-
-            Toast.makeText(context,context.getString(R.string.band_members_cleared), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.no_band_members_added), Toast.LENGTH_SHORT).show();
         }
         else{
 
-            Toast.makeText(context,context.getString(R.string.nothing_to_clear), Toast.LENGTH_SHORT).show();
+            editBandMembers = this;
+
+            Resources res = getResources();
+
+            adapter = new BandMemberAdapter(editBandMembers , bandMembersToDisplay, res);
+
+            band_members_list.setAdapter(adapter);
         }
     }
 
     public void onItemClick(int mPosition) {
 
         BandMember bandMember = bandMembersToDisplay.get(mPosition);
+
+        deleteBandMemberDialog = new DeleteBandMemberDialog();
+
+        Bundle bundle = new Bundle();
+
+        bundle.putString("bandMember", bandMember.name);
+        bundle.putInt("position", mPosition);
+
+        deleteBandMemberDialog.setArguments(bundle);
+
+        deleteBandMemberDialog.show(fm,"deleteBandMemberDialog");
+    }
+
+    @Override
+    public void onDeleteBandMemberYesButtonClick(DialogFragment dialog, String bandMember, int position) {
+
+        dbManager.deleteBandMember(bandMember);
+
+        int numBandMembers = adapter.clearData(position);
+
+        if(numBandMembers == 0){
+
+            band_members_list.setAdapter(null);
+        }
+
+        adapter.notifyDataSetChanged(); // refresh view
+
+        String msg = bandMember + " deleted";
+
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 }

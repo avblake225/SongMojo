@@ -140,7 +140,7 @@
 
     <!-- EditBandMembers.java -->
     <string name="edit_band_members">Edit Band Members</string>
-    <string name="band_members_cleared">Band Members Cleared</string>
+    <string name="no_band_members_added">No band members added</string>
 
     <!-- band_member_item_layout.xml -->
     <string name="name">Name:</string>

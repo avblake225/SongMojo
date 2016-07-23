@@ -101,4 +101,11 @@ public class BandMemberAdapter extends BaseAdapter implements View.OnClickListen
             editBandMembers.onItemClick(mPosition);
         }
     }
+
+    public int clearData(int position) {
+
+        data.remove(position);
+
+        return data.size();
+    }
 }
