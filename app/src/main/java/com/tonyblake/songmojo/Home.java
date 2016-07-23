@@ -193,15 +193,20 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                     for (DataSnapshot userID : dataSnapshot.getChildren()) {
 
-                        AvailableFile availableFile = new AvailableFile();
+                        String sender = (String) userID.child("sender").getValue();
 
-                        availableFile.sender = (String) userID.child("sender").getValue();
-                        availableFile.filename = (String) userID.child("filename").getValue();
-                        availableFile.currentDateAndTime = (String) userID.child("currentDateAndTime").getValue();
-                        availableFile.duration = (String) userID.child("duration").getValue();
-                        availableFile.filetype = (String) userID.child("filetype").getValue();
+                        if(!sender.equals(firstName)){
 
-                        availableFiles.add(availableFile);
+                            AvailableFile availableFile = new AvailableFile();
+
+                            availableFile.sender = sender;
+                            availableFile.filename = (String) userID.child("filename").getValue();
+                            availableFile.currentDateAndTime = (String) userID.child("currentDateAndTime").getValue();
+                            availableFile.duration = (String) userID.child("duration").getValue();
+                            availableFile.filetype = (String) userID.child("filetype").getValue();
+
+                            availableFiles.add(availableFile);
+                        }
                     }
                 }
 
