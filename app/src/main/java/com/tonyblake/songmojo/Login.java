@@ -140,6 +140,8 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                 if (dataSnapshot.getValue(User.class) != null) {
 
+                    if(users.size() == 0){
+
                         for (DataSnapshot userID : dataSnapshot.getChildren()) {
 
                             User user = new User();
@@ -155,6 +157,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
                                 users.add(user);
                             }
                         }
+                    }
                 }
             }
 
