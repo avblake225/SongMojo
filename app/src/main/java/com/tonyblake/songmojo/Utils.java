@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class Utils {
         }
         catch(Exception e){
 
-            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+            Log.e("getBandMembersException", "Problem reading band members from DB");
         }
 
         return bandMembers;

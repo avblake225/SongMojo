@@ -51,16 +51,29 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         view = inflater.inflate(R.layout.select_track_dialog, null);
 
-        builder.setTitle(R.string.select_track)
-                .setView(view)
+        builder.setTitle(R.string.select_track);
+
+        if(filesDownloaded.size() == 0){
+
+            builder.setMessage(context.getString(R.string.no_tracks_available));
+        }
+
+        builder.setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        String fileChosen = select_track_spinner.getSelectedItem().toString();
+                        if (filesDownloaded.size() == 0) {
 
-                        cueBackingTrackDialogInterface.onCueBackingTrackDialogOkButtonClick(CueBackingTrackDialog.this, fileChosen);
+                            dismiss();
+                        } 
+                        else {
+
+                            String fileChosen = select_track_spinner.getSelectedItem().toString();
+
+                            cueBackingTrackDialogInterface.onCueBackingTrackDialogOkButtonClick(CueBackingTrackDialog.this, fileChosen);
+                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

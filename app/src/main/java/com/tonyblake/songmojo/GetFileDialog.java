@@ -46,16 +46,28 @@ public class GetFileDialog extends DialogFragment {
 
         view = inflater.inflate(R.layout.select_track_dialog, null);
 
-        builder.setTitle(R.string.select_track)
-                .setView(view)
+        builder.setTitle(R.string.select_track);
+
+        if(availableFilenames.size() == 0){
+
+            builder.setMessage(context.getString(R.string.no_tracks_available));
+        }
+
+        builder.setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        String fileChosen = select_track_spinner.getSelectedItem().toString();
+                        if (availableFilenames.size() == 0) {
 
-                        getFileDialogInterface.onGetFileDialogOkButtonClick(GetFileDialog.this, fileChosen);
+                            dismiss();
+                        } else {
+
+                            String fileChosen = select_track_spinner.getSelectedItem().toString();
+
+                            getFileDialogInterface.onGetFileDialogOkButtonClick(GetFileDialog.this, fileChosen);
+                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
