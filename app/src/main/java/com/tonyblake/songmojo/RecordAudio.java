@@ -266,7 +266,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                 }
 
                 record.setEnabled(false);
-                stop.setEnabled(false);
+                stop.setEnabled(true);
                 play.setEnabled(true);
                 pause.setEnabled(false);
                 send.setEnabled(false);
@@ -277,6 +277,11 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
 
             @Override
             public void onClick(View v) {
+
+                if(paused){
+
+                    paused = false;
+                }
 
                 audioPlayer.stop();
 

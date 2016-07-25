@@ -144,7 +144,9 @@ public class SendFile extends AppCompatActivity{
                     intent.putExtra("filename", filename);
                     intent.putExtra("recipient", recipient_chosen);
 
-                    startActivity(intent);
+                    //startActivity(intent);
+
+                    Toast.makeText(context,"Video currently unavailable",Toast.LENGTH_SHORT).show();
                 }
                 else{
 
