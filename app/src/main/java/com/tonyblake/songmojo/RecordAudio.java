@@ -450,7 +450,9 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
             backing_track_cued = false;
         }
 
-        Toast.makeText(context,context.getString(R.string.track_saved),Toast.LENGTH_SHORT).show();
+        String msg = filename + " " + context.getString(R.string.saved_to_device);
+
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
         record.setEnabled(true);
         stop.setEnabled(false);

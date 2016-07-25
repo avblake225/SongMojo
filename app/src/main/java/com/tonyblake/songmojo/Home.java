@@ -429,11 +429,21 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         String msg;
 
+        ArrayList<String> bandMembers = Utils.getBandMembers(context,dbManager);
+
         if(userFound){
 
-            dbManager.insertDataIntoBandMembersTable(fullname);
+            if(!bandMembers.contains(fullname)){
 
-            msg = fullname + " added to band members";
+                dbManager.insertDataIntoBandMembersTable(fullname);
+
+                msg = fullname + " added to band members";
+            }
+            else{
+
+                msg = fullname + " already added to band members";
+            }
+
         }
         else{
 

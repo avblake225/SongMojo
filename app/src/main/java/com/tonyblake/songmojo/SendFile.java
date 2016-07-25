@@ -19,6 +19,8 @@ public class SendFile extends AppCompatActivity{
 
     private Context context;
 
+    private DBManager dbManager;
+
     private EditText et_file_name;
 
     private RadioButton rb_audio_file, rb_video_file;
@@ -27,7 +29,7 @@ public class SendFile extends AppCompatActivity{
 
     private ArrayAdapter<String> spinnerAdapter;
 
-    private ArrayList<String> recipients;
+    private ArrayList<String> bandMembers;
 
     private String recipient_chosen;
 
@@ -50,18 +52,15 @@ public class SendFile extends AppCompatActivity{
 
         context = this;
 
+        dbManager = Home.dbManager;
+
         savedInstanceState = getIntent().getExtras();
 
         firstName = savedInstanceState.getString("firstName");
 
         recipient_chosen = null;
 
-        recipients = new ArrayList<>();
-
-        recipients.add("Simon");
-        recipients.add("John");
-        recipients.add("Lisa");
-        recipients.add("Ben");
+        bandMembers = Utils.getBandMembers(context, dbManager);
 
         et_file_name = (EditText)findViewById(R.id.et_file_name);
 
@@ -71,7 +70,7 @@ public class SendFile extends AppCompatActivity{
 
         select_recipient_spinner = (Spinner)findViewById(R.id.select_recipient_spinner);
 
-        spinnerAdapter = new ArrayAdapter<>(this, R.layout.my_custom_spinner, recipients);
+        spinnerAdapter = new ArrayAdapter<>(this, R.layout.my_custom_spinner, bandMembers);
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 

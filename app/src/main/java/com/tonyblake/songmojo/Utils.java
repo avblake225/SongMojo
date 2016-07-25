@@ -1,11 +1,13 @@
 package com.tonyblake.songmojo;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
@@ -100,5 +102,35 @@ public class Utils {
         String filenameWithoutPrefix = new String(chars);
 
         return filenameWithoutPrefix;
+    }
+
+    public static ArrayList<String> getBandMembers(Context context, DBManager dbManager){
+
+        ArrayList<String> bandMembers = new ArrayList<>();
+
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.BAND_MEMBERS_TABLE() + ";";
+
+        Cursor cursor;
+
+        try{
+
+            cursor = dbManager.rawQuery(query);
+
+            cursor.moveToFirst();
+
+            do{
+
+                String bandMember = cursor.getString(1);
+
+                bandMembers.add(bandMember);
+            }
+            while(cursor.moveToNext());
+        }
+        catch(Exception e){
+
+            Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        return bandMembers;
     }
 }
