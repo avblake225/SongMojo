@@ -23,9 +23,7 @@
 
     <!-- Home.java / home.xml -->
     <string name="home">Home</string>
-    <string name="welcome_message">Welcome to SongMojo, the file sharing platform for musicians.
-                                    Use this app to easily collaborate with your band members by
-                                    sending them new song ideas and video lessons.</string>
+    <string name="no_recent_activity">No recent activity</string>
 
     <drawable name="clr_focused">#FF6600</drawable>
     <drawable name="clr_pressed">#FFD700</drawable>

@@ -67,7 +67,7 @@ public class CueBackingTrackDialog extends DialogFragment {
                         if (filesDownloaded.size() == 0) {
 
                             dismiss();
-                        } 
+                        }
                         else {
 
                             String fileChosen = select_track_spinner.getSelectedItem().toString();

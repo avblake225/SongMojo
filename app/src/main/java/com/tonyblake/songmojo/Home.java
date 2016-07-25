@@ -99,7 +99,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         tv_user.setText(firstName);
 
-        createWelcomeMessage();
+        createNoRecentActivityMessage();
 
         // Show Status Bar
         View decorView = getWindow().getDecorView();
@@ -132,17 +132,11 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         recordingsDirectory.mkdirs();
     }
 
-    private void createWelcomeMessage(){
+    private void createNoRecentActivityMessage(){
 
-        View welcome_layout = layoutInflater.inflate(R.layout.welcome, null);
+        View no_recent_activity = layoutInflater.inflate(R.layout.no_recent_activity, null);
 
-        TextView tv = (TextView)welcome_layout.findViewById(R.id.tv_welcome);
-
-        String welcome_message = context.getString(R.string.welcome_message);
-
-        tv.setText(welcome_message);
-
-        layout_container.addView(welcome_layout);
+        layout_container.addView(no_recent_activity);
     }
 
     @Override
