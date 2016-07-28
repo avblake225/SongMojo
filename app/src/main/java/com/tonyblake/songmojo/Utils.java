@@ -8,7 +8,10 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
@@ -133,5 +136,36 @@ public class Utils {
         }
 
         return bandMembers;
+    }
+
+    public static String getCurrentDate(){
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
+
+        String currentDate = simpleDateFormat.format(new Date());
+
+        return currentDate;
+    }
+
+    public static String getCurrentTime(){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        String currentTime = sdf.format(new Date());
+
+        return currentTime;
+    }
+
+    public static String getCurrentDateAndTime(){
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+
+        TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+
+        simpleDateFormat.setTimeZone(gmtTime);
+
+        String currentDateandTime = simpleDateFormat.format(new Date());
+
+        return currentDateandTime;
     }
 }

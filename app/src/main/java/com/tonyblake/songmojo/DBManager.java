@@ -30,6 +30,13 @@ public class DBManager extends SQLiteOpenHelper{
     public static final String FILES_DOWNLOADED_TABLE_COL_5 = "FILE_TYPE";
     public static final String FILES_DOWNLOADED_TABLE_COL_6 = "DATE";
 
+    // Recent Activity Table
+    public static final String RECENT_ACTIVITY_TABLE = "recent_activity_table";
+    public static final String RECENT_ACTIVITY_TABLE_COL_1 = "ID";
+    public static final String RECENT_ACTIVITY_TABLE_COL_2 = "DATE";
+    public static final String RECENT_ACTIVITY_TABLE_COL_3 = "TIME";
+    public static final String RECENT_ACTIVITY_TABLE_COL_4 = "ACTION";
+
     // Band Members Table
     public static final String BAND_MEMBERS_TABLE = "band_members_table";
     public static final String BAND_MEMBERS_TABLE_COL_1 = "ID";
@@ -59,6 +66,7 @@ public class DBManager extends SQLiteOpenHelper{
 
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + FILES_DOWNLOADED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
+        db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, DATE TEXT, TIME TEXT, ACTION TEXT)");
         db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FULLNAME TEXT)");
     }
 
@@ -102,6 +110,24 @@ public class DBManager extends SQLiteOpenHelper{
         }
     }
 
+    public boolean insertDataIntoRecentActivityTable(String date, String time, String action){
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(RECENT_ACTIVITY_TABLE_COL_2, date);
+        contentValues.put(RECENT_ACTIVITY_TABLE_COL_3, time);
+        contentValues.put(RECENT_ACTIVITY_TABLE_COL_4, action);
+
+        long result = db.insert(RECENT_ACTIVITY_TABLE, null, contentValues);
+
+        if(result == -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public boolean insertDataIntoBandMembersTable(String fullname){
 
         ContentValues contentValues = new ContentValues();
@@ -123,6 +149,7 @@ public class DBManager extends SQLiteOpenHelper{
 
         db.execSQL("DROP TABLE IF EXISTS" + FILES_SENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + FILES_DOWNLOADED_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + RECENT_ACTIVITY_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + BAND_MEMBERS_TABLE);
         onCreate(db);
     }
@@ -163,6 +190,11 @@ public class DBManager extends SQLiteOpenHelper{
     public String FILES_DOWNLOADED_TABLE(){
 
         return FILES_DOWNLOADED_TABLE;
+    }
+
+    public String RECENT_ACTIVITY_TABLE(){
+
+        return RECENT_ACTIVITY_TABLE;
     }
 
     public String BAND_MEMBERS_TABLE(){

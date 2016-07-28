@@ -23,7 +23,7 @@
 
     <!-- Home.java / home.xml -->
     <string name="home">Home</string>
-    <string name="no_recent_activity">No recent activity</string>
+    <string name="no_activity">No activity</string>
 
     <drawable name="clr_focused">#FF6600</drawable>
     <drawable name="clr_pressed">#FFD700</drawable>
@@ -109,6 +109,7 @@
 
     <!-- FilesSent.java -->
     <string name="select_all_rows_from">SELECT * FROM</string>
+    <string name="where_date_equals">WHERE DATE =</string>
     <string name="delete_from">DELETE FROM</string>
     <string name="no_files_sent">No Files Sent</string>
     <string name="duration">Duration:</string>

@@ -26,9 +26,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
                                                             CueBackingTrackDialog.CueBackingTrackDialogInterface,
@@ -37,12 +34,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private FirebaseStorage storage;
 
     private DBManager dbManager;
-
-    private SimpleDateFormat simpleDateFormat;
-
-    private String currentDateandTime;
-
-    private TimeZone gmtTime;
 
     private StorageReference storageRef, recordingRef;
 
@@ -65,8 +56,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private String backing_track;
 
     private File file;
-
-    private GetFileDialog getFileDialog;
 
     private CueBackingTrackDialog cueBackingTrackDialog;
 
@@ -106,14 +95,6 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         recipient = savedInstanceState.getString("recipient");
 
         dbManager = Home.dbManager;
-
-        simpleDateFormat = new SimpleDateFormat();
-
-        gmtTime = TimeZone.getTimeZone("GMT");
-
-        simpleDateFormat.setTimeZone(gmtTime);
-
-        currentDateandTime = simpleDateFormat.format(new Date());
 
         storage = FirebaseStorage.getInstance();
 
@@ -327,9 +308,17 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                         @Override
                         protected void onPostExecute(String result) {
 
-                            dbManager.insertDataIntoFilesSentTable(recipient, filename, duration, context.getString(R.string.audio_file), currentDateandTime); // save locally
+                            dbManager.insertDataIntoFilesSentTable(recipient, filename, duration, context.getString(R.string.audio_file), Utils.getCurrentDateAndTime()); // save locally
 
-                            AvailableFile availableFile = new AvailableFile(firstName, Utils.removePrefix(filename), recipient, currentDateandTime, duration, context.getString(R.string.audio_file));
+                            String current_date = Utils.getCurrentDate();
+
+                            String current_time = Utils.getCurrentTime();
+
+                            String action = filename + " sent to " + recipient;
+
+                            dbManager.insertDataIntoRecentActivityTable(current_date, current_time, action);
+
+                            AvailableFile availableFile = new AvailableFile(firstName, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration, context.getString(R.string.audio_file));
 
                             databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
@@ -406,6 +395,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         Intent intent = new Intent(this, Home.class);
 
         intent.putExtra("firstName", firstName);
+        intent.putExtra("getRecentActivity", true);
 
         startActivity(intent);
     }

@@ -3,7 +3,7 @@ package com.tonyblake.songmojo;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.DialogFragment;
@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,7 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Home extends AppCompatActivity implements GetFileDialog.GetFileDialogInterface, FindBandMemberDialog.FindBandMemberDialogInterface{
@@ -56,13 +55,13 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
     private Intent intent;
 
-    private LinearLayout layout_container;
-
     private String firstName;
 
     private LayoutInflater layoutInflater;
 
-    private TextView tv_user;
+    private TextView tv_user, tv_current_date;
+
+    private ArrayList<RecentActivity> recentActivityList;
 
     private GetFileDialog getFileDialog;
 
@@ -73,6 +72,10 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     private FragmentManager fm;
 
     public static File songMojoDirectory, downloadsDirectory, recordingsDirectory;
+
+    public static boolean getRecentActivity;
+
+    private LinearLayout recent_activity_layout_container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +94,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         firstName = savedInstanceState.getString("firstName");
 
-        layout_container = (LinearLayout)findViewById(R.id.layout_container);
+        getRecentActivity = savedInstanceState.getBoolean("getRecentActivity");
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -99,7 +102,11 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         tv_user.setText(firstName);
 
-        createNoRecentActivityMessage();
+        tv_current_date = (TextView)findViewById(R.id.tv_current_date);
+
+        tv_current_date.setText(Utils.getCurrentDate());
+
+        recentActivityList = new ArrayList<>();
 
         // Show Status Bar
         View decorView = getWindow().getDecorView();
@@ -130,13 +137,10 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         recordingsDirectory = new File(songMojoDirectory + File.separator + context.getString(R.string.recordings));
         recordingsDirectory.mkdirs();
-    }
 
-    private void createNoRecentActivityMessage(){
+        recent_activity_layout_container = (LinearLayout)findViewById(R.id.recent_activity_layout_container);
 
-        View no_recent_activity = layoutInflater.inflate(R.layout.no_recent_activity, null);
-
-        layout_container.addView(no_recent_activity);
+        displayNoRecentActivityMessage();
     }
 
     @Override
@@ -173,6 +177,13 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(getRecentActivity){
+
+            displayRecentActivity();
+
+            getRecentActivity = false;
+        }
 
         availableFiles = new ArrayList<>();
 
@@ -338,6 +349,12 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         if(filename.equals(availableFile.filename)){
 
                             dbManager.insertDataIntoFilesDownloadedTable(availableFile.sender, filename, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
+
+                            String action = "Downloaded " + filename;
+
+                            dbManager.insertDataIntoRecentActivityTable(Utils.getCurrentDate(), Utils.getCurrentTime(), action);
+
+                            displayRecentActivity();
                         }
                     }
 
@@ -359,51 +376,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
             Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
         }
-    }
-
-    private void displayAudioScreen(String filename){
-
-        final File file = new File(filename);
-
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View download_audio_layout = inflater.inflate(R.layout.download_audio, null);
-
-        layout_container.addView(download_audio_layout);
-
-        TextView tv_file_name = (TextView) download_audio_layout.findViewById(R.id.tv_file_name);
-
-        Button btn_play = (Button) download_audio_layout.findViewById(R.id.btn_play);
-
-        tv_file_name.setText(filename + ".3pg");
-
-        btn_play.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                MediaPlayer mediaPlayer = new MediaPlayer();
-
-                try {
-
-                    mediaPlayer.setDataSource(file.getPath());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-
-                    mediaPlayer.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                mediaPlayer.start();
-
-                Toast.makeText(getApplicationContext(), "Playing audio", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Override
@@ -445,5 +417,63 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         }
 
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void displayNoRecentActivityMessage(){
+
+        View no_recent_activity = layoutInflater.inflate(R.layout.no_activity, null);
+
+        recent_activity_layout_container.addView(no_recent_activity);
+    }
+
+    private void displayRecentActivity(){
+
+        recent_activity_layout_container.removeAllViews();
+
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.RECENT_ACTIVITY_TABLE() + " "
+                + context.getString(R.string.where_date_equals) + "'" + Utils.getCurrentDate() + "';";
+
+        Cursor cursor;
+
+        try{
+
+            cursor = dbManager.rawQuery(query);
+
+            cursor.moveToFirst();
+
+            do{
+
+                RecentActivity recentActivity = new RecentActivity();
+
+                recentActivity.time = cursor.getString(2);
+                recentActivity.action = cursor.getString(3);
+
+                recentActivityList.add(recentActivity);
+            }
+            while(cursor.moveToNext());
+        }
+        catch(Exception e){
+
+            Log.e("LocalDBError", "Error retrieving recent activity data");
+        }
+
+        for(RecentActivity recentActivity: recentActivityList){
+
+            View recent_activity_layout = layoutInflater.inflate(R.layout.recent_activity_layout, null);
+
+            RecentActivityLayout recentActivityLayout = new RecentActivityLayout(recent_activity_layout, recent_activity_layout_container);
+
+            recentActivityLayout.setTime(recentActivity.time);
+
+            recentActivityLayout.setAction(recentActivity.action);
+
+            recentActivityLayout.finish();
+        }
+    }
+
+    private class RecentActivity{
+
+        String time;
+        String action;
     }
 }

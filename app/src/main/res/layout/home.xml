@@ -38,26 +38,37 @@
 
             <TextView
                 android:id="@+id/tv_user"
+                android:text="testing"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="@dimen/tv_user_text_size"
-                android:layout_margin="@dimen/tv_user_margin"
+                android:layout_marginTop="@dimen/tv_user_margin_top"
+                android:layout_marginRight="@dimen/tv_user_margin_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"/>
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/tv_current_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/tv_current_date_margin_top"
+                android:layout_marginLeft="@dimen/tv_current_date_margin_left"
+                android:text="testing"
+                android:textSize="@dimen/tv_current_date_text_size"
+                android:textColor="@color/black"/>
+
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/layout_container"
+                    android:id="@+id/recent_activity_layout_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
                     android:orientation="vertical"/>
 
-            </RelativeLayout>
+            </ScrollView>
 
         </LinearLayout>
 
