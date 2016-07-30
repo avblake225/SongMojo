@@ -11,11 +11,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         Intent intent = new Intent(this, Login.class);
-        /*Intent intent = new Intent(this, RecordVideo.class);
-        intent.putExtra("firstName","some name");
-        intent.putExtra("filename", "some file");
-        intent.putExtra("recipient","some recipient");
-*/
+
         startActivity(intent);
 
         finish();

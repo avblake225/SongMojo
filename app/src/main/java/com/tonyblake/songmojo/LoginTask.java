@@ -26,9 +26,12 @@ public class LoginTask extends AsyncTask<String,Void,User>{
 
         for(User user: users){
 
-            if(username.equals(user.username) && password.equals(user.password)){
+            if(username.equals(user.username)){
 
-                userToReturn = user;
+                if(password.equals(user.password)){
+
+                    userToReturn = user;
+                }
             }
         }
 

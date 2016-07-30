@@ -332,7 +332,7 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
                 }
                 else{
 
-                    Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
+                    Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
                 }
             }
         });

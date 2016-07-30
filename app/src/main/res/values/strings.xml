@@ -3,11 +3,12 @@
     <!-- Firebase database -->
     <string name="users">Users</string>
 
-    <!-- Create Account/Log In -->
+    <!-- Login.java -->
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="please_enter_username_and_password">Please enter username and password</string>
     <string name="log_in">Log in</string>
     <string name="logging_in">Logging in...</string>
     <string name="no_account_found">No account found</string>

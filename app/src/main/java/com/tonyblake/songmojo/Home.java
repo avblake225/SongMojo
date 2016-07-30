@@ -374,7 +374,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         }
         else{
 
-            Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
+            Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }
     }
 

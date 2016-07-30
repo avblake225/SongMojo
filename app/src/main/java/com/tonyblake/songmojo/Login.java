@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -86,39 +87,35 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                 password = et_password.getText().toString();
 
-                new LoginTask(users){
+                if("".equals(username) | "".equals(password)){
 
-                    @Override
-                    protected void onPreExecute(){
+                    Toast.makeText(context, context.getString(R.string.please_enter_username_and_password), Toast.LENGTH_SHORT).show();
+                }
+                else{
 
-                        loginProgressDialog = new ProgressDialog(context);
+                    new LoginTask(users){
 
-                        loginProgressDialog.setProgressStyle(loginProgressDialog.STYLE_SPINNER);
-                        loginProgressDialog.setIndeterminate(true);
-                        loginProgressDialog.setMessage(context.getString(R.string.logging_in));
-                        loginProgressDialog.show();
-                    }
+                        @Override
+                        protected void onPreExecute(){
 
-                    @Override
-                    protected void onPostExecute(User user){
+                            loginProgressDialog = new ProgressDialog(context);
 
-                        loginProgressDialog.dismiss();
+                            loginProgressDialog.setProgressStyle(loginProgressDialog.STYLE_SPINNER);
+                            loginProgressDialog.setIndeterminate(true);
+                            loginProgressDialog.setMessage(context.getString(R.string.logging_in));
+                            loginProgressDialog.show();
+                        }
 
-                        if(user != null){
+                        @Override
+                        protected void onPostExecute(User user){
+
+                            loginProgressDialog.dismiss();
 
                             login(user);
                         }
-                        else if(!Utils.connectedToNetwork(context)){
 
-                            Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
-                        }
-                        else{
-
-                            Utils.showToastMessage(context, context.getString(R.string.no_account_found));
-                        }
-                    }
-
-                }.execute(username,password);
+                    }.execute(username,password);
+                }
             }
         });
 
@@ -171,12 +168,24 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
     private void login(User user){
 
-        Intent intent = new Intent(this, Home.class);
+        if(user == null){
 
-        intent.putExtra("firstName", user.firstName);
-        intent.putExtra("getRecentActivity", false);
+            Toast.makeText(context, context.getString(R.string.no_account_found), Toast.LENGTH_SHORT).show();
 
-        startActivity(intent);
+        }
+        else if(!Utils.connectedToNetwork(context)){
+
+            Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
+        }
+        else{
+
+            Intent intent = new Intent(this, Home.class);
+
+            intent.putExtra("firstName", user.firstName);
+            intent.putExtra("getRecentActivity", false);
+
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -188,11 +197,15 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
             databaseRef.child(username).setValue(newUser);
 
-            Utils.showToastMessage(context, context.getString(R.string.account_created));
+            Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, Login.class);  // required in order to get updated user list
+
+            startActivity(intent);
         }
         else{
 
-            Utils.showToastMessage(context, context.getString(R.string.no_network_connection));
+            Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }
     }
 }

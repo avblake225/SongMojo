@@ -6,7 +6,6 @@ import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,13 +34,6 @@ public class Utils {
         }
 
         return connected;
-    }
-
-    public static void showToastMessage(Context context, CharSequence text) {
-
-        int duration = Toast.LENGTH_LONG;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
     }
 
     public static Camera getCameraInstance(){
