@@ -24,7 +24,9 @@
 
     <!-- Home.java / home.xml -->
     <string name="home">Home</string>
-    <string name="no_activity">No activity</string>
+
+    <!-- no_files_sent_or_received.xml -->
+    <string name="no_files_sent_or_received">No files sent/received</string>
 
     <drawable name="clr_focused">#FF6600</drawable>
     <drawable name="clr_pressed">#FFD700</drawable>
@@ -57,10 +59,12 @@
     <string name="please_set_file_name">Please set file name</string>
     <string name="please_select_file_type">Please select file type</string>
 
-    <!-- Record Audio screen -->
+    <!-- record_audio.xml -->
     <string name="record_audio">Record Audio</string>
     <string name="file_name">File name:</string>
     <string name="_mp3">.mp3</string>
+    <string name="edit">EDIT</string>
+    <string name="filename_updated">Filename updated</string>
     <string name="recipient">Recipient:</string>
     <string name="temp_file">TempFile</string>
     <string name="cue_backing_track">Cue Backing Track</string>
@@ -70,6 +74,9 @@
     <string name="track_playing">Track playing</string>
     <string name="pause">Pause</string>
     <string name="send">Send</string>
+
+    <!-- edit_filename_dialog.xml -->
+    <string name="enter_new_filename">Enter new filename</string>
 
     <!-- Record Video -->
     <string name="video_saved">Video saved</string>
@@ -132,6 +139,9 @@
 
     <!-- FindBandMemberDialog.java -->
     <string name="find_band_member">Find Band Member</string>
+
+    <!-- EditFilenameDialog.java -->
+    <string name="edit_filename">Edit filename</string>
 
     <!-- find_band_member_dialog.xml -->
     <string name="enter_name">Enter name</string>

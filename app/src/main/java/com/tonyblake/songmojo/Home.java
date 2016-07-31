@@ -140,7 +140,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         recent_activity_layout_container = (LinearLayout)findViewById(R.id.recent_activity_layout_container);
 
-        displayNoRecentActivityMessage();
+        displayInitialMessage();
     }
 
     @Override
@@ -419,11 +419,11 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private void displayNoRecentActivityMessage(){
+    private void displayInitialMessage(){
 
-        View no_recent_activity = layoutInflater.inflate(R.layout.no_activity, null);
+        View no_files_sent_or_received = layoutInflater.inflate(R.layout.no_files_sent_or_received, null);
 
-        recent_activity_layout_container.addView(no_recent_activity);
+        recent_activity_layout_container.addView(no_files_sent_or_received);
     }
 
     private void displayRecentActivity(){

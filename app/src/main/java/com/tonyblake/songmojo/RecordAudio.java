@@ -27,7 +27,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RecordAudio extends AppCompatActivity implements FileSentDialog.FileSentDialogInterface,
+public class RecordAudio extends AppCompatActivity implements EditFilenameDialog.EditFilenameDialogInterface,
+                                                            FileSentDialog.FileSentDialogInterface,
                                                             CueBackingTrackDialog.CueBackingTrackDialogInterface,
                                                             RecordAudioDialog.RecordDialogInterface{
 
@@ -78,6 +79,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
     private FirebaseDatabase database;
 
     private DatabaseReference databaseRef;
+
+    private TextView btn_edit_filename;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +161,8 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         database = FirebaseDatabase.getInstance();
 
         databaseRef = database.getReference().child("files");
+
+        btn_edit_filename = (TextView)findViewById(R.id.btn_edit_filename);
     }
 
     @Override
@@ -174,6 +179,17 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         });
 
         tv_filename.setText(filename);
+
+        btn_edit_filename.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                EditFilenameDialog editFilenameDialog = new EditFilenameDialog();
+                editFilenameDialog.show(fm, "editFilenameDialogInterface");
+
+            }
+        });
 
         tv_recipient.setText(recipient);
 
@@ -449,5 +465,15 @@ public class RecordAudio extends AppCompatActivity implements FileSentDialog.Fil
         play.setEnabled(true);
         pause.setEnabled(false);
         send.setEnabled(true);
+    }
+
+    @Override
+    public void onEditFilenameDialogOkButtonClick(DialogFragment dialog, String new_filename) {
+
+        filename = new_filename + context.getString(R.string._mp3);
+
+        tv_filename.setText(filename);
+
+        Toast.makeText(context, context.getString(R.string.filename_updated), Toast.LENGTH_SHORT).show();
     }
 }

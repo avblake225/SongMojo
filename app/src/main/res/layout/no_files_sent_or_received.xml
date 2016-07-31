@@ -10,7 +10,7 @@
         android:layout_marginTop="@dimen/no_activity_margin_top"
         android:layout_marginLeft="@dimen/no_activity_margin_left"
         android:textSize="@dimen/header_text_size"
-        android:text="@string/no_activity"
+        android:text="@string/no_files_sent_or_received"
         android:textColor="@color/gray"/>
 
 </LinearLayout>
