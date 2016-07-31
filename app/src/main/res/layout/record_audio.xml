@@ -84,30 +84,46 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/record_audio_tv_margin"
-                android:layout_marginBottom="@dimen/record_audio_tv_margin"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/recipient"
-                    style="@style/header_text_style"/>
+                    android:layout_margin="@dimen/record_audio_tv_margin"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_recipient"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/input_recipient_margin_left"
-                    style="@style/input_text_style"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/recipient"
+                        style="@style/header_text_style"/>
 
-                <Button
-                    android:id="@+id/btn_edit_recipient"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_recipient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/input_recipient_margin_left"
+                        style="@style/input_text_style"/>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/edit"/>
+                    android:layout_margin="@dimen/record_audio_tv_margin">
+
+                    <TextView
+                        android:id="@+id/btn_edit_recipient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edit"
+                        android:background="@color/dark_gray"
+                        android:textColor="@color/white"
+                        android:padding="@dimen/btn_edit_padding"
+                        android:layout_alignParentRight="true"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 

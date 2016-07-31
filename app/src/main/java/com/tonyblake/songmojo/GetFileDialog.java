@@ -44,7 +44,7 @@ public class GetFileDialog extends DialogFragment {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        view = inflater.inflate(R.layout.select_track_dialog, null);
+        view = inflater.inflate(R.layout.spinner_dialog, null);
 
         builder.setTitle(R.string.select_track);
 
@@ -135,7 +135,7 @@ public class GetFileDialog extends DialogFragment {
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        select_track_spinner = (Spinner) view.findViewById(R.id.select_track_spinner);
+        select_track_spinner = (Spinner) view.findViewById(R.id.select_item_spinner);
 
         select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, availableFilenames);
 

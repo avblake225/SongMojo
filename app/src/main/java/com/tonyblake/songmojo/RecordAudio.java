@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class RecordAudio extends AppCompatActivity implements EditFilenameDialog.EditFilenameDialogInterface,
+                                                            EditRecipientDialog.EditRecipientDialogInterface,
                                                             FileSentDialog.FileSentDialogInterface,
                                                             CueBackingTrackDialog.CueBackingTrackDialogInterface,
                                                             RecordAudioDialog.RecordDialogInterface{
@@ -80,7 +81,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
     private DatabaseReference databaseRef;
 
-    private TextView btn_edit_filename;
+    private TextView btn_edit_filename, btn_edit_recipient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +164,8 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
         databaseRef = database.getReference().child("files");
 
         btn_edit_filename = (TextView)findViewById(R.id.btn_edit_filename);
+
+        btn_edit_recipient = (TextView)findViewById(R.id.btn_edit_recipient);
     }
 
     @Override
@@ -192,6 +195,23 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
         });
 
         tv_recipient.setText(recipient);
+
+        btn_edit_recipient.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                EditRecipientDialog editRecipientDialog = new EditRecipientDialog();
+
+                Bundle bundle = new Bundle();
+
+                bundle.putStringArrayList("availableRecipients", Utils.getBandMembers(dbManager, context));
+
+                editRecipientDialog.setArguments(bundle);
+
+                editRecipientDialog.show(fm, "editRecipientDialog");
+            }
+        });
 
         cue_backing_track.setOnClickListener(new View.OnClickListener() {
 
@@ -475,5 +495,15 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
         tv_filename.setText(filename);
 
         Toast.makeText(context, context.getString(R.string.filename_updated), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onEditRecipientDialogOkButtonClick(DialogFragment dialog, String new_recipient) {
+
+        recipient = new_recipient;
+
+        tv_recipient.setText(recipient);
+
+        Toast.makeText(context, context.getString(R.string.recipient_updated), Toast.LENGTH_SHORT).show();
     }
 }

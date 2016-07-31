@@ -160,4 +160,33 @@ public class Utils {
 
         return currentDateandTime;
     }
+
+    public static ArrayList<String> getBandMembers(DBManager dbManager, Context context) {
+
+        ArrayList<String> bandMembers = new ArrayList<>();
+
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.BAND_MEMBERS_TABLE() + ";";
+
+        Cursor cursor;
+
+        try {
+
+            cursor = dbManager.rawQuery(query);
+
+            cursor.moveToFirst();
+
+            do {
+
+                String name = cursor.getString(1);
+
+                bandMembers.add(name);
+            }
+            while (cursor.moveToNext());
+        }
+        catch (Exception e) {
+
+        }
+
+        return bandMembers;
+    }
 }

@@ -2,7 +2,6 @@ package com.tonyblake.songmojo;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -25,11 +24,9 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
 
     private TextView tv_screen_title;
 
-    private Cursor cursor;
-
     private FragmentManager fm;
 
-    private ArrayList<BandMember> bandMembersToDisplay;
+    private ArrayList<String> bandMembersToDisplay;
 
     private ListView band_members_list;
 
@@ -47,8 +44,6 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
         context = this;
 
         fm = getSupportFragmentManager();
-
-        bandMembersToDisplay = new ArrayList<>();
 
         band_members_list = (ListView)findViewById(R.id.band_members_list);
 
@@ -85,59 +80,34 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
 
         if(bandMembersToDisplay.size() == 0){
 
-            getBandMembers();
-        }
-    }
+            bandMembersToDisplay = Utils.getBandMembers(dbManager, context);
 
-    private void getBandMembers(){
+            if(bandMembersToDisplay.size() == 0){
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.BAND_MEMBERS_TABLE() + ";";
-
-        try{
-
-            cursor = dbManager.rawQuery(query);
-
-            cursor.moveToFirst();
-
-            do {
-
-                BandMember bandMember = new BandMember();
-
-                bandMember.name = cursor.getString(1);
-
-                bandMembersToDisplay.add(bandMember);
+                Toast.makeText(context, context.getString(R.string.no_band_members_added), Toast.LENGTH_SHORT).show();
             }
-            while (cursor.moveToNext());
-        }
-        catch(Exception e){
+            else{
 
-        }
+                editBandMembers = this;
 
-        if(bandMembersToDisplay.size() == 0){
+                Resources res = getResources();
 
-            Toast.makeText(context, context.getString(R.string.no_band_members_added), Toast.LENGTH_SHORT).show();
-        }
-        else{
+                adapter = new BandMemberAdapter(editBandMembers , bandMembersToDisplay, res);
 
-            editBandMembers = this;
-
-            Resources res = getResources();
-
-            adapter = new BandMemberAdapter(editBandMembers , bandMembersToDisplay, res);
-
-            band_members_list.setAdapter(adapter);
+                band_members_list.setAdapter(adapter);
+            }
         }
     }
 
     public void onItemClick(int mPosition) {
 
-        BandMember bandMember = bandMembersToDisplay.get(mPosition);
+        String name = bandMembersToDisplay.get(mPosition);
 
         deleteBandMemberDialog = new DeleteBandMemberDialog();
 
         Bundle bundle = new Bundle();
 
-        bundle.putString("bandMember", bandMember.name);
+        bundle.putString("bandMember", name);
         bundle.putInt("position", mPosition);
 
         deleteBandMemberDialog.setArguments(bundle);

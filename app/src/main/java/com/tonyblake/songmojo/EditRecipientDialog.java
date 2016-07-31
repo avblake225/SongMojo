@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -20,19 +19,17 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
-public class CueBackingTrackDialog extends DialogFragment {
+public class EditRecipientDialog extends DialogFragment {
 
     private Context context;
 
-    private DBManager dbManager;
-
-    private ArrayList<String> filesDownloaded;
+    private ArrayList<String> availableRecipients;
 
     private View view;
 
-    private Spinner select_track_spinner;
+    private Spinner select_recipient_spinner;
 
-    private ArrayAdapter<String> select_track_spinnerAdapter;
+    private ArrayAdapter<String> select_recipient_spinnerAdapter;
 
     private WindowManager.LayoutParams lp;
 
@@ -41,9 +38,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         context = getActivity();
 
-        dbManager = Home.dbManager;
-
-        filesDownloaded = new ArrayList<>();
+        availableRecipients = getArguments().getStringArrayList("availableRecipients");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -51,12 +46,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         view = inflater.inflate(R.layout.spinner_dialog, null);
 
-        builder.setTitle(R.string.select_track);
-
-        if(filesDownloaded.size() == 0){
-
-            builder.setMessage(context.getString(R.string.no_tracks_available));
-        }
+        builder.setTitle(R.string.edit_recipient);
 
         builder.setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -64,16 +54,9 @@ public class CueBackingTrackDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        if (filesDownloaded.size() == 0) {
+                            String recipientChosen = select_recipient_spinner.getSelectedItem().toString();
 
-                            dismiss();
-                        }
-                        else {
-
-                            String fileChosen = select_track_spinner.getSelectedItem().toString();
-
-                            cueBackingTrackDialogInterface.onCueBackingTrackDialogOkButtonClick(CueBackingTrackDialog.this, fileChosen);
-                        }
+                            editRecipientDialogInterface.onEditRecipientDialogOkButtonClick(EditRecipientDialog.this, recipientChosen);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -118,19 +101,19 @@ public class CueBackingTrackDialog extends DialogFragment {
         return dialog;
     }
 
-    public interface CueBackingTrackDialogInterface {
+    public interface EditRecipientDialogInterface {
 
-        void onCueBackingTrackDialogOkButtonClick(DialogFragment dialog, String fileChosen);
+        void onEditRecipientDialogOkButtonClick(DialogFragment dialog, String new_recipient);
     }
 
-    CueBackingTrackDialogInterface cueBackingTrackDialogInterface;
+    EditRecipientDialogInterface editRecipientDialogInterface;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         try {
-            cueBackingTrackDialogInterface = (CueBackingTrackDialogInterface) activity;
+            editRecipientDialogInterface = (EditRecipientDialogInterface) activity;
         }
         catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
@@ -141,30 +124,12 @@ public class CueBackingTrackDialog extends DialogFragment {
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        select_track_spinner = (Spinner) view.findViewById(R.id.select_item_spinner);
+        select_recipient_spinner = (Spinner) view.findViewById(R.id.select_item_spinner);
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_DOWNLOADED_TABLE() + ";";
+        select_recipient_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, availableRecipients);
 
-        Cursor cursor = null;
+        select_recipient_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        try{
-
-            cursor = dbManager.rawQuery(query);
-
-            cursor.moveToFirst();
-
-            do{
-
-                filesDownloaded.add(cursor.getString(2));
-            }
-            while(cursor.moveToNext());
-        }
-        catch(Exception e){};
-
-        select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, filesDownloaded);
-
-        select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        select_track_spinner.setAdapter(select_track_spinnerAdapter);
+        select_recipient_spinner.setAdapter(select_recipient_spinnerAdapter);
     }
 }

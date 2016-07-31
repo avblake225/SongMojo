@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/select_track_spinner"
+        android:id="@+id/select_item_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/track_spinner_margin_left"
-        android:layout_marginTop="@dimen/track_spinner_margin_top"
+        android:layout_marginLeft="@dimen/spinner_margin_left"
+        android:layout_marginTop="@dimen/spinner_margin_top"
         android:background="@drawable/spinner_border"/>
 
 </LinearLayout>
