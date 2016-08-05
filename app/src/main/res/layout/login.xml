@@ -36,6 +36,7 @@
                 android:padding="@dimen/et_padding"
                 android:layout_marginTop="@dimen/et_password_margin_top"
                 android:hint="@string/password"
+                android:inputType = "textPassword"
                 android:textColorHint="@color/gray"
                 android:textCursorDrawable="@null"
                 android:background="@color/dark_gray"
