@@ -55,7 +55,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
     private Intent intent;
 
-    private String firstName;
+    private String user;
 
     private LayoutInflater layoutInflater;
 
@@ -92,7 +92,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         savedInstanceState = getIntent().getExtras();
 
-        firstName = savedInstanceState.getString("firstName");
+        user = savedInstanceState.getString("user");
 
         getRecentActivity = savedInstanceState.getBoolean("getRecentActivity");
 
@@ -100,7 +100,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         tv_user = (TextView)findViewById(R.id.tv_user);
 
-        tv_user.setText(firstName);
+        tv_user.setText(user);
 
         tv_current_date = (TextView)findViewById(R.id.tv_current_date);
 
@@ -200,7 +200,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         String sender = (String) userID.child("sender").getValue();
 
-                        if(!sender.equals(firstName)){
+                        if(!sender.equals(user)){
 
                             AvailableFile availableFile = new AvailableFile();
 
@@ -253,7 +253,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         intent = new Intent(context, SendFile.class);
 
-                        intent.putExtra("firstName", firstName);
+                        intent.putExtra("user", user);
 
                         startActivity(intent);
 
@@ -293,6 +293,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         dLayout.closeDrawer(dList);
 
                         intent = new Intent(context, EditBandMembers.class);
+
+                        intent.putExtra("user", user);
 
                         startActivity(intent);
 
@@ -395,13 +397,13 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         String msg;
 
-        ArrayList<String> bandMembers = Utils.getBandMembers(context,dbManager);
+        ArrayList<String> bandMembers = Utils.getBandMembers(context, user, dbManager);
 
         if(userFound){
 
             if(!bandMembers.contains(fullname)){
 
-                dbManager.insertDataIntoBandMembersTable(fullname);
+                dbManager.insertDataIntoBandMembersTable(user, fullname);
 
                 msg = fullname + " added to band members";
             }

@@ -119,8 +119,9 @@
     <string name="no_file_name_entered">No file name entered</string>
     <string name="no_file_found">No file found</string>
 
-    <!-- FilesSent.java -->
+    <!-- DB queries -->
     <string name="select_all_rows_from">SELECT * FROM</string>
+    <string name="where_user_equals">WHERE USER =</string>
     <string name="where_date_equals">WHERE DATE =</string>
     <string name="delete_from">DELETE FROM</string>
     <string name="no_files_sent">No Files Sent</string>

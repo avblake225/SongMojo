@@ -41,7 +41,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
     private Context context;
 
-    private String firstName;
+    private String user;
 
     public static String filename, recipient;
 
@@ -94,7 +94,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
         savedInstanceState = getIntent().getExtras();
 
-        firstName = savedInstanceState.getString("firstName");
+        user = savedInstanceState.getString("user");
         filename = savedInstanceState.getString("filename");
         recipient = savedInstanceState.getString("recipient");
 
@@ -205,7 +205,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                 Bundle bundle = new Bundle();
 
-                bundle.putStringArrayList("availableRecipients", Utils.getBandMembers(dbManager, context));
+                bundle.putStringArrayList("availableRecipients", Utils.getBandMembers(context, user, dbManager));
 
                 editRecipientDialog.setArguments(bundle);
 
@@ -354,7 +354,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                             dbManager.insertDataIntoRecentActivityTable(current_date, current_time, action);
 
-                            AvailableFile availableFile = new AvailableFile(firstName, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration, context.getString(R.string.audio_file));
+                            AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration, context.getString(R.string.audio_file));
 
                             databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
@@ -430,7 +430,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
         Intent intent = new Intent(this, Home.class);
 
-        intent.putExtra("firstName", firstName);
+        intent.putExtra("firstName", user);
         intent.putExtra("getRecentActivity", true);
 
         startActivity(intent);

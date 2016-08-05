@@ -40,7 +40,8 @@ public class DBManager extends SQLiteOpenHelper{
     // Band Members Table
     public static final String BAND_MEMBERS_TABLE = "band_members_table";
     public static final String BAND_MEMBERS_TABLE_COL_1 = "ID";
-    public static final String BAND_MEMBERS_TABLE_COL_2 = "FULLNAME";
+    public static final String BAND_MEMBERS_TABLE_COL_2 = "USER";
+    public static final String BAND_MEMBERS_TABLE_COL_3 = "FULLNAME";
 
     private File db_file;
 
@@ -67,7 +68,7 @@ public class DBManager extends SQLiteOpenHelper{
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + FILES_DOWNLOADED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, DATE TEXT, TIME TEXT, ACTION TEXT)");
-        db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FULLNAME TEXT)");
+        db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, FULLNAME TEXT)");
     }
 
     public boolean insertDataIntoFilesSentTable(String recipient, String file_name, String duration, String file_type, String date){
@@ -128,11 +129,12 @@ public class DBManager extends SQLiteOpenHelper{
         }
     }
 
-    public boolean insertDataIntoBandMembersTable(String fullname){
+    public boolean insertDataIntoBandMembersTable(String user, String fullname){
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(BAND_MEMBERS_TABLE_COL_2, fullname);
+        contentValues.put(BAND_MEMBERS_TABLE_COL_2, user);
+        contentValues.put(BAND_MEMBERS_TABLE_COL_3, fullname);
 
         long result = db.insert(BAND_MEMBERS_TABLE, null, contentValues);
 
@@ -160,9 +162,9 @@ public class DBManager extends SQLiteOpenHelper{
         return res;
     }
 
-    public void deleteBandMember(String bandMember){
+    public void deleteBandMember(String user, String bandMember){
 
-        String query = "DELETE FROM " + BAND_MEMBERS_TABLE + " WHERE FULLNAME = '" + bandMember + "';";
+        String query = "DELETE FROM " + BAND_MEMBERS_TABLE + " WHERE USER = '" + user + "' AND FULLNAME = '" + bandMember + "';";
 
         db.execSQL(query);
     }

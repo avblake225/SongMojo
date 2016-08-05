@@ -18,6 +18,8 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
 
     private Context context;
 
+    private String user;
+
     private Toolbar appBar;
 
     private DBManager dbManager;
@@ -42,6 +44,10 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
         setContentView(R.layout.edit_band_members);
 
         context = this;
+
+        savedInstanceState = getIntent().getExtras();
+
+        user = savedInstanceState.getString("user");
 
         fm = getSupportFragmentManager();
 
@@ -82,7 +88,7 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
 
         if(bandMembersToDisplay.size() == 0){
 
-            bandMembersToDisplay = Utils.getBandMembers(dbManager, context);
+            bandMembersToDisplay = Utils.getBandMembers(context, user, dbManager);
 
             if(bandMembersToDisplay.size() == 0){
 
@@ -120,7 +126,7 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
     @Override
     public void onDeleteBandMemberYesButtonClick(DialogFragment dialog, String bandMember, int position) {
 
-        dbManager.deleteBandMember(bandMember);
+        dbManager.deleteBandMember(user, bandMember);
 
         int numBandMembers = adapter.clearData(position);
 

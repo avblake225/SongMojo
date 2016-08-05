@@ -35,7 +35,7 @@ public class SendFile extends AppCompatActivity{
 
     private Button btn_proceed_to_recording;
 
-    private String firstName;
+    private String user;
 
     private String filename;
 
@@ -56,11 +56,11 @@ public class SendFile extends AppCompatActivity{
 
         savedInstanceState = getIntent().getExtras();
 
-        firstName = savedInstanceState.getString("firstName");
+        user = savedInstanceState.getString("user");
 
         recipient_chosen = null;
 
-        bandMembers = Utils.getBandMembers(context, dbManager);
+        bandMembers = Utils.getBandMembers(context, user, dbManager);
 
         et_file_name = (EditText)findViewById(R.id.et_file_name);
 
@@ -124,7 +124,7 @@ public class SendFile extends AppCompatActivity{
 
                     intent = new Intent(context, RecordAudio.class);
 
-                    intent.putExtra("firstName", firstName);
+                    intent.putExtra("user", user);
                     intent.putExtra("filename", filename);
                     intent.putExtra("recipient", recipient_chosen);
 
@@ -139,7 +139,7 @@ public class SendFile extends AppCompatActivity{
 
                     intent = new Intent(context, RecordVideo.class);
 
-                    intent.putExtra("firstName", firstName);
+                    intent.putExtra("user", user);
                     intent.putExtra("filename", filename);
                     intent.putExtra("recipient", recipient_chosen);
 
