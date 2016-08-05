@@ -45,6 +45,8 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
 
         fm = getSupportFragmentManager();
 
+        bandMembersToDisplay = new ArrayList<>();
+
         band_members_list = (ListView)findViewById(R.id.band_members_list);
 
         // Show Status Bar

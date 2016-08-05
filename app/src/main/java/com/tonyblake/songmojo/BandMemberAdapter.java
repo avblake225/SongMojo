@@ -17,7 +17,7 @@ public class BandMemberAdapter extends BaseAdapter implements View.OnClickListen
     private ArrayList data;
     private static LayoutInflater inflater = null;
     public Resources res;
-    BandMember bandMember = null;
+    String name = null;
     int i=0;
 
     public BandMemberAdapter(Activity a, ArrayList d,Resources resLocal) {
@@ -75,9 +75,9 @@ public class BandMemberAdapter extends BaseAdapter implements View.OnClickListen
 
         if(data.size() != 0){
 
-            bandMember = ( BandMember ) data.get( position );
+            name = (String)data.get( position );
 
-            holder.band_member_name.setText(bandMember.name);
+            holder.band_member_name.setText(name);
 
             v.setOnClickListener(new OnItemClickListener( position ));
         }

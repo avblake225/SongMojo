@@ -102,7 +102,7 @@
     <dimen name="generic_margin_left_right">23dp</dimen>
 
     <!-- band_member_item_layout -->
-    <dimen name="band_member_item_layout_margin_top">10dp</dimen>
+    <dimen name="band_member_item_layout_margin">10dp</dimen>
     <dimen name="band_member_item_layout_inner_margin">15dp</dimen>
     <dimen name="tv_band_member_name_margin_left">13dp</dimen>
 

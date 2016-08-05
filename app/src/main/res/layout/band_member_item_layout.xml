@@ -8,7 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/band_member_item_layout_margin_top"
+        android:layout_marginTop="@dimen/band_member_item_layout_margin"
+        android:layout_marginLeft="@dimen/band_member_item_layout_margin"
+        android:layout_marginRight="@dimen/band_member_item_layout_margin"
         android:background="@drawable/layout_box"
         android:orientation="vertical">
 
