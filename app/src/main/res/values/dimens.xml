@@ -41,6 +41,7 @@
 
     <!-- record_audio.xml -->
     <dimen name="record_audio_tv_margin">15dp</dimen>
+    <dimen name="filename_margin_right">30dp</dimen>
     <dimen name="input_filename_margin_left">15dp</dimen>
     <dimen name="input_recipient_margin_left">19dp</dimen>
     <dimen name="record_audio_drawable_padding">5dp</dimen>
