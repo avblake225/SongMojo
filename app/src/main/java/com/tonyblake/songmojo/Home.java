@@ -102,8 +102,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         tv_current_date.setText(Utils.getCurrentDate());
 
-        recentActivityList = new ArrayList<>();
-
         // Show Status Bar
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
@@ -176,6 +174,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
             user = getUser();
         }
+
+        recentActivityList = new ArrayList<>();
 
         displayRecentActivity();
 
