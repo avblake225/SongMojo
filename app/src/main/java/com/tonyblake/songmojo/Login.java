@@ -182,7 +182,6 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
             Intent intent = new Intent(this, Home.class);
 
             intent.putExtra("user", user.firstName);
-            intent.putExtra("getRecentActivity", false);
 
             startActivity(intent);
         }

@@ -73,8 +73,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
     public static File songMojoDirectory, downloadsDirectory, recordingsDirectory;
 
-    public static boolean getRecentActivity;
-
     private LinearLayout recent_activity_layout_container;
 
     @Override
@@ -93,8 +91,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         savedInstanceState = getIntent().getExtras();
 
         user = savedInstanceState.getString("user");
-
-        getRecentActivity = savedInstanceState.getBoolean("getRecentActivity");
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -139,8 +135,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         recordingsDirectory.mkdirs();
 
         recent_activity_layout_container = (LinearLayout)findViewById(R.id.recent_activity_layout_container);
-
-        displayInitialMessage();
     }
 
     @Override
@@ -178,12 +172,12 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     protected void onResume() {
         super.onResume();
 
-        if(getRecentActivity){
+        if(user == null){
 
-            displayRecentActivity();
-
-            getRecentActivity = false;
+            user = getUser();
         }
+
+        displayRecentActivity();
 
         availableFiles = new ArrayList<>();
 
@@ -283,6 +277,12 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         findBandMemberDialog = new FindBandMemberDialog();
 
+                        bundle = new Bundle();
+
+                        bundle.putString("user", user);
+
+                        findBandMemberDialog.setArguments(bundle);
+
                         findBandMemberDialog.show(fm, "findBandMemberDialog");
 
                         break;
@@ -354,7 +354,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                             String action = "Downloaded " + filename;
 
-                            dbManager.insertDataIntoRecentActivityTable(Utils.getCurrentDate(), Utils.getCurrentTime(), action);
+                            dbManager.insertDataIntoRecentActivityTable(user, Utils.getCurrentDate(), Utils.getCurrentTime(), action);
 
                             displayRecentActivity();
                         }
@@ -421,11 +421,32 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private void displayInitialMessage(){
+    private String getUser(){
 
-        View no_files_sent_or_received = layoutInflater.inflate(R.layout.no_files_sent_or_received, null);
+        String user = null;
 
-        recent_activity_layout_container.addView(no_files_sent_or_received);
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.RECENT_ACTIVITY_TABLE() + ";";
+
+        Cursor cursor;
+
+        try{
+
+            cursor = dbManager.rawQuery(query);
+
+            cursor.moveToFirst();
+
+            do{
+
+                user = cursor.getString(1);
+            }
+            while(cursor.moveToNext());
+        }
+        catch(Exception e){
+
+            Log.e("LocalDBError", "Error retrieving user");
+        }
+
+        return user;
     }
 
     private void displayRecentActivity(){
@@ -433,7 +454,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         recent_activity_layout_container.removeAllViews();
 
         String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.RECENT_ACTIVITY_TABLE() + " "
-                + context.getString(R.string.where_date_equals) + "'" + Utils.getCurrentDate() + "';";
+                        + context.getString(R.string.where_user_equals) + "'" + user + "' "
+                        + context.getString(R.string.and_date_equals) + "'" + Utils.getCurrentDate() + "';";
 
         Cursor cursor;
 
@@ -447,8 +469,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                 RecentActivity recentActivity = new RecentActivity();
 
-                recentActivity.time = cursor.getString(2);
-                recentActivity.action = cursor.getString(3);
+                recentActivity.time = cursor.getString(3);
+                recentActivity.action = cursor.getString(4);
 
                 recentActivityList.add(recentActivity);
             }
@@ -459,17 +481,26 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
             Log.e("LocalDBError", "Error retrieving recent activity data");
         }
 
-        for(RecentActivity recentActivity: recentActivityList){
+        if(recentActivityList.size() == 0){
 
-            View recent_activity_layout = layoutInflater.inflate(R.layout.recent_activity_layout, null);
+            View no_files_sent_or_received = layoutInflater.inflate(R.layout.no_files_sent_or_received, null);
 
-            RecentActivityLayout recentActivityLayout = new RecentActivityLayout(recent_activity_layout, recent_activity_layout_container);
+            recent_activity_layout_container.addView(no_files_sent_or_received);
+        }
+        else{
 
-            recentActivityLayout.setTime(recentActivity.time);
+            for(RecentActivity recentActivity: recentActivityList){
 
-            recentActivityLayout.setAction(recentActivity.action);
+                View recent_activity_layout = layoutInflater.inflate(R.layout.recent_activity_layout, null);
 
-            recentActivityLayout.finish();
+                RecentActivityLayout recentActivityLayout = new RecentActivityLayout(recent_activity_layout, recent_activity_layout_container);
+
+                recentActivityLayout.setTime(recentActivity.time);
+
+                recentActivityLayout.setAction(recentActivity.action);
+
+                recentActivityLayout.finish();
+            }
         }
     }
 

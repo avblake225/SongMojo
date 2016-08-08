@@ -352,7 +352,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                             String action = filename + " sent to " + recipient;
 
-                            dbManager.insertDataIntoRecentActivityTable(current_date, current_time, action);
+                            dbManager.insertDataIntoRecentActivityTable(user, current_date, current_time, action);
 
                             AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration, context.getString(R.string.audio_file));
 
@@ -431,7 +431,6 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
         Intent intent = new Intent(this, Home.class);
 
         intent.putExtra("firstName", user);
-        intent.putExtra("getRecentActivity", true);
 
         startActivity(intent);
     }

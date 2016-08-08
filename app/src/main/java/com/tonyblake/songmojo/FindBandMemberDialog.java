@@ -36,6 +36,8 @@ public class FindBandMemberDialog extends DialogFragment {
 
     private ArrayList<String> fullnames;
 
+    private String user;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -46,6 +48,8 @@ public class FindBandMemberDialog extends DialogFragment {
         layout = inflator.inflate(R.layout.find_band_member_dialog, null);
 
         fullnames = new ArrayList<>();
+
+        user = getArguments().getString("user");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -135,9 +139,12 @@ public class FindBandMemberDialog extends DialogFragment {
 
         tv_name_entered = (AutoCompleteTextView) layout.findViewById(R.id.tv_name_entered);
 
-        for(User user: Login.users){
+        for(User u: Login.users){
 
-            fullnames.add(user.fullName);
+            if(!u.firstName.equals(user)){
+
+                fullnames.add(u.fullName);
+            }
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,android.R.layout.simple_list_item_1, fullnames);
