@@ -5,6 +5,12 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tv_available_files"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/tv_available_files_margin"/>
+
     <Spinner
         android:id="@+id/select_item_spinner"
         android:layout_width="wrap_content"

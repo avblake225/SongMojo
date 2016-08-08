@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,8 @@ public class GetFileDialog extends DialogFragment {
     private ArrayList<String> availableFilenames;
 
     private View view;
+
+    private TextView tv_available_files;
 
     private Spinner select_track_spinner;
 
@@ -47,11 +50,6 @@ public class GetFileDialog extends DialogFragment {
         view = inflater.inflate(R.layout.spinner_dialog, null);
 
         builder.setTitle(R.string.select_track);
-
-        if(availableFilenames.size() == 0){
-
-            builder.setMessage(context.getString(R.string.no_tracks_available));
-        }
 
         builder.setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -135,12 +133,35 @@ public class GetFileDialog extends DialogFragment {
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        select_track_spinner = (Spinner) view.findViewById(R.id.select_item_spinner);
+        tv_available_files = (TextView) view.findViewById(R.id.tv_available_files);
 
-        select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, availableFilenames);
+        if(availableFilenames.size() == 0){
 
-        select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            tv_available_files.setText(context.getString(R.string.no_tracks_available));
+        }
+        else {
 
-        select_track_spinner.setAdapter(select_track_spinnerAdapter);
+            String message;
+
+            int num_files = availableFilenames.size();
+
+            if (num_files == 1) {
+
+                message = num_files + " track available:";
+            } else {
+
+                message = num_files + " tracks available:";
+            }
+
+            tv_available_files.setText(message);
+
+            select_track_spinner = (Spinner) view.findViewById(R.id.select_item_spinner);
+
+            select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, availableFilenames);
+
+            select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            select_track_spinner.setAdapter(select_track_spinnerAdapter);
+        }
     }
 }
