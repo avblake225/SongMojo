@@ -29,7 +29,10 @@
         <activity android:name=".EditBandMembers"></activity>
         <activity android:name=".FilesSent"></activity>
         <activity android:name=".FilesReceived"></activity>
-        <activity android:name=".RecordAudio"></activity>
+        <activity
+            android:name=".RecordAudio"
+            android:configChanges="orientation|screenSize">
+        </activity>
         <activity android:name=".RecordVideo"></activity>
         <activity android:name=".FullScreenVideo"></activity>
         <activity android:name=".VideoPlayback"></activity>
