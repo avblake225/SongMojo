@@ -42,7 +42,9 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
     public static MyCameraSurfaceView myCameraSurfaceView;
 
-    public static String firstName, filename, recipient;
+    private String user;
+
+    public static String filename, recipient;
 
     private FirebaseStorage storage;
 
@@ -104,7 +106,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
         savedInstanceState = getIntent().getExtras();
 
-        firstName = savedInstanceState.getString("firstName");
+        user = savedInstanceState.getString("user");
         filename = savedInstanceState.getString("filename");
         recipient = savedInstanceState.getString("recipient");
 
@@ -319,9 +321,9 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                         @Override
                         protected void onPostExecute(String fileStatus) {
 
-                            dbManager.insertDataIntoFilesSentTable(recipient, filename, duration, context.getString(R.string.video_file), currentDateandTime);
+                            dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration, context.getString(R.string.video_file), currentDateandTime);
 
-                            AvailableFile availableFile = new AvailableFile(firstName, Utils.removePrefix(filename), recipient, currentDateandTime, duration, context.getString(R.string.audio_file));
+                            AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, currentDateandTime, duration, context.getString(R.string.audio_file));
 
                             databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
@@ -403,7 +405,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
         Intent intent = new Intent(this, Home.class);
 
-        intent.putExtra("firstName", firstName);
+        intent.putExtra("user", user);
 
         startActivity(intent);
     }

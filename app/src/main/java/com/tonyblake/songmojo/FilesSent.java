@@ -20,6 +20,8 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
 
     private Context context;
 
+    private String user;
+
     private Toolbar appBar;
 
     private DBManager dbManager;
@@ -46,6 +48,10 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
         setContentView(R.layout.files_sent_or_received);
 
         context = this;
+
+        savedInstanceState = getIntent().getExtras();
+
+        user = savedInstanceState.getString("user");
 
         fm = getSupportFragmentManager();
 
@@ -98,7 +104,8 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
             }
         });
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_SENT_TABLE() + ";";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_SENT_TABLE() + " "
+                        + context.getString(R.string.where_user_equals) + "'" + user + "';";
 
         if(sentFiles.size() == 0){
 
@@ -118,15 +125,15 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
 
                 SentFile sentFile = new SentFile();
 
-                sentFile.recipient = cursor.getString(1);
+                sentFile.recipient = cursor.getString(2);
 
-                sentFile.filename = cursor.getString(2);
+                sentFile.filename = cursor.getString(3);
 
-                sentFile.duration = cursor.getString(3);
+                sentFile.duration = cursor.getString(4);
 
-                sentFile.filetype = cursor.getString(4);
+                sentFile.filetype = cursor.getString(5);
 
-                sentFile.date = cursor.getString(5);
+                sentFile.date = cursor.getString(6);
 
                 sentFiles.add(sentFile);
             }

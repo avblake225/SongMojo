@@ -307,6 +307,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         intent = new Intent(context, FilesSent.class);
 
+                        intent.putExtra("user", user);
+
                         startActivity(intent);
 
                         break;

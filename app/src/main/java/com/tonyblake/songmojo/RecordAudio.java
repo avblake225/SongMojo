@@ -344,7 +344,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
                         @Override
                         protected void onPostExecute(String result) {
 
-                            dbManager.insertDataIntoFilesSentTable(recipient, filename, duration, context.getString(R.string.audio_file), Utils.getCurrentDateAndTime()); // save locally
+                            dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration, context.getString(R.string.audio_file), Utils.getCurrentDateAndTime()); // save locally
 
                             String current_date = Utils.getCurrentDate();
 
