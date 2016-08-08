@@ -23,13 +23,14 @@ public class DBManager extends SQLiteOpenHelper{
     private final String FILES_SENT_TABLE_COL_7 = "DATE";
 
     // Files Downloaded Table
-    public static final String FILES_DOWNLOADED_TABLE = "files_downloaded_table";
-    public static final String FILES_DOWNLOADED_TABLE_COL_1 = "ID";
-    public static final String FILES_DOWNLOADED_TABLE_COL_2 = "SENDER";
-    public static final String FILES_DOWNLOADED_TABLE_COL_3 = "FILE_NAME";
-    public static final String FILES_DOWNLOADED_TABLE_COL_4 = "DURATION";
-    public static final String FILES_DOWNLOADED_TABLE_COL_5 = "FILE_TYPE";
-    public static final String FILES_DOWNLOADED_TABLE_COL_6 = "DATE";
+    private final String FILES_DOWNLOADED_TABLE = "files_downloaded_table";
+    private final String FILES_DOWNLOADED_TABLE_COL_1 = "ID";
+    private final String FILES_DOWNLOADED_TABLE_COL_2 = "SENDER";
+    private final String FILES_DOWNLOADED_TABLE_COL_3 = "RECIPIENT";
+    private final String FILES_DOWNLOADED_TABLE_COL_4 = "FILE_NAME";
+    private final String FILES_DOWNLOADED_TABLE_COL_5 = "DURATION";
+    private final String FILES_DOWNLOADED_TABLE_COL_6 = "FILE_TYPE";
+    private final String FILES_DOWNLOADED_TABLE_COL_7 = "DATE";
 
     // Recent Activity Table
     private final String RECENT_ACTIVITY_TABLE = "recent_activity_table";
@@ -68,7 +69,7 @@ public class DBManager extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
-        db.execSQL("CREATE TABLE " + FILES_DOWNLOADED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
+        db.execSQL("CREATE TABLE " + FILES_DOWNLOADED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, DATE TEXT, TIME TEXT, ACTION TEXT)");
         db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, FULLNAME TEXT)");
     }
@@ -94,15 +95,16 @@ public class DBManager extends SQLiteOpenHelper{
         }
     }
 
-    public boolean insertDataIntoFilesDownloadedTable(String sender, String file_name, String duration, String file_type, String date){
+    public boolean insertDataIntoFilesDownloadedTable(String sender, String recipient, String file_name, String duration, String file_type, String date){
 
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(FILES_DOWNLOADED_TABLE_COL_2, sender);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_3, file_name);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_4, duration);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_5, file_type);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_6, date);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_3, recipient);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_4, file_name);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_5, duration);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_6, file_type);
+        contentValues.put(FILES_DOWNLOADED_TABLE_COL_7, date);
 
         long result = db.insert(FILES_DOWNLOADED_TABLE, null, contentValues);
 

@@ -228,6 +228,13 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
                 } else {
 
                     cueBackingTrackDialog = new CueBackingTrackDialog();
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("user", user);
+
+                    cueBackingTrackDialog.setArguments(bundle);
+
                     cueBackingTrackDialog.show(fm, "getFileDialog");
                 }
             }

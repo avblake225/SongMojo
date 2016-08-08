@@ -122,6 +122,7 @@
     <!-- DB queries -->
     <string name="select_all_rows_from">SELECT * FROM</string>
     <string name="where_user_equals">WHERE USER =</string>
+    <string name="where_recipient_equals">WHERE RECIPIENT =</string>
     <string name="and_date_equals">AND DATE =</string>
     <string name="delete_from">DELETE FROM</string>
     <string name="no_files_sent">No Files Sent</string>

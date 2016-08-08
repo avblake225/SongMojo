@@ -24,6 +24,8 @@ public class CueBackingTrackDialog extends DialogFragment {
 
     private Context context;
 
+    private String user;
+
     private DBManager dbManager;
 
     private ArrayList<String> filesDownloaded;
@@ -36,16 +38,22 @@ public class CueBackingTrackDialog extends DialogFragment {
 
     private WindowManager.LayoutParams lp;
 
+    private AlertDialog.Builder builder;
+
+    private String message;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         context = getActivity();
 
+        user = getArguments().getString("user");
+
         dbManager = Home.dbManager;
 
         filesDownloaded = new ArrayList<>();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -53,10 +61,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         builder.setTitle(R.string.select_track);
 
-        if(filesDownloaded.size() == 0){
-
-            builder.setMessage(context.getString(R.string.no_tracks_available));
-        }
+        builder.setMessage(message);
 
         builder.setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -143,7 +148,8 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         select_track_spinner = (Spinner) view.findViewById(R.id.select_item_spinner);
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_DOWNLOADED_TABLE() + ";";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_DOWNLOADED_TABLE() + " "
+                        + context.getString(R.string.where_recipient_equals) + "'" + user + "';";
 
         Cursor cursor = null;
 
@@ -155,16 +161,25 @@ public class CueBackingTrackDialog extends DialogFragment {
 
             do{
 
-                filesDownloaded.add(cursor.getString(2));
+                filesDownloaded.add(cursor.getString(3));
             }
             while(cursor.moveToNext());
         }
         catch(Exception e){};
 
-        select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, filesDownloaded);
+        if(filesDownloaded.size() == 0){
 
-        select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            message = context.getString(R.string.no_tracks_available);
+        }
+        else{
 
-        select_track_spinner.setAdapter(select_track_spinnerAdapter);
+            message = "";
+
+            select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, filesDownloaded);
+
+            select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            select_track_spinner.setAdapter(select_track_spinnerAdapter);
+        }
     }
 }
