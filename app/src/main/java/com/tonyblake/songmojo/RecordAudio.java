@@ -361,6 +361,13 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
                             sendingFileDialog.dismiss();
 
                             FileSentDialog fileSentDialog = new FileSentDialog();
+
+                            Bundle bundle = new Bundle();
+
+                            bundle.putString("user", user);
+
+                            fileSentDialog.setArguments(bundle);
+
                             fileSentDialog.show(fm, "fileSentDialog");
                         }
 
@@ -426,11 +433,11 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
     }
 
     @Override
-    public void onDoneButtonClick(DialogFragment dialog) {
+    public void onDoneButtonClick(DialogFragment dialog, String user) {
 
         Intent intent = new Intent(this, Home.class);
 
-        intent.putExtra("firstName", user);
+        intent.putExtra("user", user);
 
         startActivity(intent);
     }

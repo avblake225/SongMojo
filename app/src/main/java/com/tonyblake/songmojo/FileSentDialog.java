@@ -19,6 +19,8 @@ public class FileSentDialog extends DialogFragment {
 
     private View view;
 
+    private String user;
+
     private TextView tv_success_msg;
 
     private WindowManager.LayoutParams lp;
@@ -32,6 +34,8 @@ public class FileSentDialog extends DialogFragment {
 
         view = inflater.inflate(R.layout.success_dialog, null);
 
+        user = getArguments().getString("user");
+
         builder.setTitle(R.string.success)
                 .setView(view)
                 .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
@@ -39,7 +43,7 @@ public class FileSentDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        fileSentDialogInterface.onDoneButtonClick(FileSentDialog.this);
+                        fileSentDialogInterface.onDoneButtonClick(FileSentDialog.this, user);
                     }
                 });
 
@@ -73,7 +77,7 @@ public class FileSentDialog extends DialogFragment {
 
     public interface FileSentDialogInterface {
 
-        void onDoneButtonClick(DialogFragment dialog);
+        void onDoneButtonClick(DialogFragment dialog, String user);
     }
 
     FileSentDialogInterface fileSentDialogInterface;
