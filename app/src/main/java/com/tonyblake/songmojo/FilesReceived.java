@@ -48,6 +48,8 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
     private File[] downloads;
 
+    private String user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -56,6 +58,10 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
         context = this;
 
         fm = getSupportFragmentManager();
+
+        savedInstanceState = getIntent().getExtras();
+
+        user = savedInstanceState.getString("user");
 
         // Show Status Bar
         View decorView = getWindow().getDecorView();
@@ -112,7 +118,8 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
             }
         });
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_DOWNLOADED_TABLE() + ";";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_DOWNLOADED_TABLE() + " "
+                        + context.getString(R.string.where_recipient_equals) + "'" + user + "';";
 
         if(receivedFiles.size() == 0){
 
@@ -134,13 +141,13 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
                 receivedFile.sender = cursor.getString(1);
 
-                receivedFile.filename = cursor.getString(2);
+                receivedFile.filename = cursor.getString(3);
 
-                receivedFile.duration = cursor.getString(3);
+                receivedFile.duration = cursor.getString(4);
 
-                receivedFile.filetype = cursor.getString(4);
+                receivedFile.filetype = cursor.getString(5);
 
-                receivedFile.date = cursor.getString(5);
+                receivedFile.date = cursor.getString(6);
 
                 receivedFiles.add(receivedFile);
             }
