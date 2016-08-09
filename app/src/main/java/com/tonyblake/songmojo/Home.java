@@ -175,8 +175,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
             user = getUser();
         }
 
-        recentActivityList = new ArrayList<>();
-
         displayRecentActivity();
 
         availableFiles = new ArrayList<>();
@@ -456,6 +454,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     private void displayRecentActivity(){
 
         recent_activity_layout_container.removeAllViews();
+
+        recentActivityList = new ArrayList<>();
 
         String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.RECENT_ACTIVITY_TABLE() + " "
                         + context.getString(R.string.where_user_equals) + "'" + user + "' "
