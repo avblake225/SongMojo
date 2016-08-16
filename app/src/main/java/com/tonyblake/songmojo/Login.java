@@ -17,7 +17,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity implements CreateAccountDialog.CreateAccountDialogInterface {
 
@@ -25,9 +26,9 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
     private FirebaseAuth mAuth;
 
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase database;
 
-    private FirebaseUser user;
+    private DatabaseReference databaseRef;
 
     private EditText et_email, et_password;
 
@@ -49,14 +50,9 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
         mAuth = FirebaseAuth.getInstance();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        database = FirebaseDatabase.getInstance();
 
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
-                user = firebaseAuth.getCurrentUser(); // null if user not signed in
-            }
-        };
+        databaseRef = database.getReference().child("users");
 
         et_email = (EditText) findViewById(R.id.et_email);
 
@@ -71,20 +67,6 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
         password = "";
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
 
     @Override
@@ -155,7 +137,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
     }
 
     @Override
-    public void onCreateAccountDialogCreateClick(DialogFragment dialog, String firstName, String lastName, String email, String password) {
+    public void onCreateAccountDialogCreateClick(DialogFragment dialog, final String firstName, final String lastName, final String email, final String password) {
 
         if (Utils.connectedToNetwork(context)) {
 
@@ -165,13 +147,19 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            if (task.isSuccessful()) {
+                            if (!task.isSuccessful()) {
 
-                                Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "failed to create account", Toast.LENGTH_SHORT).show();
                             }
                             else{
 
-                                Toast.makeText(context, "failed to create account", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+
+                                String fullname = firstName + " " + lastName;
+
+                                User user = new User(firstName, lastName, fullname);
+
+                                databaseRef.child(fullname).setValue(user);
                             }
                         }
                     });
