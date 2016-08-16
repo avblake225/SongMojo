@@ -1,9 +1,9 @@
 package com.tonyblake.songmojo;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,35 +13,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity implements CreateAccountDialog.CreateAccountDialogInterface {
 
     private Context context;
 
-    private EditText et_username, et_password;
+    private FirebaseAuth mAuth;
+
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private FirebaseUser user;
+
+    private EditText et_email, et_password;
 
     private Button btn_log_in, btn_create_account;
 
-    private String username, password;
-
-    private FirebaseDatabase database;
-
-    private DatabaseReference databaseRef;
+    private String email, password;
 
     private FragmentManager fm;
 
     private CreateAccountDialog createAccountDialog;
-
-    public static ArrayList<User> users;
-
-    private ProgressDialog loginProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +47,18 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
         context = this;
 
-        et_username = (EditText) findViewById(R.id.et_username);
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                user = firebaseAuth.getCurrentUser(); // null if user not signed in
+            }
+        };
+
+        et_email = (EditText) findViewById(R.id.et_email);
 
         et_password = (EditText) findViewById(R.id.et_password);
 
@@ -59,17 +66,25 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
         btn_create_account = (Button) findViewById(R.id.btn_create_account);
 
-        username = "";
+        email = "";
 
         password = "";
 
-        database = FirebaseDatabase.getInstance();
-
-        databaseRef = database.getReference().child("users");
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
 
-        users = new ArrayList<>();
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 
     @Override
@@ -83,38 +98,18 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
             @Override
             public void onClick(View v) {
 
-                username = et_username.getText().toString();
+                email = et_email.getText().toString();
 
                 password = et_password.getText().toString();
 
-                if("".equals(username) | "".equals(password)){
+                if("".equals(email) | "".equals(password)){
 
-                    Toast.makeText(context, context.getString(R.string.please_enter_username_and_password), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.please_enter_email_and_password), Toast.LENGTH_SHORT).show();
                 }
                 else{
 
-                    new LoginTask(users){
+                    login();
 
-                        @Override
-                        protected void onPreExecute(){
-
-                            loginProgressDialog = new ProgressDialog(context);
-
-                            loginProgressDialog.setProgressStyle(loginProgressDialog.STYLE_SPINNER);
-                            loginProgressDialog.setIndeterminate(true);
-                            loginProgressDialog.setMessage(context.getString(R.string.logging_in));
-                            loginProgressDialog.show();
-                        }
-
-                        @Override
-                        protected void onPostExecute(User user){
-
-                            loginProgressDialog.dismiss();
-
-                            login(user);
-                        }
-
-                    }.execute(username,password);
                 }
             }
         });
@@ -129,80 +124,59 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
             }
         });
-
-        databaseRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.getValue(User.class) != null) {
-
-                    if(users.size() == 0){
-
-                        for (DataSnapshot userID : dataSnapshot.getChildren()) {
-
-                            User user = new User();
-
-                            user.firstName = (String) userID.child("firstName").getValue();
-                            user.lastName = (String) userID.child("lastName").getValue();
-                            user.fullName = user.firstName + " " + user.lastName;
-                            user.username = (String) userID.child("username").getValue();
-                            user.password = (String) userID.child("password").getValue();
-
-                            if (!users.contains(user)) {
-
-                                users.add(user);
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-
-            }
-        });
     }
 
-    private void login(User user){
+    private void login(){
 
-        if(user == null){
-
-            Toast.makeText(context, context.getString(R.string.no_account_found), Toast.LENGTH_SHORT).show();
-
-        }
-        else if(!Utils.connectedToNetwork(context)){
+        if(!Utils.connectedToNetwork(context)){
 
             Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }
         else{
 
-            Intent intent = new Intent(this, Home.class);
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-            intent.putExtra("user", user.firstName);
+                            Intent intent = new Intent(context, Home.class);
 
-            startActivity(intent);
+                            intent.putExtra("user", "some user");
+
+                            startActivity(intent);
+
+                            if (!task.isSuccessful()) {
+
+                                Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+            });
         }
     }
 
     @Override
-    public void onCreateAccountDialogCreateClick(DialogFragment dialog, String firstName, String lastName, String username, String password) {
+    public void onCreateAccountDialogCreateClick(DialogFragment dialog, String firstName, String lastName, String email, String password) {
 
-        if(Utils.connectedToNetwork(context)){
+        if (Utils.connectedToNetwork(context)) {
 
-            User newUser = new User(firstName, lastName, username, password);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
-            databaseRef.child(username).setValue(newUser);
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-            Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful()) {
 
-            Intent intent = new Intent(this, Login.class);  // required in order to get updated user list
+                                Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+                            }
+                            else{
 
-            startActivity(intent);
-        }
-        else{
+                                Toast.makeText(context, "failed to create account", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+        } else {
 
             Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }

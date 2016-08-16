@@ -24,11 +24,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -181,44 +178,44 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         availableFilenames = new ArrayList<>();
 
-        databaseRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.getValue(User.class) != null) {
-
-                    for (DataSnapshot userID : dataSnapshot.getChildren()) {
-
-                        String sender = (String) userID.child("sender").getValue();
-
-                        if(!sender.equals(user)){
-
-                            AvailableFile availableFile = new AvailableFile();
-
-                            availableFile.sender = sender;
-                            availableFile.filename = (String) userID.child("filename").getValue();
-                            availableFile.currentDateAndTime = (String) userID.child("currentDateAndTime").getValue();
-                            availableFile.duration = (String) userID.child("duration").getValue();
-                            availableFile.filetype = (String) userID.child("filetype").getValue();
-
-                            availableFiles.add(availableFile);
-                        }
-                    }
-                }
-
-                for (AvailableFile availableFile : availableFiles) {
-
-                    availableFilenames.add(availableFile.filename);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-
-            }
-        });
+//        databaseRef.addValueEventListener(new ValueEventListener() {
+//
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                if (dataSnapshot.getValue(User.class) != null) {
+//
+//                    for (DataSnapshot userID : dataSnapshot.getChildren()) {
+//
+//                        String sender = (String) userID.child("sender").getValue();
+//
+//                        if(!sender.equals(user)){
+//
+//                            AvailableFile availableFile = new AvailableFile();
+//
+//                            availableFile.sender = sender;
+//                            availableFile.filename = (String) userID.child("filename").getValue();
+//                            availableFile.currentDateAndTime = (String) userID.child("currentDateAndTime").getValue();
+//                            availableFile.duration = (String) userID.child("duration").getValue();
+//                            availableFile.filetype = (String) userID.child("filetype").getValue();
+//
+//                            availableFiles.add(availableFile);
+//                        }
+//                    }
+//                }
+//
+//                for (AvailableFile availableFile : availableFiles) {
+//
+//                    availableFilenames.add(availableFile.filename);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//
+//            }
+//        });
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -387,15 +384,15 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
         boolean userFound = false;
 
-        for(User user: Login.users){
-
-            if(fullname.equals(user.fullName)){
-
-                userFound = true;
-
-                break;
-            }
-        }
+//        for(User user: Login.users){
+//
+//            if(fullname.equals(user.fullName)){
+//
+//                userFound = true;
+//
+//                break;
+//            }
+//        }
 
         String msg;
 

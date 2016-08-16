@@ -21,8 +21,8 @@ public class CreateAccountDialog extends DialogFragment {
 
     private Context context;
     private View view;
-    private EditText et_firstName, et_lastName, et_username, et_password;
-    private String firstName, lastName, username, password;
+    private EditText et_firstName, et_lastName, et_email, et_password;
+    private String firstName, lastName, email, password;
     private WindowManager.LayoutParams lp;
 
     @Override
@@ -38,7 +38,7 @@ public class CreateAccountDialog extends DialogFragment {
 
         firstName = null;
         lastName = null;
-        username = null;
+        email = null;
         password = null;
 
         builder.setTitle(R.string.create_account)
@@ -48,9 +48,9 @@ public class CreateAccountDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        if("".equals(username)){
+                        if("".equals(email)){
 
-                            showToastMessage(context.getString(R.string.no_username_entered));
+                            showToastMessage(context.getString(R.string.no_email_entered));
                         }
                         if("".equals(password)){
 
@@ -62,11 +62,11 @@ public class CreateAccountDialog extends DialogFragment {
 
                             lastName = et_lastName.getText().toString();
 
-                            username = et_username.getText().toString();
+                            email = et_email.getText().toString();
 
                             password = et_password.getText().toString();
 
-                            createAccountDialogInterface.onCreateAccountDialogCreateClick(CreateAccountDialog.this, firstName, lastName, username, password);
+                            createAccountDialogInterface.onCreateAccountDialogCreateClick(CreateAccountDialog.this, firstName, lastName, email, password);
                         }
                     }
                 })
@@ -115,7 +115,7 @@ public class CreateAccountDialog extends DialogFragment {
 
     public interface CreateAccountDialogInterface {
 
-        void onCreateAccountDialogCreateClick(DialogFragment dialog, String firstName, String lastName, String username, String password);
+        void onCreateAccountDialogCreateClick(DialogFragment dialog, String firstName, String lastName, String email, String password);
     }
 
     CreateAccountDialogInterface createAccountDialogInterface;
@@ -140,7 +140,7 @@ public class CreateAccountDialog extends DialogFragment {
 
         et_lastName = (EditText) view.findViewById(R.id.et_lastName);
 
-        et_username = (EditText) view.findViewById(R.id.et_username);
+        et_email = (EditText) view.findViewById(R.id.et_email);
 
         et_password = (EditText) view.findViewById(R.id.et_password);
     }

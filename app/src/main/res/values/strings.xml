@@ -6,15 +6,15 @@
     <!-- Login.java -->
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
-    <string name="username">Username</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="please_enter_username_and_password">Please enter username and password</string>
+    <string name="please_enter_email_and_password">Please enter email and password</string>
     <string name="log_in">Log in</string>
     <string name="logging_in">Logging in...</string>
     <string name="no_account_found">No account found</string>
     <string name="create_account">Create Account</string>
     <string name="create">Create</string>
-    <string name="no_username_entered">No username entered</string>
+    <string name="no_email_entered">No email entered</string>
     <string name="no_password_entered">No password_entered</string>
     <string name="account_created">Account created</string>
     <string name="no_network_connection">Error: No network connection</string>
