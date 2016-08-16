@@ -139,13 +139,13 @@ public class FindBandMemberDialog extends DialogFragment {
 
         tv_name_entered = (AutoCompleteTextView) layout.findViewById(R.id.tv_name_entered);
 
-//        for(User u: Login.users){
-//
-//            if(!u.firstName.equals(user)){
-//
-//                fullnames.add(u.fullName);
-//            }
-//        }
+        for(User u: Login.users){
+
+            if(!u.firstName.equals(user)){
+
+                fullnames.add(u.fullName);
+            }
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,android.R.layout.simple_list_item_1, fullnames);
 

@@ -45,7 +45,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
     private CreateAccountDialog createAccountDialog;
 
-    private ArrayList<User> users;
+    public static ArrayList<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
