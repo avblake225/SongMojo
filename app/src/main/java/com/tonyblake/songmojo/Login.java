@@ -17,8 +17,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class Login extends AppCompatActivity implements CreateAccountDialog.CreateAccountDialogInterface {
 
@@ -39,6 +44,8 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
     private FragmentManager fm;
 
     private CreateAccountDialog createAccountDialog;
+
+    private ArrayList<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,8 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
         password = "";
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        users = new ArrayList<>();
     }
 
     @Override
@@ -74,6 +83,40 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
         super.onResume();
 
         fm = getSupportFragmentManager();
+
+        databaseRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue(User.class) != null) {
+
+                    if (users.size() == 0) {
+
+                        for (DataSnapshot userID : dataSnapshot.getChildren()) {
+
+                            User user = new User();
+
+                            user.firstName = (String) userID.child("firstName").getValue();
+                            user.lastName = (String) userID.child("lastName").getValue();
+                            user.fullName = user.firstName + " " + user.lastName;
+                            user.email = (String) userID.child("email").getValue();
+                            user.password = (String) userID.child("password").getValue();
+
+                            if (!users.contains(user)) {
+
+                                users.add(user);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+        });
 
         btn_log_in.setOnClickListener(new View.OnClickListener() {
 
@@ -123,7 +166,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                             Intent intent = new Intent(context, Home.class);
 
-                            intent.putExtra("user", "some user");
+                            intent.putExtra("user", getUser(email));
 
                             startActivity(intent);
 
@@ -134,6 +177,21 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
                         }
             });
         }
+    }
+
+    private String getUser(String email){
+
+        String user = "";
+
+        for(User u: users){
+
+            if(email.equals(u.email)){
+
+                user = u.firstName;
+            }
+        }
+
+        return user;
     }
 
     @Override
@@ -157,7 +215,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                                 String fullname = firstName + " " + lastName;
 
-                                User user = new User(firstName, lastName, fullname);
+                                User user = new User(firstName, lastName, fullname, email, password);
 
                                 databaseRef.child(fullname).setValue(user);
                             }
