@@ -5,6 +5,12 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
@@ -36,6 +42,20 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = new FormBody.Builder().add("Token", token).build();
+
+        Request request = new Request.Builder()
+                            .url("http://192.168.1.3/fcm/register.php")
+                            .post(body)
+                            .build();
+
+        try {
+            client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
