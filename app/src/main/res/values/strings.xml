@@ -17,6 +17,8 @@
     <string name="no_email_entered">No email entered</string>
     <string name="no_password_entered">No password_entered</string>
     <string name="account_created">Account created</string>
+    <string name="password_length_error">Error: Password must be at least 8 characters long</string>
+    <string name="failed_to_create_account">Failed to create account</string>
     <string name="no_network_connection">Error: No network connection</string>
 
     <string name="app_name">SongMojo</string>

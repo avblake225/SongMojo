@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -205,24 +206,41 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            if (!task.isSuccessful()) {
-
-                                Toast.makeText(context, "failed to create account", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-
-                                Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful()) {
 
                                 String fullname = firstName + " " + lastName;
 
                                 User user = new User(firstName, lastName, fullname, email, password);
 
-                                databaseRef.child(fullname).setValue(user);
+                                //databaseRef.child(fullname).setValue(user);
+
+                                String token = FirebaseInstanceId.getInstance().getToken();
+
+                                new UserRegistrationTask(token, fullname) {
+
+                                    @Override
+                                    protected void onPostExecute(Boolean result) {
+
+                                        if (result) {
+
+                                            Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+                                        }
+                                        else {
+
+                                            Toast.makeText(context, context.getString(R.string.failed_to_create_account), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                }.execute();
+                            }
+                            else if(password.length() < 8) { // Google password complexity standards
+
+                                Toast.makeText(context, context.getString(R.string.password_length_error), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
-
-        } else {
+        }
+        else {
 
             Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }
