@@ -237,8 +237,9 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
                                         if (result) {
 
                                             creatingAccountDialog.dismiss();
-                                            
-                                            Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
+
+                                            AccountCreatedDialog accountCreatedDialog = new AccountCreatedDialog();
+                                            accountCreatedDialog.show(fm,"AccountCreatedDialog");
                                         }
                                         else {
 
