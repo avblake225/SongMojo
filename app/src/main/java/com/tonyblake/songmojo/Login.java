@@ -215,7 +215,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                                 User user = new User(firstName, lastName, fullname, email, password);
 
-                                //databaseRef.child(fullname).setValue(user);
+                                databaseRef.child(fullname).setValue(user);
 
                                 String token = FirebaseInstanceId.getInstance().getToken();
 

@@ -26,7 +26,7 @@
 
          echo "Connected to database\n";
    	   
-   	   $query = "INSERT INTO users(Token,firstName,lastName) VALUES ('$token','$firstName','$lastName')";
+   	   $query = "INSERT INTO userregistration(Token,FirstName,LastName) VALUES ('$token','$firstName','$lastName')";
 
    	   mysqli_query($conn,$query);
 
