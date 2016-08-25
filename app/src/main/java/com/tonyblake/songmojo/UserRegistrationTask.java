@@ -11,12 +11,13 @@ import okhttp3.RequestBody;
 
 public class UserRegistrationTask extends AsyncTask<String,Void,Boolean>{
 
-    private String token, fullname;
+    private String token, firstName, lastName;
 
-    public UserRegistrationTask(String token, String fullname){
+    public UserRegistrationTask(String token, String firstName, String lastName){
 
        this.token = token;
-       this.fullname = fullname;
+       this.firstName = firstName;
+       this.lastName = lastName;
     }
 
     @Override
@@ -28,7 +29,8 @@ public class UserRegistrationTask extends AsyncTask<String,Void,Boolean>{
 
         RequestBody body = new FormBody.Builder()
                 .add("Token", token)
-                .add("User", fullname)
+                .add("FirstName", firstName)
+                .add("LastName", lastName)
                 .build();
 
         Request request = new Request.Builder()

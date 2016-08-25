@@ -107,6 +107,9 @@
     <!-- Get File Progress Dialog -->
     <string name="downloading_file">Downloading file...</string>
 
+    <!-- Creating Account Progress Dialog -->
+    <string name="creating_account">Creating Account...</string>
+
     <!-- GetFileTask.java -->
     <string name="success">Success</string>
     <string name="fail">Fail</string>

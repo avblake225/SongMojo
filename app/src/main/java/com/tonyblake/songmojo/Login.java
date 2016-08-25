@@ -1,5 +1,6 @@
 package com.tonyblake.songmojo;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,6 +48,8 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
     private CreateAccountDialog createAccountDialog;
 
     public static ArrayList<User> users;
+
+    private ProgressDialog creatingAccountDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,13 +219,25 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                                 String token = FirebaseInstanceId.getInstance().getToken();
 
-                                new UserRegistrationTask(token, fullname) {
+                                new UserRegistrationTask(token, firstName, lastName) {
+
+                                    @Override
+                                    protected void onPreExecute(){
+
+                                        creatingAccountDialog = new ProgressDialog(context);
+                                        creatingAccountDialog.setIndeterminate(true);
+                                        creatingAccountDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                        creatingAccountDialog.setMessage(context.getString(R.string.creating_account));
+                                        creatingAccountDialog.show();
+                                    }
 
                                     @Override
                                     protected void onPostExecute(Boolean result) {
 
                                         if (result) {
 
+                                            creatingAccountDialog.dismiss();
+                                            
                                             Toast.makeText(context, context.getString(R.string.account_created), Toast.LENGTH_SHORT).show();
                                         }
                                         else {
