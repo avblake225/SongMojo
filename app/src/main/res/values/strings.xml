@@ -20,6 +20,7 @@
     <string name="password_length_error">Error: Password must be at least 8 characters long</string>
     <string name="failed_to_create_account">Failed to create account</string>
     <string name="no_network_connection">Error: No network connection</string>
+    <string name="database_error">Database error</string>
 
     <string name="app_name">SongMojo</string>
     <string name="record_video">Record Video</string>

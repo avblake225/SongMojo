@@ -1,6 +1,7 @@
 package com.tonyblake.songmojo;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -42,6 +43,8 @@ public class UserRegistrationTask extends AsyncTask<String,Void,Boolean>{
             client.newCall(request).execute();
 
             result = true;
+
+            Log.i("UserRegistrationTask","Successfully posted user registration data to server");
 
         }
         catch (IOException e) {

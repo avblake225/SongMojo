@@ -3,6 +3,7 @@ package com.tonyblake.songmojo;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -12,13 +13,15 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.InputStream;
 
-public class SendFileTask extends AsyncTask<String,Void,String>{
+public class StoreFileInCloudTask extends AsyncTask<String,Void,Boolean>{
 
     private Context context;
     private InputStream stream;
     private StorageReference recordingRef;
 
-    public SendFileTask(Context context, InputStream stream, StorageReference recordingRef){
+    private Boolean result;
+
+    public StoreFileInCloudTask(Context context, InputStream stream, StorageReference recordingRef){
 
         this.context = context;
         this.stream = stream;
@@ -26,7 +29,9 @@ public class SendFileTask extends AsyncTask<String,Void,String>{
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected Boolean doInBackground(String... params) {
+
+        result = false;
 
         UploadTask uploadTask = recordingRef.putStream(stream);
 
@@ -44,10 +49,12 @@ public class SendFileTask extends AsyncTask<String,Void,String>{
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
+                result = true;
 
+                Log.i("StoreFileInCloudTask","Successfully stored file in cloud");
             }
         });
 
-        return null;
+        return result;
     }
 }

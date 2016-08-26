@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -306,7 +307,23 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
 
                 if(Utils.connectedToNetwork(context)){
 
-                    new SendFileTask(context, stream, recordingRef) {
+                    new StoreFileInCloudTask(context, stream, recordingRef){
+
+                        @Override
+                        protected void onPostExecute(Boolean success){
+
+                            if(success){
+
+                                Log.i("StoreFileInCloudTask", "Successfully stored file in cloud");
+                            }
+                            else{
+
+                                Log.i("StoreFileInCloudTask", "Error storing file in cloud");
+                            }
+                        }
+                    }.execute();
+
+                    new SendMessageToRecipientTask(Utils.getDeviceToken(), recipient, filename) {
 
                         @Override
                         protected void onPreExecute() {
@@ -319,18 +336,25 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                         }
 
                         @Override
-                        protected void onPostExecute(String fileStatus) {
+                        protected void onPostExecute(Boolean success) {
 
-                            dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration, context.getString(R.string.video_file), currentDateandTime);
+                            if(success){
 
-                            AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, currentDateandTime, duration, context.getString(R.string.audio_file));
+                                dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration, context.getString(R.string.video_file), currentDateandTime);
 
-                            databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
+                                AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, currentDateandTime, duration, context.getString(R.string.audio_file));
 
-                            sendingFileDialog.dismiss();
+                                databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
-                            FileSentDialog fileSentDialog = new FileSentDialog();
-                            fileSentDialog.show(fm, "fileSentDialog");
+                                sendingFileDialog.dismiss();
+
+                                FileSentDialog fileSentDialog = new FileSentDialog();
+                                fileSentDialog.show(fm, "fileSentDialog");
+                            }
+                            else{
+
+                                Toast.makeText(context, context.getString(R.string.database_error),Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                     }.execute();

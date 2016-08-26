@@ -7,6 +7,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -189,5 +191,65 @@ public class Utils {
         }
 
         return bandMembers;
+    }
+
+    public static String getDeviceToken(){
+
+        return FirebaseInstanceId.getInstance().getToken();
+    }
+
+    public static String[] separateWords(String fullname){
+
+        // Convert fullname string to character array
+        char[] fullnamechars = new char[fullname.length()];
+
+        for(int i=0;i<fullname.length();i++){
+
+            fullnamechars[i] = fullname.charAt(i);
+        }
+
+        String[] names = new String[2];
+
+        char[] firstname, lastname;
+
+        // Search for whitespace
+        for(int i=0;i<fullname.length()-1;i++){
+
+            if(fullnamechars[i] == ' '){
+
+                // Get first name
+                firstname = new char[i];
+
+                for(int j=0;j<i;j++){
+
+                    firstname[j] = fullnamechars[j];
+                }
+
+                names[0] = String.valueOf(firstname);
+
+                // Get last name
+                int charsRemaining = (fullname.length()-1)-i;
+
+                lastname = new char[charsRemaining];
+
+                int k=i+1;
+
+                int l=0;
+
+                while(l<charsRemaining){
+
+                    lastname[l] = fullnamechars[k];
+
+                    k++;
+                    l++;
+                }
+
+                names[1] = String.valueOf(lastname);
+
+                break;
+            }
+        }
+
+        return names;
     }
 }

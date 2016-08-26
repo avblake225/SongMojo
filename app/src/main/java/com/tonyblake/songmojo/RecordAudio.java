@@ -336,7 +336,23 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                 if(Utils.connectedToNetwork(context)){
 
-                    new SendFileTask(context, stream, recordingRef) {
+                    /*new StoreFileInCloudTask(context, stream, recordingRef){
+
+                        @Override
+                        protected void onPostExecute(Boolean success){
+
+                            if(success){
+
+                                Log.i("StoreFileInCloudTask", "Successfully stored file in cloud");
+                            }
+                            else{
+
+                                Log.i("StoreFileInCloudTask", "Error storing file in cloud");
+                            }
+                        }
+                    }.execute();*/
+
+                    new SendMessageToRecipientTask(Utils.getDeviceToken(), recipient, filename) {
 
                         @Override
                         protected void onPreExecute() {
@@ -349,33 +365,40 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
                         }
 
                         @Override
-                        protected void onPostExecute(String result) {
+                        protected void onPostExecute(Boolean success) {
 
-                            dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration, context.getString(R.string.audio_file), Utils.getCurrentDateAndTime()); // save locally
+                            if(success){
 
-                            String current_date = Utils.getCurrentDate();
+                                dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration, context.getString(R.string.audio_file), Utils.getCurrentDateAndTime()); // save locally
 
-                            String current_time = Utils.getCurrentTime();
+                                String current_date = Utils.getCurrentDate();
 
-                            String action = filename + " sent to " + recipient;
+                                String current_time = Utils.getCurrentTime();
 
-                            dbManager.insertDataIntoRecentActivityTable(user, current_date, current_time, action);
+                                String action = filename + " sent to " + recipient;
 
-                            AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration, context.getString(R.string.audio_file));
+                                dbManager.insertDataIntoRecentActivityTable(user, current_date, current_time, action);
 
-                            databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
+                                AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration, context.getString(R.string.audio_file));
 
-                            sendingFileDialog.dismiss();
+                                databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
-                            FileSentDialog fileSentDialog = new FileSentDialog();
+                                sendingFileDialog.dismiss();
 
-                            Bundle bundle = new Bundle();
+                                FileSentDialog fileSentDialog = new FileSentDialog();
 
-                            bundle.putString("user", user);
+                                Bundle bundle = new Bundle();
 
-                            fileSentDialog.setArguments(bundle);
+                                bundle.putString("user", user);
 
-                            fileSentDialog.show(fm, "fileSentDialog");
+                                fileSentDialog.setArguments(bundle);
+
+                                fileSentDialog.show(fm, "fileSentDialog");
+                            }
+                            else{
+
+                                Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                     }.execute();
