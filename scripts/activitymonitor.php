@@ -1,8 +1,10 @@
 <?php         
 
-   if(isset($_POST["SenderToken"]) && isset($_POST["RecipientFirstname"]) && isset($_POST["RecipientLastname"]) && isset($_POST["Filename"])){ 
+   if(isset($_POST["DateAndTime"]) && isset($_POST["SenderToken"]) && isset($_POST["RecipientFirstname"]) && isset($_POST["RecipientLastname"]) && isset($_POST["Filename"])){ 
         	
       echo "variables set successfully";
+
+      $dateAndTime = $_POST["DateAndTime"];
       
    	$sendertoken = $_POST["SenderToken"];
 
@@ -16,7 +18,7 @@
 
       echo "Connected to database";
          
-      $query = "INSERT INTO activity(SenderToken,RecipientFirstname,RecipientLastname,Filename) VALUES ('$sendertoken','$recipientfirstname','$recipientlastname','$filename')";      
+      $query = "INSERT INTO activity(DateAndTime,SenderToken,RecipientFirstname,RecipientLastname,Filename) VALUES ('$dateAndTime', $sendertoken','$recipientfirstname','$recipientlastname','$filename')";      
 
    	mysqli_query($conn,$query);
 

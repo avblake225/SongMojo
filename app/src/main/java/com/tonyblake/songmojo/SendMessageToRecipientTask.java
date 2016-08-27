@@ -28,7 +28,7 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
 
         Boolean result = false;
 
-        String filenameWithoutPrefix = Utils.removePrefix(filename);
+        String dateAndTime = Utils.getCurrentDateAndTime();
 
         String[] recipientName = Utils.separateWords(recipient);
 
@@ -36,10 +36,13 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
 
         String recipientlastname = recipientName[1];
 
+        String filenameWithoutPrefix = Utils.removePrefix(filename);
+
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = new FormBody.Builder()
-                .add("SenderToken", /*token*/ "12345")
+                .add("DateAndTime", dateAndTime)
+                .add("SenderToken", token)
                 .add("RecipientFirstname", recipientfirstname)
                 .add("RecipientLastname", recipientlastname)
                 .add("Filename", filenameWithoutPrefix)
