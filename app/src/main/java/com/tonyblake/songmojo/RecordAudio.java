@@ -11,6 +11,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -336,7 +337,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                 if(Utils.connectedToNetwork(context)){
 
-                    /*new StoreFileInCloudTask(context, stream, recordingRef){
+                    new StoreFileInCloudTask(context, stream, recordingRef){
 
                         @Override
                         protected void onPostExecute(Boolean success){
@@ -350,9 +351,9 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
                                 Log.i("StoreFileInCloudTask", "Error storing file in cloud");
                             }
                         }
-                    }.execute();*/
+                    }.execute();
 
-                    new SendMessageToRecipientTask(Utils.getDeviceToken(), recipient, filename) {
+                    new SendMessageToRecipientTask(Utils.getDeviceToken(), user, recipient, filename) {
 
                         @Override
                         protected void onPreExecute() {

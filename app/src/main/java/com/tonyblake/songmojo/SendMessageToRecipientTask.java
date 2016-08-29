@@ -14,12 +14,14 @@ import okhttp3.Response;
 public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
 
     private String token;
+    private String sender;
     private String recipient;
     private String filename;
 
-    public SendMessageToRecipientTask(String token, String recipient, String filename){
+    public SendMessageToRecipientTask(String token, String sender, String recipient, String filename){
 
         this.token = token;
+        this.sender = sender;
         this.recipient = recipient;
         this.filename = filename;
     }
@@ -30,6 +32,12 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
         Boolean result = false;
 
         String dateAndTime = Utils.getCurrentDateAndTime();
+
+        String[] senderName = Utils.separateWords(sender);
+
+        String senderfirstname = senderName[0];
+
+        String senderlastname = senderName[1];
 
         String[] recipientName = Utils.separateWords(recipient);
 
@@ -44,6 +52,8 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
         RequestBody body = new FormBody.Builder()
                 .add("DateAndTime", dateAndTime)
                 .add("SenderToken", token)
+                .add("SenderFirstname", senderfirstname)
+                .add("SenderLastname", senderlastname)
                 .add("RecipientFirstname", recipientfirstname)
                 .add("RecipientLastname", recipientlastname)
                 .add("Filename", filenameWithoutPrefix)

@@ -141,7 +141,7 @@ public class FindBandMemberDialog extends DialogFragment {
 
         for(User u: Login.users){
 
-            if(!u.firstName.equals(user)){
+            if(!u.fullName.equals(user)){
 
                 fullnames.add(u.fullName);
             }

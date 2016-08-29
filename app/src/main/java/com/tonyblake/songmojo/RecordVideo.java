@@ -323,7 +323,7 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                         }
                     }.execute();
 
-                    new SendMessageToRecipientTask(Utils.getDeviceToken(), recipient, filename) {
+                    new SendMessageToRecipientTask(Utils.getDeviceToken(), user, recipient, filename) {
 
                         @Override
                         protected void onPreExecute() {

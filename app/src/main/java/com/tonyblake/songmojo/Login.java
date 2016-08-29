@@ -190,7 +190,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
             if(email.equals(u.email)){
 
-                user = u.firstName;
+                user = u.firstName + " " + u.lastName;
             }
         }
 
