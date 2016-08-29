@@ -4,7 +4,7 @@
         	
       echo "variables set successfully";
 
-      $dateAndTime = $_POST["DateAndTime"];
+      $dateandtime = $_POST["DateAndTime"];
       
    	$sendertoken = $_POST["SenderToken"];
 
@@ -16,13 +16,21 @@
 
       $conn = mysqli_connect("localhost","root","","songmojo") or die("Error connecting");
 
-      echo "Connected to database";
+      if(mysqli_connect_errno()){
+
+         echo "Failed to connect to database: " . mysqli_connect_error();
+      }
          
-      $query = "INSERT INTO activity(DateAndTime,SenderToken,RecipientFirstname,RecipientLastname,Filename) VALUES ('$dateAndTime', $sendertoken','$recipientfirstname','$recipientlastname','$filename')";      
+      $query = "INSERT INTO activity (DateAndTime,SenderToken,RecipientFirstname,RecipientLastname,Filename) VALUES ('$dateandtime', '$sendertoken','$recipientfirstname','$recipientlastname','$filename')";      
 
-   	mysqli_query($conn,$query);
+   	if(!mysqli_query($conn,$query)){
 
-      echo "Queried database";
+         echo "Error description: " . mysqli_error($conn);
+      }
+      else{
+
+         echo "Successfully queried database";
+      }            
 
    	mysqli_close($conn);
    }   

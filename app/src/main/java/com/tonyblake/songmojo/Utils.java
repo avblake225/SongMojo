@@ -155,7 +155,7 @@ public class Utils {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
-        TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+        TimeZone gmtTime = TimeZone.getTimeZone("GMT+1");
 
         simpleDateFormat.setTimeZone(gmtTime);
 

@@ -9,6 +9,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
 
@@ -54,7 +55,10 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
                 .build();
 
         try {
-            client.newCall(request).execute();
+
+            Response response = client.newCall(request).execute();
+
+            Log.i("Server Response: ", response.body().string());
 
             result = true;
 
