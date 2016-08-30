@@ -35,7 +35,7 @@ public class UserRegistrationTask extends AsyncTask<String,Void,Boolean>{
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.10/songmojo/register.php")
+                .url("http://192.168.1.10/songmojo/release/register.php")
                 .post(body)
                 .build();
 
