@@ -8,7 +8,7 @@
       // Extract data
       $dateandtime = $_POST["DateAndTime"];
       
-   	$sendertoken = $_POST["SenderToken"];
+   	  $sendertoken = $_POST["SenderToken"];
 
       $senderfirstname = $_POST["SenderFirstname"];
 
@@ -64,11 +64,10 @@
       }                  
       
       // Close database
-   	mysqli_close($conn);
+   	  mysqli_close($conn);      
 
-      $testToken = "efRBZ84M-qk:APA91bGKSGEuADrFxMfx8F2m5uo3rhaa5V1lRJQsI9esPCp5FA4vw_hDznQzvE5dgDIjiJmOHLUVUvWWQ6Qk785IViwwjT9I7PWOkXePeKOPDm6kZK-zeivRrKwKMNM_FBQQQVR-jNH0";
-
-      $tokens[] = $testToken;
+      // Send notification
+      $tokens[] = $recipienttoken;
 
       $message_str = "$senderfirstname just sent you $filename";
 
