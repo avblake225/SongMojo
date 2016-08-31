@@ -170,6 +170,15 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
             receivedFileListItem.setDuration(file.duration);
 
             receivedFileListItem.finish();
+
+            received_file_item_layout.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    // Play file Dialog...
+                }
+            });
         }
     }
 

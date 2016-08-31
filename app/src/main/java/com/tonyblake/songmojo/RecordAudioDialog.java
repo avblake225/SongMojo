@@ -91,7 +91,7 @@ public class RecordAudioDialog extends DialogFragment {
 
                         chronometer.stop();
 
-                        recordDialogInterface.onStopButtonClick(RecordAudioDialog.this);
+                        recordDialogInterface.onRecordDialogStopButtonClick(RecordAudioDialog.this);
                     }
                 });
 
@@ -124,7 +124,7 @@ public class RecordAudioDialog extends DialogFragment {
 
     public interface RecordDialogInterface{
 
-        void onStopButtonClick(DialogFragment dialog);
+        void onRecordDialogStopButtonClick(DialogFragment dialog);
     }
 
     RecordDialogInterface recordDialogInterface;

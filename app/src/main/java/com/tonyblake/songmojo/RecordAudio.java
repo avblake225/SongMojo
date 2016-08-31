@@ -50,7 +50,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
     private TextView tv_recipient;
 
-    private Button cue_backing_track, record, play, pause, stop, send;
+    private Button cue_backing_track, record, play, send;
 
     private Toolbar actionBar;
 
@@ -68,15 +68,11 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
     private boolean backing_track_cued;
 
-    private MediaPlayer audioPlayer;
-
-    private boolean paused;
-
     private boolean backing_track_playing;
 
-    private long start_time, stop_time, time_elapsed;
+    private long start_time, stop_time, duration;
 
-    private String duration;
+    private String duration_str;
 
     private FirebaseDatabase database;
 
@@ -84,12 +80,16 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
     private TextView btn_edit_filename, btn_edit_recipient;
 
+    private MediaPlayer audioPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_audio);
 
         context = this;
+
+        audioPlayer = new MediaPlayer();
 
         fm = getSupportFragmentManager();
 
@@ -133,19 +133,10 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
         play = (Button) findViewById(R.id.btn_play);
         play.setBackgroundResource(android.R.drawable.btn_default);
-
-        pause = (Button) findViewById(R.id.btn_pause);
-        pause.setBackgroundResource(android.R.drawable.btn_default);
-
-        stop = (Button) findViewById(R.id.btn_stop);
-        stop.setBackgroundResource(android.R.drawable.btn_default);
+        play.setEnabled(false);
 
         send = (Button) findViewById(R.id.btn_send);
         send.setBackgroundResource(android.R.drawable.btn_default);
-
-        play.setEnabled(false);
-        pause.setEnabled(false);
-        stop.setEnabled(false);
         send.setEnabled(false);
 
         filePath = Home.recordingsDirectory + File.separator + filename;
@@ -153,10 +144,6 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
         file = new File(filePath);
 
         backing_track_cued = false;
-
-        audioPlayer = new MediaPlayer();
-
-        paused = false;
 
         backing_track_playing = false;
 
@@ -263,7 +250,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                 recordAudioDialog.setArguments(bundle);
 
-                recordAudioDialog.show(fm, "recordDialog");
+                recordAudioDialog.show(fm, "recordAudioDialog");
             }
         });
 
@@ -272,49 +259,17 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
             @Override
             public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
 
-                Toast.makeText(context,context.getString(R.string.track_playing),Toast.LENGTH_SHORT).show();
+                start_time = SystemClock.elapsedRealtime();
 
-                playFile(filePath);
-            }
-        });
+                PlayAudioDialog playAudioDialog = new PlayAudioDialog();
 
-        pause.setOnClickListener(new View.OnClickListener() {
+                Bundle bundle = new Bundle();
 
-            @Override
-            public void onClick(View v) throws IllegalArgumentException, SecurityException, IllegalStateException {
+                bundle.putString("filepath", filePath);
 
-                if (audioPlayer.isPlaying()) {
+                playAudioDialog.setArguments(bundle);
 
-                    audioPlayer.pause();
-
-                    paused = true;
-                }
-
-                record.setEnabled(false);
-                stop.setEnabled(true);
-                play.setEnabled(true);
-                pause.setEnabled(false);
-                send.setEnabled(false);
-            }
-        });
-
-        stop.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                if(paused){
-
-                    paused = false;
-                }
-
-                audioPlayer.stop();
-
-                record.setEnabled(true);
-                stop.setEnabled(false);
-                play.setEnabled(true);
-                pause.setEnabled(false);
-                send.setEnabled(true);
+                playAudioDialog.show(fm, "playAudioDialog");
             }
         });
 
@@ -370,7 +325,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                             if(success){
 
-                                dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration, context.getString(R.string.audio_file), Utils.getCurrentDateAndTime()); // save locally
+                                dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration_str, context.getString(R.string.audio_file), Utils.getCurrentDateAndTime()); // save locally
 
                                 String current_date = Utils.getCurrentDate();
 
@@ -380,7 +335,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                                 dbManager.insertDataIntoRecentActivityTable(user, current_date, current_time, action);
 
-                                AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration, context.getString(R.string.audio_file));
+                                AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration_str, context.getString(R.string.audio_file));
 
                                 databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
@@ -414,53 +369,15 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
     private void playFile(String filePath){
 
-        if(paused) {
+        try {
 
+            audioPlayer.setDataSource(filePath);
+            audioPlayer.prepare();
             audioPlayer.start();
-
-            paused = false;
         }
-        else{
-
-            audioPlayer.reset();
-
-            try {
-
-                audioPlayer.setDataSource(filePath);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-
-                audioPlayer.prepare();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+        catch (IOException e) {
+            e.printStackTrace();
         }
-
-        audioPlayer.start();
-
-        record.setEnabled(false);
-        stop.setEnabled(true);
-        play.setEnabled(false);
-        pause.setEnabled(true);
-        send.setEnabled(false);
-
-        audioPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-
-                record.setEnabled(true);
-                stop.setEnabled(false);
-                play.setEnabled(true);
-                pause.setEnabled(false);
-                send.setEnabled(true);
-            }
-        });
     }
 
     @Override
@@ -488,23 +405,18 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
     }
 
     @Override
-    public void onStopButtonClick(DialogFragment dialog) {
+    public void onRecordDialogStopButtonClick(DialogFragment dialog) {
 
         stop_time = SystemClock.elapsedRealtime();
 
-        time_elapsed = stop_time - start_time;
+        duration = stop_time - start_time;
 
-        duration = Utils.formatInterval(time_elapsed);
+        duration_str = Utils.formatInterval(duration);
 
         if(backing_track_playing){
 
             audioPlayer.stop();
-
-            record.setEnabled(true);
-            stop.setEnabled(false);
-            play.setEnabled(true);
-            pause.setEnabled(false);
-            send.setEnabled(true);
+            audioPlayer.reset();
 
             backing_track_playing = false;
 
@@ -517,10 +429,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
-        record.setEnabled(true);
-        stop.setEnabled(false);
         play.setEnabled(true);
-        pause.setEnabled(false);
         send.setEnabled(true);
     }
 

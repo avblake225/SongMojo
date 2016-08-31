@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.tonyblake.songmojo.UploadFile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -164,24 +163,6 @@
                 android:drawablePadding="@dimen/record_audio_drawable_padding"
                 android:drawableLeft="@drawable/ic_play_arrow_black_24dp"
                 android:id="@+id/btn_play"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/pause"
-                android:drawablePadding="@dimen/record_audio_drawable_padding"
-                android:drawableLeft="@drawable/ic_pause_black_24dp"
-                android:id="@+id/btn_pause"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/stop"
-                android:drawablePadding="@dimen/record_audio_drawable_padding"
-                android:drawableLeft="@drawable/ic_stop_black_24dp"
-                android:id="@+id/btn_stop"/>
 
             <Button
                 android:layout_width="wrap_content"

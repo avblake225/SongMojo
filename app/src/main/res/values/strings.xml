@@ -74,8 +74,8 @@
     <string name="cue_backing_track">Cue Backing Track</string>
     <string name="record">Record</string>
     <string name="stop">Stop</string>
+    <string name="close">Close</string>
     <string name="play">Play</string>
-    <string name="track_playing">Track playing</string>
     <string name="pause">Pause</string>
     <string name="send">Send</string>
 
@@ -96,8 +96,9 @@
     <string name="backing_track_removed">Backing track removed</string>
     <string name="no_tracks_available">No tracks available</string>
 
-    <!-- Record Dialog -->
+    <!-- Record/Play Dialog -->
     <string name="recording">Recording...</string>
+    <string name="playing">Playing...</string>
     <string name="saved_to_device">saved to device</string>
 
     <!-- Sending File dialog -->
