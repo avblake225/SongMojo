@@ -176,7 +176,21 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
                 @Override
                 public void onClick(View v) {
 
-                    // Play file Dialog...
+                    PlayAudioDialog playAudioDialog = new PlayAudioDialog();
+
+                    TextView tv_file_name = (TextView)received_file_item_layout.findViewById(R.id.tv_file_name);
+
+                    String filename = tv_file_name.getText().toString();
+
+                    String filePath = Home.downloadsDirectory + File.separator + filename + context.getString(R.string._mp3);
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("filepath", filePath);
+
+                    playAudioDialog.setArguments(bundle);
+
+                    playAudioDialog.show(fm, "playAudioDialog");
                 }
             });
         }
