@@ -114,7 +114,7 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
             }
         });
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_RECEIVED_TABLE() + "';";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_RECEIVED_TABLE() + ";";
 
         if(receivedFiles.size() == 0){
 

@@ -301,4 +301,32 @@ public class Utils {
 
         return filename_str;
     }
+
+    public static String getNewReceivedFile(DBManager dbManager, Context context){
+
+        String filename = null;
+
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.NEW_FILE_RECEIVED_TABLE() + ";";
+
+        Cursor cursor;
+
+        try{
+
+            cursor = dbManager.rawQuery(query);
+
+            cursor.moveToFirst();
+
+            do{
+
+                filename = cursor.getString(1);
+            }
+            while(cursor.moveToNext());
+        }
+        catch(Exception e){
+
+            Log.e("NewReceivedFileTable: ", e.toString());
+        }
+
+        return filename;
+    }
 }

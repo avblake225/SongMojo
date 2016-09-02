@@ -73,6 +73,8 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
     private LinearLayout recent_activity_layout_container;
 
+    private String name_of_file_received;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -218,8 +220,7 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
             }
         });
 
-        // TODO: Uncomment this method
-        //checkForNewReceivedFile();
+        checkForNewReceivedFile();
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -312,51 +313,52 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
     private void checkForNewReceivedFile(){
 
-        // TODO: Extract file name from "newFileReceived" table
-        final String filename = "some file";
+        name_of_file_received = Utils.getNewReceivedFile(dbManager,context);
 
-        // TODO: if table not empty...
-        if(Utils.connectedToNetwork(context)){
+        if(name_of_file_received != null){
 
-            new GetFileTask(filename,context){
+            if(Utils.connectedToNetwork(context)){
 
-                @Override
-                protected void onPreExecute() {
+                new GetFileTask(name_of_file_received,context){
 
-                    getFileProgressDialog = new ProgressDialog(context);
-                    getFileProgressDialog.setIndeterminate(true);
-                    getFileProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    getFileProgressDialog.setMessage(context.getString(R.string.checking_for_new_files));
-                    getFileProgressDialog.show();
-                }
+                    @Override
+                    protected void onPreExecute() {
 
-                @Override
-                protected void onPostExecute(String result) {
-
-                    for(AvailableFile availableFile: availableFiles){
-
-                        if(filename.equals(availableFile.filename)){
-
-                            dbManager.insertDataIntoFilesReceivedTable(availableFile.sender, filename, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
-
-                            String action = "Received " + filename;
-
-                            dbManager.insertDataIntoRecentActivityTable(user, Utils.getCurrentDate(), Utils.getCurrentTime(), action);
-
-                            displayRecentActivity();
-                        }
+                        getFileProgressDialog = new ProgressDialog(context);
+                        getFileProgressDialog.setIndeterminate(true);
+                        getFileProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        getFileProgressDialog.setMessage(context.getString(R.string.checking_for_new_files));
+                        getFileProgressDialog.show();
                     }
 
-                    getFileProgressDialog.dismiss();
-                }
-            }.execute();
-        }
-        else{
+                    @Override
+                    protected void onPostExecute(String result) {
 
-            Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
+                        for(AvailableFile availableFile: availableFiles){
+
+                            if(name_of_file_received.equals(availableFile.filename)){
+
+                                dbManager.insertDataIntoFilesReceivedTable(availableFile.sender, name_of_file_received, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
+
+                                String action = "Received " + name_of_file_received;
+
+                                dbManager.insertDataIntoRecentActivityTable(user, Utils.getCurrentDate(), Utils.getCurrentTime(), action);
+
+                                displayRecentActivity();
+                            }
+                        }
+
+                        getFileProgressDialog.dismiss();
+                    }
+                }.execute();
+            }
+            else{
+
+                Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
+            }
         }
 
-        // TODO: Delete file from newFileReceived table
+        dbManager.deleteNewFileReceived();
     }
 
     @Override
@@ -459,7 +461,7 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
         }
         catch(Exception e){
 
-            Log.e("LocalDBError", "Error retrieving recent activity data");
+            Log.e("LocalDB", "No recent activity data");
         }
 
         if(recentActivityList.size() == 0){
