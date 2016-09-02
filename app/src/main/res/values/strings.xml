@@ -42,7 +42,6 @@
 
     <string-array name="menu_items">
         <item>Send File</item>
-        <item>Get File</item>
         <item>Find Band Members</item>
         <item>Edit Band Members</item>
         <item>Files sent</item>
@@ -107,7 +106,7 @@
     <string name="done">Done</string>
 
     <!-- Get File Progress Dialog -->
-    <string name="downloading_file">Downloading file...</string>
+    <string name="checking_for_new_files">Checking for new files...</string>
 
     <!-- Creating Account Progress Dialog -->
     <string name="creating_account">Creating Account...</string>

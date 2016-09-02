@@ -27,7 +27,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.i("Filename from message: ", filename);
 
-        // TODO: downloadFile(filename)
+        // TODO: store filename in newFileReceived table
     }
 
     private void sendNotification(String messageBody) {

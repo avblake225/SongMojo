@@ -33,7 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.util.ArrayList;
 
-public class Home extends AppCompatActivity implements GetFileDialog.GetFileDialogInterface, FindBandMemberDialog.FindBandMemberDialogInterface{
+public class Home extends AppCompatActivity implements FindBandMemberDialog.FindBandMemberDialogInterface{
 
     private FirebaseDatabase database;
 
@@ -62,8 +62,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
     private TextView tv_user, tv_current_date;
 
     private ArrayList<RecentActivity> recentActivityList;
-
-    private GetFileDialog getFileDialog;
 
     private ProgressDialog getFileProgressDialog;
 
@@ -220,6 +218,9 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
             }
         });
 
+        // TODO: Uncomment this method
+        //checkForNewReceivedFile();
+
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -251,31 +252,14 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         break;
 
-                    // Get File
-                    case 1:
-
-                        dLayout.closeDrawer(dList);
-
-                        getFileDialog = new GetFileDialog();
-
-                        Bundle bundle = new Bundle();
-
-                        bundle.putStringArrayList("availableFilenames", availableFilenames);
-
-                        getFileDialog.setArguments(bundle);
-
-                        getFileDialog.show(fm, "getFileDialog");
-
-                        break;
-
                     // Find Band Members
-                    case 2:
+                    case 1:
 
                         dLayout.closeDrawer(dList);
 
                         findBandMemberDialog = new FindBandMemberDialog();
 
-                        bundle = new Bundle();
+                        Bundle bundle = new Bundle();
 
                         bundle.putString("user", user);
 
@@ -286,7 +270,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         break;
 
                     // Edit Band Members
-                    case 3:
+                    case 2:
 
                         dLayout.closeDrawer(dList);
 
@@ -299,7 +283,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         break;
 
                     // Files sent
-                    case 4:
+                    case 3:
 
                         dLayout.closeDrawer(dList);
 
@@ -312,7 +296,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         break;
 
                     // Files received
-                    case 5:
+                    case 4:
 
                         dLayout.closeDrawer(dList);
 
@@ -326,9 +310,12 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         });
     }
 
-    @Override
-    public void onGetFileDialogOkButtonClick(DialogFragment dialog, final String filename) {
+    private void checkForNewReceivedFile(){
 
+        // TODO: Extract file name from "newFileReceived" table
+        final String filename = "some file";
+
+        // TODO: if table not empty...
         if(Utils.connectedToNetwork(context)){
 
             new GetFileTask(filename,context){
@@ -339,7 +326,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                     getFileProgressDialog = new ProgressDialog(context);
                     getFileProgressDialog.setIndeterminate(true);
                     getFileProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    getFileProgressDialog.setMessage(context.getString(R.string.downloading_file));
+                    getFileProgressDialog.setMessage(context.getString(R.string.checking_for_new_files));
                     getFileProgressDialog.show();
                 }
 
@@ -352,7 +339,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                             dbManager.insertDataIntoFilesReceivedTable(availableFile.sender, filename, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
 
-                            String action = "Downloaded " + filename;
+                            String action = "Received " + filename;
 
                             dbManager.insertDataIntoRecentActivityTable(user, Utils.getCurrentDate(), Utils.getCurrentTime(), action);
 
@@ -361,16 +348,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                     }
 
                     getFileProgressDialog.dismiss();
-
-                    DownloadSuccessDialog downloadSuccessDialog = new DownloadSuccessDialog();
-
-                    Bundle bundle = new Bundle();
-
-                    bundle.putString("filename", filename);
-
-                    downloadSuccessDialog.setArguments(bundle);
-
-                    downloadSuccessDialog.show(fm, "downloadSuccessDialog");
                 }
             }.execute();
         }
@@ -378,6 +355,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
             Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
         }
+
+        // TODO: Delete file from newFileReceived table
     }
 
     @Override
