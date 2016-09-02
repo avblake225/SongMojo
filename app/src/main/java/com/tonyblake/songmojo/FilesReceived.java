@@ -118,8 +118,7 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
             }
         });
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_DOWNLOADED_TABLE() + " "
-                        + context.getString(R.string.where_recipient_equals) + "'" + user + "';";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_RECEIVED_TABLE() + "';";
 
         if(receivedFiles.size() == 0){
 
@@ -141,13 +140,13 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
                 receivedFile.sender = cursor.getString(1);
 
-                receivedFile.filename = cursor.getString(3);
+                receivedFile.filename = cursor.getString(2);
 
-                receivedFile.duration = cursor.getString(4);
+                receivedFile.duration = cursor.getString(3);
 
-                receivedFile.filetype = cursor.getString(5);
+                receivedFile.filetype = cursor.getString(4);
 
-                receivedFile.date = cursor.getString(6);
+                receivedFile.date = cursor.getString(5);
 
                 receivedFiles.add(receivedFile);
             }
@@ -203,7 +202,7 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
             files_received_list.removeAllViews();
 
-            dbManager.deleteDownloadedFiles();
+            dbManager.deleteReceivedFiles();
 
             // Remove files from external memory on device
             for(File file: downloads){

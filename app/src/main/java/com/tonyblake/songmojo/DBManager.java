@@ -22,15 +22,14 @@ public class DBManager extends SQLiteOpenHelper{
     private final String FILES_SENT_TABLE_COL_6 = "FILE_TYPE";
     private final String FILES_SENT_TABLE_COL_7 = "DATE";
 
-    // Files Downloaded Table
-    private final String FILES_DOWNLOADED_TABLE = "files_downloaded_table";
-    private final String FILES_DOWNLOADED_TABLE_COL_1 = "ID";
-    private final String FILES_DOWNLOADED_TABLE_COL_2 = "SENDER";
-    private final String FILES_DOWNLOADED_TABLE_COL_3 = "RECIPIENT";
-    private final String FILES_DOWNLOADED_TABLE_COL_4 = "FILE_NAME";
-    private final String FILES_DOWNLOADED_TABLE_COL_5 = "DURATION";
-    private final String FILES_DOWNLOADED_TABLE_COL_6 = "FILE_TYPE";
-    private final String FILES_DOWNLOADED_TABLE_COL_7 = "DATE";
+    // Files Received Table
+    private final String FILES_RECEIVED_TABLE = "files_received_table";
+    private final String FILES_RECEIVED_TABLE_COL_1 = "ID";
+    private final String FILES_RECEIVED_TABLE_COL_2 = "SENDER";
+    private final String FILES_RECEIVED_TABLE_COL_3 = "FILE_NAME";
+    private final String FILES_RECEIVED_TABLE_COL_4 = "DURATION";
+    private final String FILES_RECEIVED_TABLE_COL_5 = "FILE_TYPE";
+    private final String FILES_RECEIVED_TABLE_COL_6 = "DATE";
 
     // Recent Activity Table
     private final String RECENT_ACTIVITY_TABLE = "recent_activity_table";
@@ -69,7 +68,7 @@ public class DBManager extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
-        db.execSQL("CREATE TABLE " + FILES_DOWNLOADED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
+        db.execSQL("CREATE TABLE " + FILES_RECEIVED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, DATE TEXT, TIME TEXT, ACTION TEXT)");
         db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, FULLNAME TEXT)");
     }
@@ -95,18 +94,17 @@ public class DBManager extends SQLiteOpenHelper{
         }
     }
 
-    public boolean insertDataIntoFilesDownloadedTable(String sender, String recipient, String file_name, String duration, String file_type, String date){
+    public boolean insertDataIntoFilesReceivedTable(String sender, String file_name, String duration, String file_type, String date){
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_2, sender);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_3, recipient);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_4, file_name);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_5, duration);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_6, file_type);
-        contentValues.put(FILES_DOWNLOADED_TABLE_COL_7, date);
+        contentValues.put(FILES_RECEIVED_TABLE_COL_2, sender);
+        contentValues.put(FILES_RECEIVED_TABLE_COL_3, file_name);
+        contentValues.put(FILES_RECEIVED_TABLE_COL_4, duration);
+        contentValues.put(FILES_RECEIVED_TABLE_COL_5, file_type);
+        contentValues.put(FILES_RECEIVED_TABLE_COL_6, date);
 
-        long result = db.insert(FILES_DOWNLOADED_TABLE, null, contentValues);
+        long result = db.insert(FILES_RECEIVED_TABLE, null, contentValues);
 
         if(result == -1){
             return false;
@@ -156,7 +154,7 @@ public class DBManager extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS" + FILES_SENT_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS" + FILES_DOWNLOADED_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + FILES_RECEIVED_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + RECENT_ACTIVITY_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + BAND_MEMBERS_TABLE);
         onCreate(db);
@@ -180,9 +178,9 @@ public class DBManager extends SQLiteOpenHelper{
         db.delete(FILES_SENT_TABLE,null,null);
     }
 
-    public void deleteDownloadedFiles(){
+    public void deleteReceivedFiles(){
 
-        db.delete(FILES_DOWNLOADED_TABLE,null,null);
+        db.delete(FILES_RECEIVED_TABLE,null,null);
     }
 
     public String FILES_SENT_TABLE(){
@@ -190,9 +188,9 @@ public class DBManager extends SQLiteOpenHelper{
         return FILES_SENT_TABLE;
     }
 
-    public String FILES_DOWNLOADED_TABLE(){
+    public String FILES_RECEIVED_TABLE(){
 
-        return FILES_DOWNLOADED_TABLE;
+        return FILES_RECEIVED_TABLE;
     }
 
     public String RECENT_ACTIVITY_TABLE(){

@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -252,6 +253,14 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                                 Toast.makeText(context, context.getString(R.string.password_length_error), Toast.LENGTH_LONG).show();
                             }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            Toast.makeText(context, context.getString(R.string.account_already_exists_error), Toast.LENGTH_LONG).show();
                         }
                     });
         }

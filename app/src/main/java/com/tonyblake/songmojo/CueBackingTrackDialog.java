@@ -29,7 +29,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
     private DBManager dbManager;
 
-    private ArrayList<String> filesDownloaded;
+    private ArrayList<String> filesReceived;
 
     private View view;
 
@@ -52,7 +52,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         dbManager = Home.dbManager;
 
-        filesDownloaded = new ArrayList<>();
+        filesReceived = new ArrayList<>();
 
         builder = new AlertDialog.Builder(getActivity());
 
@@ -68,7 +68,7 @@ public class CueBackingTrackDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        if (filesDownloaded.size() == 0) {
+                        if (filesReceived.size() == 0) {
 
                             dismiss();
                         }
@@ -149,10 +149,9 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         select_track_spinner = (Spinner) view.findViewById(R.id.select_item_spinner);
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_DOWNLOADED_TABLE() + " "
-                        + context.getString(R.string.where_recipient_equals) + "'" + user + "';";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_RECEIVED_TABLE() + "';";
 
-        Cursor cursor = null;
+        Cursor cursor;
 
         try{
 
@@ -162,13 +161,13 @@ public class CueBackingTrackDialog extends DialogFragment {
 
             do{
 
-                filesDownloaded.add(cursor.getString(3));
+                filesReceived.add(cursor.getString(2));
             }
             while(cursor.moveToNext());
         }
         catch(Exception e){};
 
-        if(filesDownloaded.size() == 0){
+        if(filesReceived.size() == 0){
 
             tv_available_files.setText(context.getString(R.string.no_tracks_available));
         }
@@ -176,7 +175,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
             String message;
 
-            int num_files = filesDownloaded.size();
+            int num_files = filesReceived.size();
 
             if(num_files == 1){
 
@@ -189,7 +188,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
             tv_available_files.setText(message);
 
-            select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, filesDownloaded);
+            select_track_spinnerAdapter = new ArrayAdapter<>(context, R.layout.my_custom_spinner, filesReceived);
 
             select_track_spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 

@@ -352,7 +352,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
                         if(filename.equals(availableFile.filename)){
 
-                            dbManager.insertDataIntoFilesDownloadedTable(availableFile.sender, user, filename, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
+                            dbManager.insertDataIntoFilesReceivedTable(availableFile.sender, filename, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
 
                             String action = "Downloaded " + filename;
 
