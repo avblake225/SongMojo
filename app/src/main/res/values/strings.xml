@@ -38,7 +38,6 @@
     <drawable name="black">#000000</drawable>
 
     <string name="songmojo">SongMojo</string>
-    <string name="downloads">Downloads</string>
     <string name="recordings">Recordings</string>
 
     <string-array name="menu_items">

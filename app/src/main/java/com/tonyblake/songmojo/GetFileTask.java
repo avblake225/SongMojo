@@ -40,7 +40,7 @@ public class GetFileTask extends AsyncTask<String,Void,String>{
 
         StorageReference recordingRef = storageRef.child(filenameWithPrefix);
 
-        File file = new File(Home.downloadsDirectory + File.separator + filenameWithPrefix);
+        File file = new File(Home.filesReceivedDirectory + File.separator + filenameWithPrefix);
 
         recordingRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
 

@@ -71,7 +71,7 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
 
     private FragmentManager fm;
 
-    public static File songMojoDirectory, downloadsDirectory, recordingsDirectory;
+    public static File songMojoDirectory, filesReceivedDirectory, recordingsDirectory;
 
     private LinearLayout recent_activity_layout_container;
 
@@ -126,8 +126,8 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
         songMojoDirectory = new File(Environment.getExternalStorageDirectory() + File.separator + context.getString(R.string.songmojo));
         songMojoDirectory.mkdirs();
 
-        downloadsDirectory = new File(songMojoDirectory + File.separator + context.getString(R.string.downloads));
-        downloadsDirectory.mkdirs();
+        filesReceivedDirectory = new File(songMojoDirectory + File.separator + context.getString(R.string.files_received));
+        filesReceivedDirectory.mkdirs();
 
         recordingsDirectory = new File(songMojoDirectory + File.separator + context.getString(R.string.recordings));
         recordingsDirectory.mkdirs();
@@ -317,8 +317,6 @@ public class Home extends AppCompatActivity implements GetFileDialog.GetFileDial
                         dLayout.closeDrawer(dList);
 
                         intent = new Intent(context, FilesReceived.class);
-
-                        intent.putExtra("user", user);
 
                         startActivity(intent);
 

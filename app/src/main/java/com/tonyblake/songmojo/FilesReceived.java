@@ -42,13 +42,11 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
     private FragmentManager fm;
 
-    private String downloadsFolderPath;
+    private String filesReceivedFolderPath;
 
-    private File downloadsFolder;
+    private File filesReceivedFolder;
 
-    private File[] downloads;
-
-    private String user;
+    private File[] filesReceived;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -58,10 +56,6 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
         context = this;
 
         fm = getSupportFragmentManager();
-
-        savedInstanceState = getIntent().getExtras();
-
-        user = savedInstanceState.getString("user");
 
         // Show Status Bar
         View decorView = getWindow().getDecorView();
@@ -88,11 +82,13 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
         btn_clear_all = (Button)findViewById(R.id.btn_clear_all);
 
-        downloadsFolderPath = Environment.getExternalStorageDirectory() + File.separator + "SongMojo" + File.separator + "Downloads";
+        filesReceivedFolderPath = Environment.getExternalStorageDirectory() + File.separator
+                                  + context.getString(R.string.app_name) + File.separator
+                                  + context.getString(R.string.files_received);
 
-        downloadsFolder = new File(downloadsFolderPath);
+        filesReceivedFolder = new File(filesReceivedFolderPath);
 
-        downloads = downloadsFolder.listFiles();
+        filesReceived = filesReceivedFolder.listFiles();
     }
 
     @Override
@@ -181,7 +177,7 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
                     String filename = tv_file_name.getText().toString();
 
-                    String filePath = Home.downloadsDirectory + File.separator + filename + context.getString(R.string._mp3);
+                    String filePath = Home.filesReceivedDirectory + File.separator + filename + context.getString(R.string._mp3);
 
                     Bundle bundle = new Bundle();
 
@@ -205,7 +201,7 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
             dbManager.deleteReceivedFiles();
 
             // Remove files from external memory on device
-            for(File file: downloads){
+            for(File file: filesReceived){
 
                 file.delete();
             }
