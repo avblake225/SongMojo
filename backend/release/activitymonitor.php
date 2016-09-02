@@ -69,7 +69,7 @@
       // Send notification
       $tokens[] = $recipienttoken;
 
-      $message_str = "$senderfirstname just sent you '$filename'";
+      $message_str = "$senderfirstname just sent you $filename";
 
       $message = array("message" => $message_str);
 

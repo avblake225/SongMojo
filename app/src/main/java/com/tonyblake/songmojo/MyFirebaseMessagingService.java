@@ -14,8 +14,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private static final String TAG = "MyFirebaseMsgService";
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
@@ -25,9 +23,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String filename = Utils.extractFilename(message);
 
-        Log.i("Filename from message: ", filename);
+        NewFileReceivedManager manager = new NewFileReceivedManager(this);
 
-        // TODO: store filename in newFileReceived table
+        boolean addedToDatabase = manager.addToDatabase(filename);
+
+        Log.i("Filename from message: ", filename);
     }
 
     private void sendNotification(String messageBody) {
