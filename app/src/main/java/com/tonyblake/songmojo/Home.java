@@ -340,7 +340,7 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
                                 dbManager.insertDataIntoFilesReceivedTable(availableFile.sender, name_of_file_received, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
 
-                                String action = "Received " + name_of_file_received;
+                                String action = "Received " + name_of_file_received + " from " + availableFile.sender;
 
                                 dbManager.insertDataIntoRecentActivityTable(user, Utils.getCurrentDate(), Utils.getCurrentTime(), action);
 
