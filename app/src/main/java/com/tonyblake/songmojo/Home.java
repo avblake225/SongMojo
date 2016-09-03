@@ -485,6 +485,13 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
                 recentActivityLayout.finish();
             }
         }
+
+        // Delete old activity
+        int numRowsBefore = dbManager.getRowsInRecentActivityTable(context); // debug only
+
+        dbManager.deleteOldActivity(Utils.getCurrentDate());
+
+        int numRowsAfter = dbManager.getRowsInRecentActivityTable(context); // debug only
     }
 
     private class RecentActivity{

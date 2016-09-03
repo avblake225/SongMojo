@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.File;
 
@@ -194,6 +195,37 @@ public class DBManager extends SQLiteOpenHelper{
         String query = "DELETE FROM " + BAND_MEMBERS_TABLE + " WHERE USER = '" + user + "' AND FULLNAME = '" + bandMember + "';";
 
         db.execSQL(query);
+    }
+
+    public int getRowsInRecentActivityTable(Context context){
+
+        String query = context.getString(R.string.select_all_rows_from) + " " + RECENT_ACTIVITY_TABLE + ";";
+
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery(query, null);
+        }
+        catch(Exception e){
+
+            Log.e("dbReadError: ", "Error reading rows in Recent Activity table");
+        }
+
+        int numRows = 0;
+
+        if(cursor != null){
+
+           numRows = cursor.getCount();
+        }
+
+        return numRows;
+    }
+
+    public void deleteOldActivity(String date){
+
+        String delete_query = "DELETE FROM " + RECENT_ACTIVITY_TABLE + " WHERE DATE != '" + date + "';";
+
+        db.execSQL(delete_query);
     }
 
     public void deleteSentFiles(){
