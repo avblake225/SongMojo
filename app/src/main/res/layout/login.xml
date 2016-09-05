@@ -61,6 +61,15 @@
                 android:text="@string/create_account"
                 android:textColor="@color/white"/>
 
+            <TextView
+                android:id="@+id/btn_forgot_password"
+                android:background="@drawable/background_color_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/forgot_password"
+                android:textColor="@color/white"/>
+
         </LinearLayout>
 
     </ScrollView>

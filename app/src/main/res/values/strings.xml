@@ -1,5 +1,7 @@
 <resources>
 
+    <string name="app_name">SongMojo</string>
+
     <!-- Firebase database -->
     <string name="users">Users</string>
 
@@ -13,6 +15,7 @@
     <string name="logging_in">Logging in...</string>
     <string name="no_account_found">No account found</string>
     <string name="create_account">Create Account</string>
+    <string name="forgot_password">Forgot password?</string>
     <string name="create">Create</string>
     <string name="no_email_entered">No email entered</string>
     <string name="no_password_entered">No password_entered</string>
@@ -23,8 +26,8 @@
     <string name="no_network_connection">Error: No network connection</string>
     <string name="database_error">Database error</string>
 
-    <string name="app_name">SongMojo</string>
-    <string name="record_video">Record Video</string>
+    <!-- ForgotPasswordDialog -->
+    <string name="contact_tony">Contact Tony at avblake225@gmail.com and ask for your password</string>
 
     <!-- Home.java / home.xml -->
     <string name="home">Home</string>
@@ -85,6 +88,7 @@
     <string name="edit_recipient">Edit recipient</string>
 
     <!-- Record Video -->
+    <string name="record_video">Record Video</string>
     <string name="video_saved">Video saved</string>
     <string name="video_playing">Video playing</string>
 

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,11 +42,15 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
     private Button btn_log_in, btn_create_account;
 
+    private TextView btn_forgot_password;
+
     private String email, password;
 
     private FragmentManager fm;
 
     private CreateAccountDialog createAccountDialog;
+
+    private ForgotPasswordDialog forgotPasswordDialog;
 
     public static ArrayList<User> users;
 
@@ -72,6 +77,8 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
         btn_log_in = (Button) findViewById(R.id.btn_log_in);
 
         btn_create_account = (Button) findViewById(R.id.btn_create_account);
+
+        btn_forgot_password = (TextView) findViewById(R.id.btn_forgot_password);
 
         email = "";
 
@@ -150,6 +157,17 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                 createAccountDialog = new CreateAccountDialog();
                 createAccountDialog.show(fm, "createAccountDialog");
+
+            }
+        });
+
+        btn_forgot_password.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                forgotPasswordDialog = new ForgotPasswordDialog();
+                forgotPasswordDialog.show(fm, "forgotPasswordDialog");
 
             }
         });
