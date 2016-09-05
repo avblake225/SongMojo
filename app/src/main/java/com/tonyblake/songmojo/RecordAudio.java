@@ -265,6 +265,8 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                 Bundle bundle = new Bundle();
 
+                bundle.putString("filename", filename);
+
                 bundle.putString("filepath", filePath);
 
                 playAudioDialog.setArguments(bundle);

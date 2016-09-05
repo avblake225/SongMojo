@@ -152,14 +152,17 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
         }
 
-        for(ReceivedFile file: receivedFiles){
+        for(final ReceivedFile file: receivedFiles){
 
             received_file_item_layout = inflator.inflate(R.layout.received_file_item_layout,null);
 
             ReceivedFileListItem receivedFileListItem = new ReceivedFileListItem(files_received_list, received_file_item_layout);
 
             receivedFileListItem.setSender(file.sender);
-            receivedFileListItem.setFileName(file.filename);
+
+            String filename = file.filename + context.getString(R.string._mp3);
+            receivedFileListItem.setFileName(filename);
+
             receivedFileListItem.setDate(file.date);
             receivedFileListItem.setFileType(file.filetype);
             receivedFileListItem.setDuration(file.duration);
@@ -177,9 +180,11 @@ public class FilesReceived extends AppCompatActivity implements ClearAllDialog.C
 
                     String filename = tv_file_name.getText().toString();
 
-                    String filePath = Home.filesReceivedDirectory + File.separator + filename + context.getString(R.string._mp3);
+                    String filePath = Home.filesReceivedDirectory + File.separator + filename;
 
                     Bundle bundle = new Bundle();
+
+                    bundle.putString("filename", filename);
 
                     bundle.putString("filepath", filePath);
 

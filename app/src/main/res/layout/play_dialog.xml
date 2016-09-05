@@ -13,6 +13,16 @@
         android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_audiotrack_black_24dp"/>
 
+    <TextView
+        android:id="@+id/tv_filename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="filename"
+        android:textSize="@dimen/play_dialog_text_size"
+        android:textColor="@color/black"
+        android:layout_marginBottom="@dimen/play_dialog_text_margin_bottom"/>
+
     <Chronometer
         android:id="@+id/my_chronometer"
         android:format="%s"

@@ -18,11 +18,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 
 public class PlayAudioDialog extends DialogFragment {
+
+    private TextView tv_filename;
 
     private Button pause, play;
 
@@ -38,12 +41,14 @@ public class PlayAudioDialog extends DialogFragment {
 
     private PausableChronometer pausableChronometer;
 
-    private String filepath;
+    private String filename, filepath;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.fade);
+
+        filename = getArguments().get("filename").toString();
 
         filepath = getArguments().get("filepath").toString();
 
@@ -108,6 +113,9 @@ public class PlayAudioDialog extends DialogFragment {
     @Override
     public void onActivityCreated (Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+
+        tv_filename = (TextView)view.findViewById(R.id.tv_filename);
+        tv_filename.setText(filename);
 
         pause = (Button) view.findViewById(R.id.btn_pause);
         pause.setBackgroundResource(android.R.drawable.btn_default);

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class FilesSent extends AppCompatActivity implements ClearAllDialog.ClearAllDialogInterface{
@@ -155,6 +156,31 @@ public class FilesSent extends AppCompatActivity implements ClearAllDialog.Clear
             sentFileListItem.setFileType(sentFile.filetype);
             sentFileListItem.setDate(sentFile.date);
             sentFileListItem.finish();
+
+            sent_file_item_layout.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    PlayAudioDialog playAudioDialog = new PlayAudioDialog();
+
+                    TextView tv_file_name = (TextView)sent_file_item_layout.findViewById(R.id.tv_file_name);
+
+                    String filename = tv_file_name.getText().toString();
+
+                    String filePath = Home.recordingsDirectory + File.separator + filename;
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("filename", filename);
+
+                    bundle.putString("filepath", filePath);
+
+                    playAudioDialog.setArguments(bundle);
+
+                    playAudioDialog.show(fm, "playAudioDialog");
+                }
+            });
         }
     }
 
