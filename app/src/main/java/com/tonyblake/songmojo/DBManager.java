@@ -37,6 +37,11 @@ public class DBManager extends SQLiteOpenHelper{
     private final String NEW_FILE_RECEIVED_TABLE_COL_1 = "ID";
     private final String NEW_FILE_RECEIVED_TABLE_COL_2 = "FILE_NAME";
 
+    // Device Token Table
+    private final String DEVICE_TOKEN_TABLE = "device_token_table";
+    private final String DEVICE_TOKEN_TABLE_COL_1 = "ID";
+    private final String DEVICE_TOKEN_TABLE_COL_2 = "TOKEN";
+
     // Recent Activity Table
     private final String RECENT_ACTIVITY_TABLE = "recent_activity_table";
     private final String RECENT_ACTIVITY_TABLE_COL_1 = "ID";
@@ -76,6 +81,7 @@ public class DBManager extends SQLiteOpenHelper{
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + FILES_RECEIVED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + NEW_FILE_RECEIVED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FILE_NAME TEXT)");
+        db.execSQL("CREATE TABLE " + DEVICE_TOKEN_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, TOKEN TEXT)");
         db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, DATE TEXT, TIME TEXT, ACTION TEXT)");
         db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, FULLNAME TEXT)");
     }
@@ -137,6 +143,22 @@ public class DBManager extends SQLiteOpenHelper{
         }
     }
 
+    public boolean insertDataIntoDeviceTokenTable(String token){
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(DEVICE_TOKEN_TABLE_COL_2, token);
+
+        long result = db.insert(DEVICE_TOKEN_TABLE, null, contentValues);
+
+        if(result == -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public boolean insertDataIntoRecentActivityTable(String user, String date, String time, String action){
 
         ContentValues contentValues = new ContentValues();
@@ -179,6 +201,7 @@ public class DBManager extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS" + FILES_SENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + FILES_RECEIVED_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + NEW_FILE_RECEIVED_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + DEVICE_TOKEN_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + RECENT_ACTIVITY_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + BAND_MEMBERS_TABLE);
         onCreate(db);
@@ -243,6 +266,14 @@ public class DBManager extends SQLiteOpenHelper{
         db.delete(NEW_FILE_RECEIVED_TABLE,null,null);
     }
 
+
+    public void updateDeviceTokenTable(String token){
+
+        String query = "INSERT INTO " + DEVICE_TOKEN_TABLE + "(TOKEN) VALUE " + token + " WHERE ID = '1'";
+
+        db.execSQL(query);
+    }
+
     public String FILES_SENT_TABLE(){
 
         return FILES_SENT_TABLE;
@@ -256,6 +287,11 @@ public class DBManager extends SQLiteOpenHelper{
     public String NEW_FILE_RECEIVED_TABLE(){
 
         return NEW_FILE_RECEIVED_TABLE;
+    }
+
+    public String DEVICE_TOKEN_TABLE(){
+
+        return DEVICE_TOKEN_TABLE;
     }
 
     public String RECENT_ACTIVITY_TABLE(){
