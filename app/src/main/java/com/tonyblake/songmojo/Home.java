@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -93,8 +92,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
         user = savedInstanceState.getString("user");
 
-        checkForNewDeviceToken();
-
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         tv_user = (TextView)findViewById(R.id.tv_user);
@@ -136,18 +133,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
         recordingsDirectory.mkdirs();
 
         recent_activity_layout_container = (LinearLayout)findViewById(R.id.recent_activity_layout_container);
-    }
-
-    private void checkForNewDeviceToken(){
-
-        String issuedToken = FirebaseInstanceId.getInstance().getToken();
-
-        String storedToken = Utils.getStoredToken(context, dbManager);
-
-        if(!issuedToken.equals(storedToken)){
-
-            // TODO: Update local DB/MySQL
-        }
     }
 
     @Override

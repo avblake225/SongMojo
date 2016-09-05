@@ -1,0 +1,13 @@
+diff a/app/src/main/java/com/tonyblake/songmojo/DBManager.java b/app/src/main/java/com/tonyblake/songmojo/DBManager.java	(rejected hunks)
+@@ -37,6 +37,11 @@
+     private final String NEW_FILE_RECEIVED_TABLE_COL_1 = "ID";
+     private final String NEW_FILE_RECEIVED_TABLE_COL_2 = "FILE_NAME";
+ 
++    // Device Token Table
++    private final String DEVICE_TOKEN_TABLE = "device_token_table";
++    private final String DEVICE_TOKEN_TABLE_COL_1 = "ID";
++    private final String DEVICE_TOKEN_TABLE_COL_2 = "TOKEN";
++
+     // Recent Activity Table
+     private final String RECENT_ACTIVITY_TABLE = "recent_activity_table";
+     private final String RECENT_ACTIVITY_TABLE_COL_1 = "ID";

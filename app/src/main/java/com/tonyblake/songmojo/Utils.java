@@ -329,32 +329,4 @@ public class Utils {
 
         return filename;
     }
-
-    public static String getStoredToken(Context context, DBManager dbManager){
-
-        String token = "";
-
-        Cursor cursor;
-
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.DEVICE_TOKEN_TABLE() + ";";
-
-        try{
-
-            cursor = dbManager.rawQuery(query);
-
-            cursor.moveToFirst();
-
-            do{
-
-                token = cursor.getString(1);
-            }
-            while(cursor.moveToNext());
-        }
-        catch(Exception e){
-
-            Log.e("getStoredToken: ", "Error reading stored token");
-        }
-
-        return token;
-    }
 }
