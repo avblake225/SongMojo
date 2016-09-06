@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -133,6 +134,23 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
         recordingsDirectory.mkdirs();
 
         recent_activity_layout_container = (LinearLayout)findViewById(R.id.recent_activity_layout_container);
+
+        String newToken = FirebaseInstanceId.getInstance().getToken();
+
+        String[] names = Utils.separateWords(user);
+
+        // Fresh install case
+        new UpdateTokenTask(newToken,names[0],names[1]){
+
+            @Override
+            protected void onPostExecute(Boolean result){
+
+                if(result){
+
+                    Log.i("UpdateTokenTask: ", "Successfully updated device token");
+                }
+            }
+        }.execute();
     }
 
     @Override
