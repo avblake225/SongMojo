@@ -10,7 +10,8 @@
     <string name="lastName">Last Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="please_enter_email_and_password">Please enter email and password</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_password">Enter password</string>
     <string name="log_in">Log in</string>
     <string name="logging_in">Logging in...</string>
     <string name="no_account_found">No account found</string>
@@ -23,6 +24,7 @@
     <string name="password_length_error">Error: Password must be at least 8 characters long</string>
     <string name="account_already_exists_error">Error: Account aleady exists</string>
     <string name="failed_to_create_account">Failed to create account</string>
+    <string name="email_password_error">Email/password error</string>
     <string name="no_network_connection">Error: No network connection</string>
     <string name="database_error">Database error</string>
 

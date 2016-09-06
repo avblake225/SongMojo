@@ -138,9 +138,13 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                 password = et_password.getText().toString();
 
-                if("".equals(email) | "".equals(password)){
+                if("".equals(email)){
 
-                    Toast.makeText(context, context.getString(R.string.please_enter_email_and_password), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.enter_email), Toast.LENGTH_SHORT).show();
+                }
+                else if("".equals(password)){
+
+                    Toast.makeText(context, context.getString(R.string.enter_password), Toast.LENGTH_SHORT).show();
                 }
                 else{
 
@@ -186,15 +190,17 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            Intent intent = new Intent(context, Home.class);
+                            if (task.isSuccessful()) {
 
-                            intent.putExtra("user", getUser(email));
+                                Intent intent = new Intent(context, Home.class);
 
-                            startActivity(intent);
+                                intent.putExtra("user", getUser(email));
 
-                            if (!task.isSuccessful()) {
+                                startActivity(intent);
+                            }
+                            else{
 
-                                Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, context.getString(R.string.email_password_error), Toast.LENGTH_SHORT).show();
                             }
                         }
             });
