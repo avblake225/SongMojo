@@ -24,8 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -92,10 +90,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
     private long start_time, stop_time, time_elapsed;
 
     private String duration;
-
-    private FirebaseDatabase database;
-
-    private DatabaseReference databaseRef;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,10 +165,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
         display_height = size.y; // px
 
         //makeVideoViewHeightDynamic(); // Needs debugging
-
-        database = FirebaseDatabase.getInstance();
-
-        databaseRef = database.getReference().child("files");
     }
 
     @Override
@@ -341,10 +331,6 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
                             if(success){
 
                                 dbManager.insertDataIntoFilesSentTable(user, recipient, filename, duration, context.getString(R.string.video_file), currentDateandTime);
-
-                                AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, currentDateandTime, duration, context.getString(R.string.audio_file));
-
-                                databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
                                 sendingFileDialog.dismiss();
 

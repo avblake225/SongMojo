@@ -12,13 +12,15 @@ import okhttp3.RequestBody;
 
 public class UserRegistrationTask extends AsyncTask<String,Void,Boolean>{
 
-    private String token, firstName, lastName, email, password;
+    private String token, firstName, lastName, fullname, email, password;
 
     public UserRegistrationTask(String token, String firstName, String lastName, String email, String password){
 
        this.token = token;
        this.firstName = firstName;
        this.lastName = lastName;
+
+       fullname = firstName + " " + lastName;
        this.email = email;
        this.password = password;
     }
@@ -34,6 +36,7 @@ public class UserRegistrationTask extends AsyncTask<String,Void,Boolean>{
                 .add("Token", token)
                 .add("FirstName", firstName)
                 .add("LastName", lastName)
+                .add("FullName", fullname)
                 .add("Email", email)
                 .add("Password", password)
                 .build();

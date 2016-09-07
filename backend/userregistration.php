@@ -1,13 +1,15 @@
 <?php         
 
    if(isset($_POST["Token"]) && isset($_POST["FirstName"]) && isset($_POST["LastName"]) 
-         && isset($_POST["Email"]) && isset($_POST["Password"])){   	   
+         && isset($_POST["FullName"]) && isset($_POST["Email"]) && isset($_POST["Password"])){   	   
 
    	   $token = $_POST["Token"];         
 
          $firstName = $_POST["FirstName"];   	
 
          $lastName = $_POST["LastName"];
+
+         $fullName = $_POST["FullName"];
 
          $email = $_POST["Email"];
 
@@ -19,8 +21,8 @@
 
          echo "Connected to database ";
    	   
-   	   $query = "INSERT INTO userregistration(Token,FirstName,LastName,Email,Password) 
-                   VALUES ('$token','$firstName','$lastName','$email','$password')";
+   	   $query = "INSERT INTO userregistration(Token,FirstName,LastName,FullName,Email,Password) 
+                   VALUES ('$token','$firstName','$lastName','$fullName','$email','$password')";
 
    	   mysqli_query($conn,$query);
 

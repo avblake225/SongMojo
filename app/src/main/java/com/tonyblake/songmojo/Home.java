@@ -24,25 +24,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.File;
 import java.util.ArrayList;
 
 public class Home extends AppCompatActivity implements FindBandMemberDialog.FindBandMemberDialogInterface{
-
-    private FirebaseDatabase database;
-
-    private DatabaseReference databaseRef;
-
-    private ArrayList<AvailableFile> availableFiles;
-
-    private ArrayList<String> availableFilenames;
 
     private Context context;
 
@@ -80,10 +67,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-
-        database = FirebaseDatabase.getInstance();
-
-        databaseRef = database.getReference().child("files");
 
         context = this;
 
@@ -203,47 +186,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
         displayRecentActivity();
 
-        availableFiles = new ArrayList<>();
-
-        availableFilenames = new ArrayList<>();
-
-        databaseRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot userID : dataSnapshot.getChildren()) {
-
-                    String sender = (String) userID.child("sender").getValue();
-
-                    if(!sender.equals(user)){
-
-                        AvailableFile availableFile = new AvailableFile();
-
-                        availableFile.sender = sender;
-                        availableFile.filename = (String) userID.child("filename").getValue();
-                        availableFile.currentDateAndTime = (String) userID.child("currentDateAndTime").getValue();
-                        availableFile.duration = (String) userID.child("duration").getValue();
-                        availableFile.filetype = (String) userID.child("filetype").getValue();
-
-                        availableFiles.add(availableFile);
-                    }
-                }
-
-
-                for (AvailableFile availableFile : availableFiles) {
-
-                    availableFilenames.add(availableFile.filename);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-
-            }
-        });
-
         checkForNewReceivedFile();
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -358,19 +300,20 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
                     @Override
                     protected void onPostExecute(String result) {
 
-                        for(AvailableFile availableFile: availableFiles){
-
-                            if(name_of_file_received.equals(availableFile.filename)){
-
-                                dbManager.insertDataIntoFilesReceivedTable(availableFile.sender, name_of_file_received, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
-
-                                String action = "Received " + name_of_file_received + " from " + availableFile.sender;
-
-                                dbManager.insertDataIntoRecentActivityTable(user, Utils.getCurrentDate(), Utils.getCurrentTime(), action);
-
-                                displayRecentActivity();
-                            }
-                        }
+                        // TODO: Download/locally store all file information in MyFirebaseMessagingService
+//                        for(AvailableFile availableFile: availableFiles){
+//
+//                            if(name_of_file_received.equals(availableFile.filename)){
+//
+//                                dbManager.insertDataIntoFilesReceivedTable(availableFile.sender, name_of_file_received, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
+//
+//                                String action = "Received " + name_of_file_received + " from " + availableFile.sender;
+//
+//                                dbManager.insertDataIntoRecentActivityTable(user, Utils.getCurrentDate(), Utils.getCurrentTime(), action);
+//
+//                                displayRecentActivity();
+//                            }
+//                        }
 
                         getFileProgressDialog.dismiss();
                     }
@@ -390,6 +333,8 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
         boolean userFound = false;
 
+        // TODO: Download band members (i.e. registered users) from MySQL database
+        // NB: this code accounts for user not using autocomplete feature
 //        for(User user: Login.users){
 //
 //            if(fullname.equals(user.fullName)){

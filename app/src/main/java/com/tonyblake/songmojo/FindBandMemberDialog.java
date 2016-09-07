@@ -139,6 +139,7 @@ public class FindBandMemberDialog extends DialogFragment {
 
         tv_name_entered = (AutoCompleteTextView) layout.findViewById(R.id.tv_name_entered);
 
+        // TODO: Download band members from MySQL database
 //        for(User u: Login.users){
 //
 //            if(!u.fullName.equals(user)){

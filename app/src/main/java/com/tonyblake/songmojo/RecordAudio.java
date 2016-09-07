@@ -17,8 +17,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -73,10 +71,6 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
     private long start_time, stop_time, duration;
 
     private String duration_str;
-
-    private FirebaseDatabase database;
-
-    private DatabaseReference databaseRef;
 
     private TextView btn_edit_filename, btn_edit_recipient;
 
@@ -146,10 +140,6 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
         backing_track_cued = false;
 
         backing_track_playing = false;
-
-        database = FirebaseDatabase.getInstance();
-
-        databaseRef = database.getReference().child("files");
 
         btn_edit_filename = (TextView)findViewById(R.id.btn_edit_filename);
 
@@ -336,10 +326,6 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
                                 String action = filename + " sent to " + recipient;
 
                                 dbManager.insertDataIntoRecentActivityTable(user, current_date, current_time, action);
-
-                                AvailableFile availableFile = new AvailableFile(user, Utils.removePrefix(filename), recipient, Utils.getCurrentDateAndTime(), duration_str, context.getString(R.string.audio_file));
-
-                                databaseRef.child(Utils.removePrefix(filename)).setValue(availableFile); // upload to remote DB
 
                                 sendingFileDialog.dismiss();
 
