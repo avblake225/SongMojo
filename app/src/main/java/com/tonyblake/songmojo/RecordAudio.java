@@ -399,7 +399,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
         backing_track_cued = true;
 
-        backing_track = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SongMojo/Downloads/" + fileChosen + context.getString(R.string._mp3);
+        backing_track = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SongMojo/Files Received/" + fileChosen + context.getString(R.string._mp3);
 
         String background_track_message = fileChosen + " " + context.getString(R.string.set_as_backing_track);
 

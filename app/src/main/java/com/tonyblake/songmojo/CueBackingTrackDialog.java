@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -149,7 +150,7 @@ public class CueBackingTrackDialog extends DialogFragment {
 
         select_track_spinner = (Spinner) view.findViewById(R.id.select_item_spinner);
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_RECEIVED_TABLE() + "';";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILES_RECEIVED_TABLE() + ";";
 
         Cursor cursor;
 
@@ -165,7 +166,10 @@ public class CueBackingTrackDialog extends DialogFragment {
             }
             while(cursor.moveToNext());
         }
-        catch(Exception e){};
+        catch(Exception e){
+
+            Log.e("CueBackingTrackDialog: ", "Error retrieving received files");
+        };
 
         if(filesReceived.size() == 0){
 
