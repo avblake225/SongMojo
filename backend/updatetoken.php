@@ -1,15 +1,15 @@
 <?php         
 
-   if(isset($_POST["NewToken"]) && isset($_POST["FirstName"]) && isset($_POST["LastName"])){ 
+   if(isset($_POST["NewToken"]) && isset($_POST["Email"]) && isset($_POST["Password"])){ 
         	
       echo "variables set successfully";
 
       // Extract data
       $newtoken = $_POST["NewToken"];
       
-   	$firstname = $_POST["FirstName"];
+   	$email = $_POST["Email"];
 
-      $lastname = $_POST["LastName"];             
+      $password = $_POST["Password"];             
 
       // Open database
       $conn = mysqli_connect("localhost","root","","songmojo") or die("Error connecting");
@@ -24,7 +24,7 @@
       }           
          
       // Update token
-      $query = "UPDATE userregistration SET Token = '$newtoken' WHERE FirstName = '$firstname' AND LastName = '$lastname'";
+      $query = "UPDATE userregistration SET Token = '$newtoken' WHERE Email = '$email' AND Password = '$password'";
 
    	if(!mysqli_query($conn,$query)){
 

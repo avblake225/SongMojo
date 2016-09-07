@@ -56,7 +56,7 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
     private Intent intent;
 
-    private String user;
+    private String user, email, password;
 
     private LayoutInflater layoutInflater;
 
@@ -91,13 +91,13 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
         savedInstanceState = getIntent().getExtras();
 
-        user = savedInstanceState.getString("user");
+        email = savedInstanceState.getString("email");
+
+        password = savedInstanceState.getString("password");
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         tv_user = (TextView)findViewById(R.id.tv_user);
-
-        tv_user.setText(user);
 
         tv_current_date = (TextView)findViewById(R.id.tv_current_date);
 
@@ -135,12 +135,20 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
         recent_activity_layout_container = (LinearLayout)findViewById(R.id.recent_activity_layout_container);
 
+        new GetUserTask(email,password){
+
+            @Override
+            protected void onPostExecute(String userReturned){
+
+                user = userReturned;
+
+                tv_user.setText(user);
+            }
+        }.execute();
+
         String newToken = FirebaseInstanceId.getInstance().getToken();
 
-        String[] names = Utils.separateWords(user);
-
-        // Fresh install case
-        new UpdateTokenTask(newToken,names[0],names[1]){
+        new UpdateTokenTask(newToken,email,password){
 
             @Override
             protected void onPostExecute(Boolean result){
@@ -204,26 +212,24 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.getValue(User.class) != null) {
+                for (DataSnapshot userID : dataSnapshot.getChildren()) {
 
-                    for (DataSnapshot userID : dataSnapshot.getChildren()) {
+                    String sender = (String) userID.child("sender").getValue();
 
-                        String sender = (String) userID.child("sender").getValue();
+                    if(!sender.equals(user)){
 
-                        if(!sender.equals(user)){
+                        AvailableFile availableFile = new AvailableFile();
 
-                            AvailableFile availableFile = new AvailableFile();
+                        availableFile.sender = sender;
+                        availableFile.filename = (String) userID.child("filename").getValue();
+                        availableFile.currentDateAndTime = (String) userID.child("currentDateAndTime").getValue();
+                        availableFile.duration = (String) userID.child("duration").getValue();
+                        availableFile.filetype = (String) userID.child("filetype").getValue();
 
-                            availableFile.sender = sender;
-                            availableFile.filename = (String) userID.child("filename").getValue();
-                            availableFile.currentDateAndTime = (String) userID.child("currentDateAndTime").getValue();
-                            availableFile.duration = (String) userID.child("duration").getValue();
-                            availableFile.filetype = (String) userID.child("filetype").getValue();
-
-                            availableFiles.add(availableFile);
-                        }
+                        availableFiles.add(availableFile);
                     }
                 }
+
 
                 for (AvailableFile availableFile : availableFiles) {
 
@@ -384,15 +390,15 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
         boolean userFound = false;
 
-        for(User user: Login.users){
-
-            if(fullname.equals(user.fullName)){
-
-                userFound = true;
-
-                break;
-            }
-        }
+//        for(User user: Login.users){
+//
+//            if(fullname.equals(user.fullName)){
+//
+//                userFound = true;
+//
+//                break;
+//            }
+//        }
 
         String msg;
 

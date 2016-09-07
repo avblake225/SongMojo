@@ -10,52 +10,43 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class UpdateTokenTask extends AsyncTask<String,Void,Boolean> {
+public class GetUserTask extends AsyncTask<String,Void,String>{
 
-    private String newToken;
-    private String email;
-    private String password;
+    private String email, password;
 
-    public UpdateTokenTask(String newToken, String email, String password){
+    public GetUserTask(String email, String password){
 
-        this.newToken = newToken;
         this.email = email;
         this.password = password;
     }
-
     @Override
-    protected Boolean doInBackground(String... params) {
+    protected String doInBackground(String... params) {
 
-        Boolean result = false;
+        String user = "";
 
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = new FormBody.Builder()
-                .add("NewToken", newToken)
                 .add("Email", email)
                 .add("Password", password)
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.1/songmojo/updatetoken.php") // TODO: Change URL on server deployment
+                .url("http://192.168.1.1/songmojo/getuser.php")
                 .post(body)
                 .build();
 
         try {
-
             Response response = client.newCall(request).execute();
 
             int responseCode = response.code();
 
-            if(responseCode == 200){
-
-                result = true;
-            }
+            user = response.body().string();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
-        return result;
+        return user;
     }
 }

@@ -38,7 +38,6 @@
 
             <TextView
                 android:id="@+id/tv_user"
-                android:text="testing"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="@dimen/tv_user_text_size"
