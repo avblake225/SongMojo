@@ -60,7 +60,7 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.1/songmojo/release/activitymonitor.php") // TODO: Change URL on server deployment
+                .url("http://192.168.1.1/songmojo/activity.php") // TODO: Change URL on server deployment
                 .post(body)
                 .build();
 

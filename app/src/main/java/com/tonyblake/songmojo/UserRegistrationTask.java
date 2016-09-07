@@ -12,13 +12,15 @@ import okhttp3.RequestBody;
 
 public class UserRegistrationTask extends AsyncTask<String,Void,Boolean>{
 
-    private String token, firstName, lastName;
+    private String token, firstName, lastName, email, password;
 
-    public UserRegistrationTask(String token, String firstName, String lastName){
+    public UserRegistrationTask(String token, String firstName, String lastName, String email, String password){
 
        this.token = token;
        this.firstName = firstName;
        this.lastName = lastName;
+       this.email = email;
+       this.password = password;
     }
 
     @Override
@@ -32,10 +34,12 @@ public class UserRegistrationTask extends AsyncTask<String,Void,Boolean>{
                 .add("Token", token)
                 .add("FirstName", firstName)
                 .add("LastName", lastName)
+                .add("Email", email)
+                .add("Password", password)
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.2/songmojo/release/register.php")
+                .url("http://192.168.1.1/songmojo/userregistration.php")
                 .post(body)
                 .build();
 

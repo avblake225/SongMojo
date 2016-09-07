@@ -243,7 +243,7 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                                 String token = Utils.getDeviceToken();
 
-                                new UserRegistrationTask(token, firstName, lastName) {
+                                new UserRegistrationTask(token, firstName, lastName, email, password) {
 
                                     @Override
                                     protected void onPreExecute(){
