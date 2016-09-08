@@ -114,9 +114,6 @@
     <string name="file_sent">File sent</string>
     <string name="done">Done</string>
 
-    <!-- Get File Progress Dialog -->
-    <string name="checking_for_new_files">Checking for new files...</string>
-
     <!-- Creating Account Progress Dialog -->
     <string name="creating_account">Creating Account...</string>
 

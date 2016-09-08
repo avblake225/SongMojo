@@ -51,8 +51,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
     private ArrayList<RecentActivity> recentActivityList;
 
-    private ProgressDialog getFileProgressDialog;
-
     private FindBandMemberDialog findBandMemberDialog;
 
     private FragmentManager fm;
@@ -60,8 +58,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
     public static File songMojoDirectory, filesReceivedDirectory, recordingsDirectory;
 
     private LinearLayout recent_activity_layout_container;
-
-    private String name_of_file_received;
 
     private ProgressDialog searchingForBandMemberDialog;
 
@@ -127,7 +123,9 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
                 user = userReturned;
 
-                tv_user.setText(user);
+                String[] names = Utils.separateWords(user);
+
+                tv_user.setText(names[0]);
             }
         }.execute();
 
@@ -187,8 +185,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
         }
 
         displayRecentActivity();
-
-        checkForNewReceivedFile();
 
         actionBar.setNavigationOnClickListener(new View.OnClickListener() {
 
@@ -277,57 +273,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
                 }
             }
         });
-    }
-
-    private void checkForNewReceivedFile(){
-
-        name_of_file_received = Utils.getNewReceivedFile(dbManager,context);
-
-        if(name_of_file_received != null){
-
-            if(Utils.connectedToNetwork(context)){
-
-                new GetFileTask(name_of_file_received,context){
-
-                    @Override
-                    protected void onPreExecute() {
-
-                        getFileProgressDialog = new ProgressDialog(context);
-                        getFileProgressDialog.setIndeterminate(true);
-                        getFileProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        getFileProgressDialog.setMessage(context.getString(R.string.checking_for_new_files));
-                        getFileProgressDialog.show();
-                    }
-
-                    @Override
-                    protected void onPostExecute(String result) {
-
-                        // TODO: Download/locally store all file information in MyFirebaseMessagingService
-//                        for(AvailableFile availableFile: availableFiles){
-//
-//                            if(name_of_file_received.equals(availableFile.filename)){
-//
-//                                dbManager.insertDataIntoFilesReceivedTable(availableFile.sender, name_of_file_received, availableFile.duration, availableFile.filetype, availableFile.currentDateAndTime);
-//
-//                                String action = "Received " + name_of_file_received + " from " + availableFile.sender;
-//
-//                                dbManager.insertDataIntoRecentActivityTable(user, Utils.getCurrentDate(), Utils.getCurrentTime(), action);
-//
-//                                displayRecentActivity();
-//                            }
-//                        }
-
-                        getFileProgressDialog.dismiss();
-                    }
-                }.execute();
-            }
-            else{
-
-                Toast.makeText(context, context.getString(R.string.no_network_connection), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        dbManager.deleteNewFileReceived();
     }
 
     @Override

@@ -21,6 +21,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         sendNotification(message);
 
+        // TODO: Extract all file data and add to Files Received Table
+
+        // TODO: Download physical file using GetFileTask
+
+        // TODO: Add action/activity to Recent Activity table
+        // e.g. String action = "Received some file from someone";
+
         String filename = Utils.extractFilename(message);
 
         NewFileReceivedManager manager = new NewFileReceivedManager(this);

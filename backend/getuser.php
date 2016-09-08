@@ -8,7 +8,7 @@
 
          $conn = mysqli_connect("localhost","root","","songmojo") or die("Error connecting");         
    	   
-   	   $query = "SELECT FirstName FROM userregistration WHERE Email = '$email' AND Password = '$password'";                   
+   	   $query = "SELECT FullName FROM userregistration WHERE Email = '$email' AND Password = '$password'";                   
    	   
          if(!mysqli_query($conn,$query)){
 
@@ -20,7 +20,7 @@
 
             $row = mysqli_fetch_assoc($result);
 
-            $user = $row['FirstName'];
+            $user = $row['FullName'];
 
             echo $user;     
          }       
