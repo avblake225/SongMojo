@@ -15,9 +15,10 @@ public class NewFileReceivedManager {
         dbManager = new DBManager(context);
     }
 
-    public boolean addToDatabase(String filename){
+    public boolean addToDatabase(FileReceived file){
 
-        boolean result = dbManager.insertDataIntoNewFileReceivedTable(filename);
+        boolean result = dbManager.insertDataIntoFilesReceivedTable(file.sender,file.filename,
+                                                file.duration,file.filetype,file.dateAndTime);
 
         return result;
     }

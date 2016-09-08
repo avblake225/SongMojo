@@ -12,6 +12,8 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.ArrayList;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
@@ -19,25 +21,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String message = remoteMessage.getData().get("message");
 
-        sendNotification(message);
+        ArrayList<String> file_info = getFileInfo(message);
 
-        // TODO: Extract all file data and add to Files Received Table
+        String dateAndTime = file_info.get(0);
+        String sender = file_info.get(1);
+        String filename = file_info.get(2);
+        String filetype = file_info.get(3);
+        String duration = file_info.get(4);
+
+        FileReceived fileReceived = new FileReceived(dateAndTime,sender,filename,filetype,duration);
+
+        NewFileReceivedManager manager = new NewFileReceivedManager(this);
+
+        boolean addedToDatabase = manager.addToDatabase(fileReceived);
+
+        Log.i("OnMessageReceived: ", "Added received file to local DB");
 
         // TODO: Download physical file using GetFileTask
 
         // TODO: Add action/activity to Recent Activity table
         // e.g. String action = "Received some file from someone";
 
-        String filename = Utils.extractFilename(message);
-
-        NewFileReceivedManager manager = new NewFileReceivedManager(this);
-
-        boolean addedToDatabase = manager.addToDatabase(filename);
-
-        Log.i("Filename from message: ", filename);
+        sendNotification(filename,sender);
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String filename, String sender) {
+
+        String message = sender + " just sent you " + filename;
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -47,7 +57,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_mail_outline_black_24dp)
                 .setContentTitle("SongMojo")
-                .setContentText(messageBody)
+                .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
@@ -56,5 +66,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0, notificationBuilder.build());
+    }
+
+    private ArrayList<String> getFileInfo(String message){
+
+        ArrayList<String> file_info = new ArrayList();
+
+        for(int i=0;i<message.length();i++){
+
+            String message_char = String.valueOf(message.charAt(i));
+
+            if(message_char.equals(",")){
+
+                String info = message.substring(0,i);
+
+                file_info.add(info);
+
+                message = message.substring(i+1,message.length());
+
+                i=0;
+
+                if(file_info.size() == 4){
+
+                    info = message.substring(i,message.length());
+
+                    file_info.add(info);
+
+                    break;
+                }
+            }
+        }
+
+        return file_info;
     }
 }
