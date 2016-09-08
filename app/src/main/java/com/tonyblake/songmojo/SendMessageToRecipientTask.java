@@ -17,13 +17,18 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
     private String sender;
     private String recipient;
     private String filename;
+    private String filetype;
+    private String duration;
 
-    public SendMessageToRecipientTask(String token, String sender, String recipient, String filename){
+    public SendMessageToRecipientTask(String token, String sender, String recipient, String filename,
+                                      String filetype, String duration){
 
         this.token = token;
         this.sender = sender;
         this.recipient = recipient;
         this.filename = filename;
+        this.filetype = filetype;
+        this.duration = duration;
     }
 
     @Override
@@ -56,7 +61,9 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
                 .add("SenderLastname", senderlastname)
                 .add("RecipientFirstname", recipientfirstname)
                 .add("RecipientLastname", recipientlastname)
-                .add("Filename", filenameWithoutPrefix)
+                .add("FileName", filenameWithoutPrefix)
+                .add("FileType", filetype)
+                .add("Duration", duration)
                 .build();
 
         Request request = new Request.Builder()

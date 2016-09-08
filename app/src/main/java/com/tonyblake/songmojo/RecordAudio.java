@@ -300,7 +300,8 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
                         }
                     }.execute();
 
-                    new SendMessageToRecipientTask(Utils.getDeviceToken(), user, recipient, filename) {
+                    new SendMessageToRecipientTask(Utils.getDeviceToken(), user, recipient, filename,
+                                                   context.getString(R.string.audio_file), String.valueOf(duration)){
 
                         @Override
                         protected void onPreExecute() {

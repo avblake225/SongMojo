@@ -1,7 +1,8 @@
 <?php         
 
    if(isset($_POST["DateAndTime"]) && isset($_POST["SenderToken"]) && isset($_POST["SenderFirstname"]) && isset($_POST["SenderLastname"]) 
-      && isset($_POST["RecipientFirstname"]) && isset($_POST["RecipientLastname"]) && isset($_POST["Filename"])){ 
+      && isset($_POST["RecipientFirstname"]) && isset($_POST["RecipientLastname"]) && isset($_POST["FileName"])
+      && isset($_POST["FileType"]) && isset($_POST["Duration"])){ 
         	
       echo "variables set successfully";
 
@@ -18,7 +19,11 @@
 
       $recipientlastname = $_POST["RecipientLastname"];   	   
 
-      $filename = $_POST["Filename"];         
+      $filename = $_POST["FileName"];
+
+      $filetype = $_POST["FileType"];
+
+      $duration = $_POST["Duration"];         
 
       // Open database
       $conn = mysqli_connect("localhost","root","","songmojo") or die("Error connecting");
@@ -51,10 +56,10 @@
       }            
          
       // Record activity
-      $query = "INSERT INTO activity (DateAndTime,SenderToken,SenderFirstname,SenderLastname,RecipientToken,RecipientFirstname,RecipientLastname,Filename) 
-                VALUES ('$dateandtime', '$sendertoken', '$senderfirstname', '$senderlastname', '$recipienttoken', '$recipientfirstname','$recipientlastname','$filename')";            
+      $query = "INSERT INTO activity (DateAndTime,SenderToken,SenderFirstname,SenderLastname,RecipientToken,RecipientFirstname,RecipientLastname,FileName,FileType,Duration) 
+                VALUES ('$dateandtime', '$sendertoken', '$senderfirstname', '$senderlastname', '$recipienttoken', '$recipientfirstname','$recipientlastname','$filename','$filetype','$duration')";            
 
-   	if(!mysqli_query($conn,$query)){
+   	  if(!mysqli_query($conn,$query)){
 
          echo "Error description: " . mysqli_error($conn);
       }
