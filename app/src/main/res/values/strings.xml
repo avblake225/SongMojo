@@ -96,7 +96,7 @@
 
     <!-- CueBackingTrackDialog.java -->
     <string name="select_track">Select track</string>
-    <string name="select">Select</string>
+    <string name="ok">OK</string>
     <string name="set_as_backing_track">set as backing track</string>
     <string name="backing_track_removed">Backing track removed</string>
     <string name="no_tracks_available">No tracks available</string>
@@ -105,6 +105,9 @@
     <string name="recording">Recording...</string>
     <string name="playing">Playing...</string>
     <string name="saved_to_device">saved to device</string>
+
+    <!-- Searching For Band Member Dialog -->
+    <string name="searching_for_band_member">Searching for band member...</string>
 
     <!-- Sending File dialog -->
     <string name="sending_file">Sending file...</string>
@@ -123,13 +126,6 @@
 
     <!-- FileSentDialog.java -->
     <string name="_mp4">.mp4</string>
-
-    <!-- GetFileDialog.java -->
-    <string name="enter_file_name">Enter file name</string>
-    <string name="cancel">Cancel</string>
-    <string name="ok">ok</string>
-    <string name="no_file_name_entered">No file name entered</string>
-    <string name="no_file_found">No file found</string>
 
     <!-- DB queries -->
     <string name="select_all_rows_from">SELECT * FROM</string>
@@ -157,12 +153,15 @@
 
     <!-- FindBandMemberDialog.java -->
     <string name="find_band_member">Find Band Member</string>
+    <string name="go">Go</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_band_member_found">No band member found</string>
 
     <!-- EditFilenameDialog.java -->
     <string name="edit_filename">Edit filename</string>
 
     <!-- find_band_member_dialog.xml -->
-    <string name="enter_name">Enter name</string>
+    <string name="enter_full_name">Enter full name</string>
 
     <!-- received_file_item_layout.xml -->
     <string name="sender">Sender:</string>

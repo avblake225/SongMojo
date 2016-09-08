@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/tv_name_entered"
-        android:hint="@string/enter_name"
+        android:hint="@string/enter_full_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/generic_margin_top"

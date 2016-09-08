@@ -102,12 +102,11 @@ public class Utils {
         return filenameWithoutPrefix;
     }
 
-    public static ArrayList<String> getBandMembers(Context context, String user, DBManager dbManager){
+    public static ArrayList<String> getBandMembers(Context context, DBManager dbManager){
 
         ArrayList<String> bandMembers = new ArrayList<>();
 
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.BAND_MEMBERS_TABLE() + " "
-                        + context.getString(R.string.where_user_equals) + "'" + user + "';";
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.BAND_MEMBERS_TABLE() + ";";
 
         Cursor cursor;
 
@@ -119,7 +118,7 @@ public class Utils {
 
             do{
 
-                String bandMember = cursor.getString(2);
+                String bandMember = cursor.getString(1);
 
                 bandMembers.add(bandMember);
             }

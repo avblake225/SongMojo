@@ -183,7 +183,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                 Bundle bundle = new Bundle();
 
-                bundle.putStringArrayList("availableRecipients", Utils.getBandMembers(context, user, dbManager));
+                bundle.putStringArrayList("availableRecipients", Utils.getBandMembers(context, dbManager));
 
                 editRecipientDialog.setArguments(bundle);
 

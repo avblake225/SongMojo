@@ -60,7 +60,7 @@ public class SendFile extends AppCompatActivity{
 
         recipient_chosen = null;
 
-        bandMembers = Utils.getBandMembers(context, user, dbManager);
+        bandMembers = Utils.getBandMembers(context, dbManager);
 
         et_file_name = (EditText)findViewById(R.id.et_file_name);
 

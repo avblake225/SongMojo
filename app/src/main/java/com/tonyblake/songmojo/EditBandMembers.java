@@ -88,7 +88,7 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
 
         if(bandMembersToDisplay.size() == 0){
 
-            bandMembersToDisplay = Utils.getBandMembers(context, user, dbManager);
+            bandMembersToDisplay = Utils.getBandMembers(context, dbManager);
 
             if(bandMembersToDisplay.size() == 0){
 
@@ -126,7 +126,7 @@ public class EditBandMembers extends AppCompatActivity implements DeleteBandMemb
     @Override
     public void onDeleteBandMemberYesButtonClick(DialogFragment dialog, String bandMember, int position) {
 
-        dbManager.deleteBandMember(user, bandMember);
+        dbManager.deleteBandMember(bandMember);
 
         int numBandMembers = adapter.clearData(position);
 

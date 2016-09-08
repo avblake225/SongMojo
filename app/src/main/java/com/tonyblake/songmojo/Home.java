@@ -63,6 +63,8 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
     private String name_of_file_received;
 
+    private ProgressDialog searchingForBandMemberDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -329,46 +331,70 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
     }
 
     @Override
-    public void onFindBandMemberDialogOkButtonClick(DialogFragment dialog, String fullname) {
+    public void onFindBandMemberDialogOkButtonClick(DialogFragment dialog, final String fullname_entered) {
 
-        boolean userFound = false;
+        new FindBandMemberTask(fullname_entered){
 
-        // TODO: Download band members (i.e. registered users) from MySQL database
-        // NB: this code accounts for user not using autocomplete feature
-//        for(User user: Login.users){
-//
-//            if(fullname.equals(user.fullName)){
-//
-//                userFound = true;
-//
-//                break;
-//            }
-//        }
+            @Override
+            protected void onPreExecute() {
 
-        String msg;
-
-        ArrayList<String> bandMembers = Utils.getBandMembers(context, user, dbManager);
-
-        if(userFound){
-
-            if(!bandMembers.contains(fullname)){
-
-                dbManager.insertDataIntoBandMembersTable(user, fullname);
-
-                msg = fullname + " added to band members";
-            }
-            else{
-
-                msg = fullname + " already added to band members";
+                searchingForBandMemberDialog = new ProgressDialog(context);
+                searchingForBandMemberDialog.setIndeterminate(true);
+                searchingForBandMemberDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                searchingForBandMemberDialog.setMessage(context.getString(R.string.searching_for_band_member));
+                searchingForBandMemberDialog.show();
             }
 
-        }
-        else{
+            @Override
+            protected void onPostExecute(Boolean success){
 
-            msg = "Could not find user " + fullname;
-        }
+                searchingForBandMemberDialog.dismiss();
 
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                String msg = "";
+
+                if(success){
+
+                    String[] names = Utils.separateWords(fullname_entered);
+
+                    String firstName  = names[0].substring(0, 1).toUpperCase()+ names[0].substring(1).toLowerCase();
+
+                    String lastName  = names[1].substring(0, 1).toUpperCase()+ names[1].substring(1).toLowerCase();
+
+                    String fullname_camelCase = firstName + " " + lastName;
+
+                    ArrayList<String> bandMembers = Utils.getBandMembers(context, dbManager);
+
+                    if(!bandMembers.contains(fullname_camelCase)){
+
+                        dbManager.insertDataIntoBandMembersTable(fullname_camelCase);
+
+                        FoundBandMemberDialog foundBandMemberDialog = new FoundBandMemberDialog();
+
+                        Bundle bundle = new Bundle();
+
+                        msg = fullname_camelCase + " added to band members";
+
+                        bundle.putString("message", msg);
+
+                        foundBandMemberDialog.setArguments(bundle);
+
+                        foundBandMemberDialog.show(fm,"foundBandMemberDialog");
+                    }
+                    else{
+
+                        msg = fullname_camelCase + " already added to band members";
+
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+
+                    msg = context.getString(R.string.no_band_member_found);
+
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
     }
 
     private String getUser(){

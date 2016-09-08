@@ -13,12 +13,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-
-import java.util.ArrayList;
+import android.widget.EditText;
 
 public class FindBandMemberDialog extends DialogFragment {
 
@@ -30,13 +26,9 @@ public class FindBandMemberDialog extends DialogFragment {
 
     private View layout;
 
-    private AutoCompleteTextView tv_name_entered;
+    private EditText tv_name_entered;
 
     private String fullname;
-
-    private ArrayList<String> fullnames;
-
-    private String user;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -47,36 +39,28 @@ public class FindBandMemberDialog extends DialogFragment {
 
         layout = inflator.inflate(R.layout.find_band_member_dialog, null);
 
-        fullnames = new ArrayList<>();
-
-        user = getArguments().getString("user");
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setView(layout)
                 .setTitle(context.getString(R.string.find_band_member))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.go, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        if(fullname == null) {
-
-                            fullname = tv_name_entered.getText().toString();
-                        }
+                        fullname = tv_name_entered.getText().toString();
 
                         findBandMemberDialogInterface.onFindBandMemberDialogOkButtonClick(FindBandMemberDialog.this, fullname);
-
                     }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                dismiss();
-            }
+                        dismiss();
+                    }
         });
-
 
         final AlertDialog dialog = builder.create();
 
@@ -137,35 +121,6 @@ public class FindBandMemberDialog extends DialogFragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        tv_name_entered = (AutoCompleteTextView) layout.findViewById(R.id.tv_name_entered);
-
-        // TODO: Download band members from MySQL database
-//        for(User u: Login.users){
-//
-//            if(!u.fullName.equals(user)){
-//
-//                fullnames.add(u.fullName);
-//            }
-//        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context,android.R.layout.simple_list_item_1, fullnames);
-
-        tv_name_entered.setAdapter(adapter);
-
-        tv_name_entered.setThreshold(1);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        tv_name_entered.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                fullname = (String) parent.getItemAtPosition(position);
-            }
-        });
+        tv_name_entered = (EditText) layout.findViewById(R.id.tv_name_entered);
     }
 }
