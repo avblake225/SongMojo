@@ -16,8 +16,12 @@ import java.util.ArrayList;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
+    private Context context;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+
+        context = this;
 
         String message = remoteMessage.getData().get("message");
 
@@ -31,13 +35,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         FileReceived fileReceived = new FileReceived(dateAndTime,sender,filename,filetype,duration);
 
-        NewFileReceivedManager manager = new NewFileReceivedManager(this);
+        NewFileReceivedManager newFileReceivedManager = new NewFileReceivedManager(this);
 
-        boolean addedToDatabase = manager.addToDatabase(fileReceived);
+        if(newFileReceivedManager.addToDatabase(fileReceived)){
 
-        Log.i("OnMessageReceived: ", "Added received file to local DB");
+            Log.i("OnMessageReceived: ", "Added data to Files Received table");
+        }
+        else{
 
-        // TODO: Download physical file using GetFileTask
+            Log.i("OnMessageReceived: ", "Error adding data to Files Received table");
+        }
+
+        if(newFileReceivedManager.addStatus(filename, context.getString(R.string.available))){
+
+            Log.i("OnMessageReceived: ", "Added status to File Available table");
+        }
+        else{
+
+            Log.i("OnMessageReceived: ", "Error adding status to File Available table");
+        }
 
         // TODO: Add action/activity to Recent Activity table
         // e.g. String action = "Received some file from someone";

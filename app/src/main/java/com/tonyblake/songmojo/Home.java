@@ -140,6 +140,10 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
                     Log.i("UpdateTokenTask: ", "Successfully updated device token");
                 }
+                else{
+
+                    Log.i("UpdateTokenTask: ", "Error updateding device token");
+                }
             }
         }.execute();
     }
@@ -179,10 +183,7 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
     protected void onResume() {
         super.onResume();
 
-        if(user == null){
-
-            user = getUser();
-        }
+        checkForAvailableFile();
 
         displayRecentActivity();
 
@@ -342,34 +343,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
         }.execute();
     }
 
-    private String getUser(){
-
-        String user = null;
-
-        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.RECENT_ACTIVITY_TABLE() + ";";
-
-        Cursor cursor;
-
-        try{
-
-            cursor = dbManager.rawQuery(query);
-
-            cursor.moveToFirst();
-
-            do{
-
-                user = cursor.getString(1);
-            }
-            while(cursor.moveToNext());
-        }
-        catch(Exception e){
-
-            Log.e("LocalDBError", "Error retrieving user");
-        }
-
-        return user;
-    }
-
     private void displayRecentActivity(){
 
         recent_activity_layout_container.removeAllViews();
@@ -438,5 +411,45 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
         String time;
         String action;
+    }
+
+    private void checkForAvailableFile(){
+
+        String filename = "", status = "";
+
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.FILE_AVAILABLE_TABLE() + ";";
+
+        Cursor cursor;
+
+        try{
+
+            cursor = dbManager.rawQuery(query);
+
+            cursor.moveToFirst();
+
+            do{
+                filename = cursor.getString(1);
+
+                status = cursor.getString(2);
+            }
+            while(cursor.moveToNext());
+        }
+        catch(Exception e){
+
+            Log.e("CheckForAvailableFile: ", "Error querying File Available table");
+        }
+
+        if(status.equals("Available")){
+
+            new GetFileTask(filename,context){
+
+                @Override
+                protected void onPostExecute(String filename){
+
+                    dbManager.deleteOldAvailableFile(filename);
+
+                }
+            }.execute();
+        }
     }
 }

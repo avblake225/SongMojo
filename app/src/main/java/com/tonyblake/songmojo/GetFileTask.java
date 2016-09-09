@@ -2,7 +2,7 @@ package com.tonyblake.songmojo;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,6 +47,8 @@ public class GetFileTask extends AsyncTask<String,Void,String>{
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 
+                Log.i("GetFileTask: ", "Successfully downloaded received file");
+
             }
         }).
         addOnFailureListener(new OnFailureListener() {
@@ -54,10 +56,10 @@ public class GetFileTask extends AsyncTask<String,Void,String>{
             @Override
             public void onFailure(Exception e) {
 
-                Toast.makeText(context,context.getString(R.string.error_downloading_file),Toast.LENGTH_SHORT).show();
+                Log.i("GetFileTask: ", "Error downloadeding received file");
             }
         });
 
-        return null;
+        return filename;
     }
 }

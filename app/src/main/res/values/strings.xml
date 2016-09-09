@@ -170,7 +170,7 @@
     <!-- band_member_item_layout.xml -->
     <string name="name">Name:</string>
 
-    <!-- Misc -->
-    <string name="error_downloading_file">Error downloading file</string>
+    <!-- MyFirebaseMessagingService.java -->
+    <string name="available">Available</string>
 
 </resources>

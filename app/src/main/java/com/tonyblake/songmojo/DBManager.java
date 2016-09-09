@@ -32,6 +32,12 @@ public class DBManager extends SQLiteOpenHelper{
     private final String FILES_RECEIVED_TABLE_COL_5 = "FILE_TYPE";
     private final String FILES_RECEIVED_TABLE_COL_6 = "DATE";
 
+    // File Available Table
+    private final String FILE_AVAILABLE_TABLE = "file_available_table";
+    private final String FILE_AVAILABLE_TABLE_COL_1 = "ID";
+    private final String FILE_AVAILABLE_TABLE_COL_2 = "FILENAME";
+    private final String FILE_AVAILABLE_TABLE_COL_3 = "STATUS";
+
     // Recent Activity Table
     private final String RECENT_ACTIVITY_TABLE = "recent_activity_table";
     private final String RECENT_ACTIVITY_TABLE_COL_1 = "ID";
@@ -69,6 +75,7 @@ public class DBManager extends SQLiteOpenHelper{
 
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + FILES_RECEIVED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
+        db.execSQL("CREATE TABLE " + FILE_AVAILABLE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FILENAME TEXT, STATUS TEXT)");
         db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, DATE TEXT, TIME TEXT, ACTION TEXT)");
         db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FULLNAME TEXT)");
     }
@@ -105,6 +112,23 @@ public class DBManager extends SQLiteOpenHelper{
         contentValues.put(FILES_RECEIVED_TABLE_COL_6, date);
 
         long result = db.insert(FILES_RECEIVED_TABLE, null, contentValues);
+
+        if(result == -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public boolean insertDataIntoFileAvailableTable(String filename, String status){
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(FILE_AVAILABLE_TABLE_COL_2, filename);
+        contentValues.put(FILE_AVAILABLE_TABLE_COL_3, status);
+
+        long result = db.insert(FILE_AVAILABLE_TABLE, null, contentValues);
 
         if(result == -1){
             return false;
@@ -154,6 +178,7 @@ public class DBManager extends SQLiteOpenHelper{
 
         db.execSQL("DROP TABLE IF EXISTS" + FILES_SENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + FILES_RECEIVED_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS" + FILE_AVAILABLE_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + RECENT_ACTIVITY_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + BAND_MEMBERS_TABLE);
         onCreate(db);
@@ -203,6 +228,13 @@ public class DBManager extends SQLiteOpenHelper{
         db.execSQL(delete_query);
     }
 
+    public void deleteOldAvailableFile(String filename){
+
+        String delete_query = "DELETE FROM " + FILE_AVAILABLE_TABLE + " WHERE FILENAME = '" + filename + "';";
+
+        db.execSQL(delete_query);
+    }
+
     public void deleteSentFiles(){
 
         db.delete(FILES_SENT_TABLE,null,null);
@@ -221,6 +253,11 @@ public class DBManager extends SQLiteOpenHelper{
     public String FILES_RECEIVED_TABLE(){
 
         return FILES_RECEIVED_TABLE;
+    }
+
+    public String FILE_AVAILABLE_TABLE(){
+
+        return FILE_AVAILABLE_TABLE;
     }
 
     public String RECENT_ACTIVITY_TABLE(){

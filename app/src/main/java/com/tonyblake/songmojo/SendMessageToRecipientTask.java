@@ -13,22 +13,11 @@ import okhttp3.Response;
 
 public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
 
-    private String token;
-    private String sender;
-    private String recipient;
-    private String filename;
-    private String filetype;
-    private String duration;
+    private FileSent fileSent;
 
-    public SendMessageToRecipientTask(String token, String sender, String recipient, String filename,
-                                      String filetype, String duration){
+    public SendMessageToRecipientTask(FileSent fileSent){
 
-        this.token = token;
-        this.sender = sender;
-        this.recipient = recipient;
-        this.filename = filename;
-        this.filetype = filetype;
-        this.duration = duration;
+        this.fileSent = fileSent;
     }
 
     @Override
@@ -38,32 +27,32 @@ public class SendMessageToRecipientTask extends AsyncTask<String,Void,Boolean> {
 
         String dateAndTime = Utils.getCurrentDateAndTime();
 
-        String[] senderName = Utils.separateWords(sender);
+        String[] senderName = Utils.separateWords(fileSent.sender);
 
         String senderfirstname = senderName[0];
 
         String senderlastname = senderName[1];
 
-        String[] recipientName = Utils.separateWords(recipient);
+        String[] recipientName = Utils.separateWords(fileSent.recipient);
 
         String recipientfirstname = recipientName[0];
 
         String recipientlastname = recipientName[1];
 
-        String filenameWithoutPrefix = Utils.removePrefix(filename);
+        String filenameWithoutPrefix = Utils.removePrefix(fileSent.filename);
 
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = new FormBody.Builder()
                 .add("DateAndTime", dateAndTime)
-                .add("SenderToken", token)
+                .add("SenderToken", fileSent.token)
                 .add("SenderFirstname", senderfirstname)
                 .add("SenderLastname", senderlastname)
                 .add("RecipientFirstname", recipientfirstname)
                 .add("RecipientLastname", recipientlastname)
                 .add("FileName", filenameWithoutPrefix)
-                .add("FileType", filetype)
-                .add("Duration", duration)
+                .add("FileType", fileSent.filetype)
+                .add("Duration", fileSent.duration)
                 .build();
 
         Request request = new Request.Builder()
