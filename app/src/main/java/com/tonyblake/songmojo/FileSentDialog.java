@@ -19,8 +19,6 @@ public class FileSentDialog extends DialogFragment {
 
     private View view;
 
-    private String user;
-
     private TextView tv_success_msg;
 
     private WindowManager.LayoutParams lp;
@@ -34,8 +32,6 @@ public class FileSentDialog extends DialogFragment {
 
         view = inflater.inflate(R.layout.success_dialog, null);
 
-        user = getArguments().getString("user");
-
         builder.setTitle(R.string.success)
                 .setView(view)
                 .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
@@ -43,7 +39,7 @@ public class FileSentDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        fileSentDialogInterface.onDoneButtonClick(FileSentDialog.this, user);
+                        fileSentDialogInterface.onDoneButtonClick(FileSentDialog.this);
                     }
                 });
 
@@ -77,7 +73,7 @@ public class FileSentDialog extends DialogFragment {
 
     public interface FileSentDialogInterface {
 
-        void onDoneButtonClick(DialogFragment dialog, String user);
+        void onDoneButtonClick(DialogFragment dialog);
     }
 
     FileSentDialogInterface fileSentDialogInterface;
@@ -104,11 +100,11 @@ public class FileSentDialog extends DialogFragment {
 
         if(SendFile.audioFile){
 
-            message = RecordAudio.filename + " sent to " + RecordAudio.recipient;
+            message = "Sent " + RecordAudio.filename + " to " + RecordAudio.recipient;
         }
         else if(SendFile.videoFile){
 
-            message = RecordVideo.filename + " sent to " + RecordVideo.recipient;
+            message = "Sent " + RecordVideo.filename + " to " + RecordVideo.recipient;
         }
 
         tv_success_msg.setText(message);

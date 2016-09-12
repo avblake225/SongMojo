@@ -13,6 +13,12 @@ public class DBManager extends SQLiteOpenHelper{
 
     public static final String DATABASE_NAME = "songmojodatabase.db";
 
+    // User Details Table
+    private final String USER_DETAILS_TABLE = "user_details_table";
+    private final String USER_DETAILS_TABLE_COL_1 = "ID";
+    private final String USER_DETAILS_TABLE_COL_2 = "FIRST_NAME";
+    private final String USER_DETAILS_TABLE_COL_3 = "LAST_NAME";
+
     // Files Sent Table
     private final String FILES_SENT_TABLE = "files_sent_table";
     private final String FILES_SENT_TABLE_COL_1 = "ID";
@@ -73,11 +79,29 @@ public class DBManager extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        db.execSQL("CREATE TABLE " + USER_DETAILS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FIRST_NAME TEXT, LAST_NAME TEXT, EMAIL TEXT, PASSWORD TEXT)");
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + FILES_RECEIVED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + FILE_AVAILABLE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FILENAME TEXT, STATUS TEXT)");
         db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, DATE TEXT, TIME TEXT, ACTION TEXT)");
         db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FULLNAME TEXT)");
+    }
+
+    public boolean insertDataIntoUserDetailsTable(String first_name, String last_name){
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(USER_DETAILS_TABLE_COL_2, first_name);
+        contentValues.put(USER_DETAILS_TABLE_COL_3, last_name);
+
+        long result = db.insert(USER_DETAILS_TABLE, null, contentValues);
+
+        if(result == -1){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     public boolean insertDataIntoFilesSentTable(String user, String recipient, String file_name, String duration, String file_type, String date){
@@ -176,6 +200,7 @@ public class DBManager extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+        db.execSQL("DROP TABLE IF EXISTS" + USER_DETAILS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + FILES_SENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + FILES_RECEIVED_TABLE);
         db.execSQL("DROP TABLE IF EXISTS" + FILE_AVAILABLE_TABLE);
@@ -243,6 +268,11 @@ public class DBManager extends SQLiteOpenHelper{
     public void deleteReceivedFiles(){
 
         db.delete(FILES_RECEIVED_TABLE,null,null);
+    }
+
+    public String USER_DETAILS_TABLE(){
+
+        return USER_DETAILS_TABLE;
     }
 
     public String FILES_SENT_TABLE(){

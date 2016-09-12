@@ -404,11 +404,9 @@ public class RecordVideo extends AppCompatActivity implements FileSentDialog.Fil
     }
 
     @Override
-    public void onDoneButtonClick(DialogFragment dialog, String user) {
+    public void onDoneButtonClick(DialogFragment dialog) {
 
         Intent intent = new Intent(this, Home.class);
-
-        intent.putExtra("user", user);
 
         startActivity(intent);
     }

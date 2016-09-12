@@ -316,19 +316,13 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                                 String current_time = Utils.getCurrentTime();
 
-                                String action = filename + " sent to " + recipient;
+                                String action = "Sent " + filename + " to " + recipient;
 
                                 dbManager.insertDataIntoRecentActivityTable(user, current_date, current_time, action);
 
                                 sendingFileDialog.dismiss();
 
                                 FileSentDialog fileSentDialog = new FileSentDialog();
-
-                                Bundle bundle = new Bundle();
-
-                                bundle.putString("user", user);
-
-                                fileSentDialog.setArguments(bundle);
 
                                 fileSentDialog.show(fm, "fileSentDialog");
                             }
@@ -362,11 +356,9 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
     }
 
     @Override
-    public void onDoneButtonClick(DialogFragment dialog, String user) {
+    public void onDoneButtonClick(DialogFragment dialog) {
 
         Intent intent = new Intent(this, Home.class);
-
-        intent.putExtra("user", user);
 
         startActivity(intent);
     }

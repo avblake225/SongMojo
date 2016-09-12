@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class Login extends AppCompatActivity implements CreateAccountDialog.CreateAccountDialogInterface {
 
@@ -42,6 +44,12 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
     private ForgotPasswordDialog forgotPasswordDialog;
 
     private ProgressDialog creatingAccountDialog;
+
+    private ProgressDialog loggingInDialog;
+
+    private DBManager dbManager;
+
+    private String first_name, last_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,8 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
         password = "";
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        dbManager = new DBManager(context);
     }
 
     @Override
@@ -139,12 +149,60 @@ public class Login extends AppCompatActivity implements CreateAccountDialog.Crea
 
                             if (task.isSuccessful()) {
 
-                                Intent intent = new Intent(context, Home.class);
+                                new GetUserTask(email,password){
 
-                                intent.putExtra("email", email);
-                                intent.putExtra("password", password);
+                                    @Override
+                                    protected void onPreExecute(){
 
-                                startActivity(intent);
+                                        loggingInDialog = new ProgressDialog(context);
+                                        loggingInDialog.setIndeterminate(true);
+                                        loggingInDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                        loggingInDialog.setMessage(context.getString(R.string.logging_in));
+                                        loggingInDialog.show();
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(String userReturned){
+
+                                        String[] names = Utils.separateWords(userReturned);
+
+                                        first_name = names[0];
+                                        last_name = names[1];
+
+                                        if(dbManager.insertDataIntoUserDetailsTable(first_name,last_name)){
+
+                                            Log.i("GetUserTask: ", "Stored user details in local DB");
+                                        }
+                                        else{
+
+                                            Log.i("GetUserTask: ", "Error Storing user details in local DB");
+                                        }
+                                    }
+                                }.execute();
+
+                                String newToken = FirebaseInstanceId.getInstance().getToken();
+
+                                new UpdateTokenTask(newToken,email,password){
+
+                                    @Override
+                                    protected void onPostExecute(Boolean result){
+
+                                        if(result){
+
+                                            Log.i("UpdateTokenTask: ", "Successfully updated device token");
+                                        }
+                                        else{
+
+                                            Log.i("UpdateTokenTask: ", "Error updateding device token");
+                                        }
+
+                                        loggingInDialog.dismiss();
+
+                                        Intent intent = new Intent(context, Home.class);
+
+                                        startActivity(intent);
+                                    }
+                                }.execute();
                             }
                             else{
 

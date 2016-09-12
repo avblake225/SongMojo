@@ -24,8 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
 import java.io.File;
 import java.util.ArrayList;
 
@@ -43,7 +41,7 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
     private Intent intent;
 
-    private String user, email, password;
+    private String user, first_name, last_name;
 
     private LayoutInflater layoutInflater;
 
@@ -69,12 +67,6 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
         context = this;
 
         dbManager = new DBManager(context);
-
-        savedInstanceState = getIntent().getExtras();
-
-        email = savedInstanceState.getString("email");
-
-        password = savedInstanceState.getString("password");
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -116,36 +108,9 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
         recent_activity_layout_container = (LinearLayout)findViewById(R.id.recent_activity_layout_container);
 
-        new GetUserTask(email,password){
+        getUserDetails();
 
-            @Override
-            protected void onPostExecute(String userReturned){
-
-                user = userReturned;
-
-                String[] names = Utils.separateWords(user);
-
-                tv_user.setText(names[0]);
-            }
-        }.execute();
-
-        String newToken = FirebaseInstanceId.getInstance().getToken();
-
-        new UpdateTokenTask(newToken,email,password){
-
-            @Override
-            protected void onPostExecute(Boolean result){
-
-                if(result){
-
-                    Log.i("UpdateTokenTask: ", "Successfully updated device token");
-                }
-                else{
-
-                    Log.i("UpdateTokenTask: ", "Error updateding device token");
-                }
-            }
-        }.execute();
+        tv_user.setText(first_name);
     }
 
     @Override
@@ -450,6 +415,33 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
                 }
             }.execute();
+        }
+    }
+
+    private void getUserDetails(){
+
+        String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.USER_DETAILS_TABLE() + ";";
+
+        Cursor cursor;
+
+        try{
+
+            cursor = dbManager.rawQuery(query);
+
+            cursor.moveToFirst();
+
+            do{
+
+                first_name = cursor.getString(1);
+                last_name = cursor.getString(2);
+
+                user = first_name + " " + last_name;
+            }
+            while(cursor.moveToNext());
+        }
+        catch(Exception e){
+
+            Log.e("getUserDetails: ", "Error retrieving user details");
         }
     }
 }
