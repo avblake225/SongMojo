@@ -55,8 +55,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.i("OnMessageReceived: ", "Error adding status to File Available table");
         }
 
-        // TODO: Add action/activity to Recent Activity table
-        // e.g. String action = "Received some file from someone";
+        String action = "Received " + filename + " from " + sender;
+
+        if(newFileReceivedManager.recordActivity(fileReceived, action)){
+
+            Log.i("OnMessageReceived: ", "Recorded activity");
+        }
+        else{
+
+            Log.i("OnMessageReceived: ", "Error recording activity");
+        }
 
         sendNotification(filename,sender);
     }

@@ -47,10 +47,9 @@ public class DBManager extends SQLiteOpenHelper{
     // Recent Activity Table
     private final String RECENT_ACTIVITY_TABLE = "recent_activity_table";
     private final String RECENT_ACTIVITY_TABLE_COL_1 = "ID";
-    private final String RECENT_ACTIVITY_TABLE_COL_2 = "USER";
-    private final String RECENT_ACTIVITY_TABLE_COL_3 = "DATE";
-    private final String RECENT_ACTIVITY_TABLE_COL_4 = "TIME";
-    private final String RECENT_ACTIVITY_TABLE_COL_5 = "ACTION";
+    private final String RECENT_ACTIVITY_TABLE_COL_2 = "DATE";
+    private final String RECENT_ACTIVITY_TABLE_COL_3 = "TIME";
+    private final String RECENT_ACTIVITY_TABLE_COL_4 = "ACTION";
 
     // Band Members Table
     public static final String BAND_MEMBERS_TABLE = "band_members_table";
@@ -83,7 +82,7 @@ public class DBManager extends SQLiteOpenHelper{
         db.execSQL("CREATE TABLE " + FILES_SENT_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, RECIPIENT TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + FILES_RECEIVED_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SENDER TEXT, FILE_NAME TEXT, DURATION TEXT, FILE_TYPE TEXT, DATE TEXT)");
         db.execSQL("CREATE TABLE " + FILE_AVAILABLE_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FILENAME TEXT, STATUS TEXT)");
-        db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, USER TEXT, DATE TEXT, TIME TEXT, ACTION TEXT)");
+        db.execSQL("CREATE TABLE " + RECENT_ACTIVITY_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, DATE TEXT, TIME TEXT, ACTION TEXT)");
         db.execSQL("CREATE TABLE " + BAND_MEMBERS_TABLE + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, FULLNAME TEXT)");
     }
 
@@ -162,14 +161,13 @@ public class DBManager extends SQLiteOpenHelper{
         }
     }
 
-    public boolean insertDataIntoRecentActivityTable(String user, String date, String time, String action){
+    public boolean insertDataIntoRecentActivityTable(String date, String time, String action){
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(RECENT_ACTIVITY_TABLE_COL_2, user);
-        contentValues.put(RECENT_ACTIVITY_TABLE_COL_3, date);
-        contentValues.put(RECENT_ACTIVITY_TABLE_COL_4, time);
-        contentValues.put(RECENT_ACTIVITY_TABLE_COL_5, action);
+        contentValues.put(RECENT_ACTIVITY_TABLE_COL_2, date);
+        contentValues.put(RECENT_ACTIVITY_TABLE_COL_3, time);
+        contentValues.put(RECENT_ACTIVITY_TABLE_COL_4, action);
 
         long result = db.insert(RECENT_ACTIVITY_TABLE, null, contentValues);
 

@@ -318,7 +318,7 @@ public class RecordAudio extends AppCompatActivity implements EditFilenameDialog
 
                                 String action = "Sent " + filename + " to " + recipient;
 
-                                dbManager.insertDataIntoRecentActivityTable(user, current_date, current_time, action);
+                                dbManager.insertDataIntoRecentActivityTable(current_date, current_time, action);
 
                                 sendingFileDialog.dismiss();
 

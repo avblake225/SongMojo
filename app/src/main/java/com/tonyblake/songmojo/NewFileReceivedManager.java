@@ -25,4 +25,18 @@ public class NewFileReceivedManager {
 
         return result;
     }
+
+    public boolean recordActivity(FileReceived file, String action){
+
+        String[] parts = Utils.separateDateAndTime(file.dateAndTime);
+
+        String date = parts[0];
+        String time = parts[1];
+
+        boolean result = dbManager.insertDataIntoRecentActivityTable(date,time,action);
+
+        dbManager.close();
+
+        return result;
+    }
 }

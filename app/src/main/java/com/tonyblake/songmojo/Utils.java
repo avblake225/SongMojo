@@ -152,7 +152,7 @@ public class Utils {
 
     public static String getCurrentDateAndTime(){
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy HH:mm");
 
         TimeZone gmtTime = TimeZone.getTimeZone("GMT+1");
 
@@ -250,5 +250,31 @@ public class Utils {
         }
 
         return names;
+    }
+
+    public static String[] separateDateAndTime(String dateAndTime){
+
+        String[] parts = new String[dateAndTime.length()];
+
+        int numWhiteSpaces = 0;
+
+        for(int i=0;i<dateAndTime.length()-1;i++){
+
+            if(dateAndTime.charAt(i) == ' '){
+
+                numWhiteSpaces++;
+
+                if(numWhiteSpaces == 3){
+
+                    parts[0] = dateAndTime.substring(0,i);
+
+                    parts[1] = dateAndTime.substring(i, dateAndTime.length());
+
+                    break;
+                }
+            }
+        }
+
+        return parts;
     }
 }

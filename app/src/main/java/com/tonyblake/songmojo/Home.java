@@ -315,8 +315,7 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
         recentActivityList = new ArrayList<>();
 
         String query = context.getString(R.string.select_all_rows_from) + " " + dbManager.RECENT_ACTIVITY_TABLE() + " "
-                        + context.getString(R.string.where_user_equals) + "'" + user + "' "
-                        + context.getString(R.string.and_date_equals) + "'" + Utils.getCurrentDate() + "';";
+                        + context.getString(R.string.where_date_equals) + "'" + Utils.getCurrentDate() + "';";
 
         Cursor cursor;
 
@@ -330,8 +329,8 @@ public class Home extends AppCompatActivity implements FindBandMemberDialog.Find
 
                 RecentActivity recentActivity = new RecentActivity();
 
-                recentActivity.time = cursor.getString(3);
-                recentActivity.action = cursor.getString(4);
+                recentActivity.time = cursor.getString(2);
+                recentActivity.action = cursor.getString(3);
 
                 recentActivityList.add(recentActivity);
             }
