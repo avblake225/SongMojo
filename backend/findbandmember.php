@@ -4,7 +4,7 @@
 
    	   $fullname = $_POST["FullName"];                     	              
 
-         $conn = mysqli_connect("localhost","root","","songmojo") or die("Error connecting");         
+         $conn = mysqli_connect("localhost","tonyonan_me","me2016","tonyonan_songmojo") or die("Error connecting");         
    	   
    	   $query = "SELECT * FROM userregistration WHERE FullName LIKE '$fullname'";                   
    	   

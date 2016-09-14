@@ -31,7 +31,7 @@ public class FindBandMemberTask extends AsyncTask<String,Void,Boolean> {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.1/songmojo/findbandmember.php")
+                .url("http://tonyonandroid.com/songmojo/findbandmember.php")
                 .post(body)
                 .build();
 
