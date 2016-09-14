@@ -17,17 +17,29 @@
 
          echo "Set variables ";
 
-         $conn = mysqli_connect("localhost","root","","songmojo") or die("Error connecting");
+         $conn = mysqli_connect("localhost","tonyonan_me","me2016","tonyonan_songmojo");
 
-         echo "Connected to database ";
-   	   
+         if (mysqli_connect_errno()){
+
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+         }
+         else{
+
+            echo "Connected to database ";
+         }
+            	   
    	   $query = "INSERT INTO userregistration(Token,FirstName,LastName,FullName,Email,Password) 
-                   VALUES ('$token','$firstName','$lastName','$fullName','$email','$password')";
+                   VALUES ('$token','$firstName','$lastName','$fullName','$email','$password')";   	   
 
-   	   mysqli_query($conn,$query);
+         if(!mysqli_query($conn,$query)){
 
-   	   echo "Added data to database";
-
+            echo "Query Error: " . mysqli_error($conn);
+         }
+         else{
+         
+            echo "Added data to database";            
+         }        
+   	   
    	   mysqli_close($conn);
    }   
    else{
