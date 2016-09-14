@@ -6,13 +6,18 @@
 
          $password = $_POST["Password"];   	               
 
-         $conn = mysqli_connect("localhost","root","","songmojo") or die("Error connecting");         
+         $conn = mysqli_connect("localhost","tonyonan_me","me2016","tonyonan_songmojo");
+
+         if (mysqli_connect_errno()){
+
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+         }             
    	   
    	   $query = "SELECT FullName FROM userregistration WHERE Email = '$email' AND Password = '$password'";                   
    	   
          if(!mysqli_query($conn,$query)){
 
-            echo "Error description: " . mysqli_error($conn);
+            echo "Query Error: " . mysqli_error($conn);
          }
          else{
 

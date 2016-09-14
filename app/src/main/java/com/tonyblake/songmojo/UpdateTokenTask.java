@@ -37,7 +37,7 @@ public class UpdateTokenTask extends AsyncTask<String,Void,Boolean> {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.1/songmojo/updatetoken.php") // TODO: Change URL on server deployment
+                .url("http://tonyonandroid.com/songmojo/updatetoken.php")
                 .post(body)
                 .build();
 

@@ -19,6 +19,7 @@ public class GetUserTask extends AsyncTask<String,Void,String>{
         this.email = email;
         this.password = password;
     }
+
     @Override
     protected String doInBackground(String... params) {
 
@@ -32,7 +33,7 @@ public class GetUserTask extends AsyncTask<String,Void,String>{
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://192.168.1.1/songmojo/getuser.php")
+                .url("http://tonyonandroid.com/songmojo/getuser.php")
                 .post(body)
                 .build();
 
