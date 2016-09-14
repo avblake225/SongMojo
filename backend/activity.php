@@ -26,7 +26,7 @@
       $duration = $_POST["Duration"];         
 
       // Open database
-      $conn = mysqli_connect("localhost","root","","songmojo") or die("Error connecting");
+      $conn = mysqli_connect("localhost","tonyonan_me","me2016","tonyonan_songmojo");
 
       if(mysqli_connect_errno()){
 
