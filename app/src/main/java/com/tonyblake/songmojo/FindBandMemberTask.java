@@ -42,7 +42,7 @@ public class FindBandMemberTask extends AsyncTask<String,Void,Boolean> {
 
             int response_code = response.code();
 
-            if(response_code == 200){
+            if(response_code == 200 && !("".equals(bandMemberReturned))){
 
                 result = true;
             }
