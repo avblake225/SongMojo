@@ -109,47 +109,54 @@ public class SendFile extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                recipient_chosen = select_recipient_spinner.getSelectedItem().toString();
+                if(bandMembers.size() == 0){
 
-                if("".equals(filename)){
-
-                    Toast.makeText(context, context.getString(R.string.please_set_file_name), Toast.LENGTH_SHORT).show();
-                }
-                else if(rb_audio_file.isChecked()){
-
-                    audioFile = true;
-                    videoFile = false;
-
-                    filename = et_file_name.getText().toString() + context.getString(R.string._mp3);
-
-                    intent = new Intent(context, RecordAudio.class);
-
-                    intent.putExtra("user", user);
-                    intent.putExtra("filename", filename);
-                    intent.putExtra("recipient", recipient_chosen);
-
-                    startActivity(intent);
-                }
-                else if(rb_video_file.isChecked()){
-
-                    audioFile = false;
-                    videoFile = true;
-
-                    filename = et_file_name.getText().toString() + context.getString(R.string._mp4);
-
-                    intent = new Intent(context, RecordVideo.class);
-
-                    intent.putExtra("user", user);
-                    intent.putExtra("filename", filename);
-                    intent.putExtra("recipient", recipient_chosen);
-
-                    //startActivity(intent);
-
-                    Toast.makeText(context,"Video currently unavailable",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.no_band_member_added), Toast.LENGTH_SHORT).show();
                 }
                 else{
 
-                    Toast.makeText(context, context.getString(R.string.please_select_file_type), Toast.LENGTH_SHORT).show();
+                    recipient_chosen = select_recipient_spinner.getSelectedItem().toString();
+
+                    filename = et_file_name.getText().toString() + context.getString(R.string._mp3);
+
+                    if(context.getString(R.string._mp3).equals(filename)){
+
+                        Toast.makeText(context, context.getString(R.string.please_set_file_name), Toast.LENGTH_SHORT).show();
+                    }
+                    else if(rb_audio_file.isChecked()){
+
+                        audioFile = true;
+                        videoFile = false;
+
+                        intent = new Intent(context, RecordAudio.class);
+
+                        intent.putExtra("user", user);
+                        intent.putExtra("filename", filename);
+                        intent.putExtra("recipient", recipient_chosen);
+
+                        startActivity(intent);
+                    }
+                    else if(rb_video_file.isChecked()){
+
+                        audioFile = false;
+                        videoFile = true;
+
+                        filename = et_file_name.getText().toString() + context.getString(R.string._mp4);
+
+                        intent = new Intent(context, RecordVideo.class);
+
+                        intent.putExtra("user", user);
+                        intent.putExtra("filename", filename);
+                        intent.putExtra("recipient", recipient_chosen);
+
+                        //startActivity(intent);
+
+                        Toast.makeText(context,"Video currently unavailable",Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+
+                        Toast.makeText(context, context.getString(R.string.please_select_file_type), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

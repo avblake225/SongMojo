@@ -64,6 +64,7 @@
     <string name="proceed_to_recording">Proceed to recording</string>
     <string name="please_set_file_name">Please set file name</string>
     <string name="please_select_file_type">Please select file type</string>
+    <string name="no_band_member_added">No band member added</string>
 
     <!-- record_audio.xml -->
     <string name="record_audio">Record Audio</string>
